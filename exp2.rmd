@@ -303,7 +303,7 @@ exp2gen.out <- apa.glm(data = exp2gen
 
 # t tests against a baseline
 fun.tmp <- function(x){
-  y <- apa.t(t.test(x,mu=.20),n=sum(!is.na(x)))
+  y <- apa.t(t.test(x,mu=20),n=sum(!is.na(x)))
   return(y)
 }
 

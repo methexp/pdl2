@@ -85,11 +85,10 @@ apa.t<-function(output,n=NA){
   
   if(p<.001){
     p<-".001"
-    value<-paste(c("$t(",df,") = ", t,"$, $p < ",p,"$, $d = ", d, "$"),collapse="")
-  }
-  else{
-    p<-format(round(p,digits=3),nsmall=3)
-    p<-unlist(strsplit(p,split="\\."))[2]
+    value<-paste(c("$t(",df,") = ", t,"$, $p < .001$, $d = ", d, "$"),collapse="")
+  } else{
+    p <- format(round(p,digits=3),nsmall=3)
+    p <- unlist(strsplit(p, split="\\."))[2]
     value<-paste(c("$t(", df, ") = ",t,"$, $p = .", p,"$, $d = ", d, "$"),collapse="")
   }
   

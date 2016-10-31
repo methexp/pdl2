@@ -511,7 +511,7 @@ A `r exp3gen_rev.out$name` ANOVA revealed
 a nonsignificant main effect of *Condition*, `r exp3gen_rev.out[["Condition"]]`, 
 but a significant main effect of *PD instruction*, `r exp3gen_rev.out[["PD_instruction"]]`,
 and their significant interaction, `r exp3gen_rev.out[["Condition_PD_instruction"]]`.
-The main effect of *PD instruction* reflects the clear influence of the instructed explicit knowledge depicted in figure 13.
+The main effect of *PD instruction* reflects the clear influence of the instructed explicit knowledge depicted in Figure 13.
 It is present in all practice conditions but modulated by amount of knowledge and type of practice (i.e., greater effects given specific practice): 
 The effect was greatest in the *Transfer* group, `r t.out[["Transfer"]][["stat"]]`;
 somewhat smaller in the *Practice* group, `r t.out[["Practice"]][["stat"]]`; 
@@ -545,7 +545,7 @@ apa_barplot(
   , dv = "FOC.correct"
   , factors=c("transition","Block number")
   , ylim = c(0, 110)
-  , intercept = c(.2, .2)
+  , intercept = c(20, 20)
   , xlab = "Transition type"
   , ylab = "Percentage correct"
   , args_legend = list(plot = FALSE)
@@ -568,7 +568,7 @@ apa_barplot(
   , dv = "FOC.correct"
   , factors = c("transition", "Block number")
   , ylim = c(0, 110)
-  , intercept = c(.2, .2)
+  , intercept = c(20, 20)
   , ylab = ""
   , xlab = "Transition type"
   , dispersion = wsci
@@ -585,8 +585,6 @@ We conclude that practice did not affect inclusion performance for revealed tran
 
 ```{r 'exp3_gen_revealed_hyps', fig.cap = "Exclusion performance for revealed transitions. Left: Between-subjects comparison between *No-Practice* and *Practice* groups. Right: Within-subjects comparison in *Transfer* group. Horizontal lines represent chance baseline."}
 
-# library(BayesFactor)
-
 par(mfrow = c(1, 2))
 
 ## Practice effect: Between-subjects comparison (both blocks)
@@ -594,14 +592,14 @@ par(mfrow = c(1, 2))
 tmp <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.NoOne" &  Generation[["vR.Start.instruiert"]]==1 &                Generation[["vR.revealed"]]!= "postT.before" &                Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
 agg <- aggregate(formula=FOC.correct~id, data=tmp, FUN=mean)
-bs.nonpracticed <- apa.t(t.test(x = agg$FOC.correct, mu = .2, alternative = "less"), nrow(agg))
-# bf <- ttestBF(x = agg$FOC.correct, mu = .2)
+bs.nonpracticed <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
+# bf <- ttestBF(x = agg$FOC.correct, mu = 20)
 
 tmp <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.One" &  Generation[["vR.Start.instruiert"]]==1 &                    Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
 agg <- aggregate(formula = FOC.correct~id, data = tmp, FUN = mean)
-bs.practiced <- apa.t(t.test(x = agg$FOC.correct, mu = .2, alternative = "less"), nrow(agg))
-# bf <- ttestBF(x = agg$FOC.correct, mu = .2)
+bs.practiced <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
+# bf <- ttestBF(x = agg$FOC.correct, mu = 20)
 
 
 ## Practice effect: Between-subjects comparison (only first block)
@@ -609,14 +607,14 @@ bs.practiced <- apa.t(t.test(x = agg$FOC.correct, mu = .2, alternative = "less")
 tmp <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.NoOne" & Generation[["Block.Nr"]]=="first" & Generation[["vR.Start.instruiert"]]==1 & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
 agg <- aggregate(formula=FOC.correct~id, data=tmp, FUN=mean)
-bs.nonpracticed1 <- apa.t(t.test(x = agg$FOC.correct, mu = .2, alternative = "less"), nrow(agg))
-# bf <- ttestBF(x = agg$FOC.correct, mu = .2)
+bs.nonpracticed1 <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
+# bf <- ttestBF(x = agg$FOC.correct, mu = 20)
 
 tmp <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.One" & Generation[["Block.Nr"]]=="first" & Generation[["vR.Start.instruiert"]]==1 & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
 agg <- aggregate(formula = FOC.correct~id, data = tmp, FUN = mean)
-bs.practiced1 <- apa.t(t.test(x = agg$FOC.correct, mu = .2, alternative = "less"), nrow(agg))
-# bf <- ttestBF(x = agg$FOC.correct, mu = .2)
+bs.practiced1 <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
+# bf <- ttestBF(x = agg$FOC.correct, mu = 20)
 
 tmp <- Generation[Generation[["Trial"]] > 1&Generation[["repetition"]]==0&(Generation[["InstrExpl"]]=="Expl.One"|Generation[["InstrExpl"]]=="Expl.NoOne")&Generation[["vR.Start.instruiert"]]==1&Generation[["PD instruction"]]=="Exclusion"&Generation[["excluded.id"]]==0,]
 
@@ -631,7 +629,7 @@ apa_barplot(
   , dv = "FOC.correct"
   , factors = c("transition", "Block number")
   , ylim = c(0, 100)
-  , intercept = c(.2, .2)
+  , intercept = c(20, 20)
   , ylab = "Percentage correct"
   , xlab = "Transition type"
   , args_legend = list(plot = FALSE)
@@ -642,13 +640,13 @@ apa_barplot(
 tmp <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.OneOne" & Generation[["vR.revealed"]]=="preT" & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
 agg <- aggregate(formula = FOC.correct~id, data = tmp,FUN = mean)
-ws.practiced<-apa.t(t.test(x = agg$FOC.correct, mu=.2, alternative="less"), nrow(agg))
-# bf <- ttestBF(x = agg$FOC.correct, mu = .2)
+ws.practiced<-apa.t(t.test(x = agg$FOC.correct, mu=20, alternative="less"), nrow(agg))
+# bf <- ttestBF(x = agg$FOC.correct, mu = 20)
 
 tmp<-Generation[Generation[["Trial"]]>1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.OneOne" & Generation[["vR.revealed"]]=="postT.recently" & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 agg <- aggregate(formula = FOC.correct~id, data = tmp,FUN = mean)
-ws.nonpracticed<-apa.t(t.test(x = agg$FOC.correct, mu=.2, alternative="less"), nrow(agg))
-# bf <- ttestBF(x = agg$FOC.correct, mu = .2)
+ws.nonpracticed<-apa.t(t.test(x = agg$FOC.correct, mu= 20, alternative="less"), nrow(agg))
+# bf <- ttestBF(x = agg$FOC.correct, mu = 20)
 
 tmp <- Generation[Generation[["Trial"]] > 1&Generation[["repetition"]]==0&Generation[["InstrExpl"]]=="Expl.OneOne"&(Generation[["vR.revealed"]]=="preT"|Generation[["vR.revealed"]]=="postT.recently")&Generation[["PD instruction"]]=="Exclusion"&Generation[["excluded.id"]]==0,]
 tmp[["InstrExpl"]] <- droplevels(tmp[["InstrExpl"]])
@@ -664,7 +662,7 @@ apa_barplot(
   , dv = "FOC.correct"
   , factors = c("transition", "Block number")
   , ylim = c(0, 100)
-  , intercept = c(.2, .2)
+  , intercept = c(20, 20)
   , xlab = "Transition type"
   , ylab = ""
 )
@@ -676,14 +674,14 @@ par(mfrow = c(1, 1))
 ```{r}
 tmp <- Generation[Generation[["Trial"]]>1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.OneOne" & Generation[["Block.Nr"]]=="first" & Generation[["vR.revealed"]]=="preT" & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
-agg <- aggregate(formula = korrekt~id, data = tmp, FUN = mean)
-ws.practiced.1 <- apa.t(t.test(x = agg$korrekt, mu = .2, alternative = "less"), nrow(agg))
+agg <- aggregate(formula = FOC.correct~id, data = tmp, FUN = mean)
+ws.practiced.1 <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
 
 
 tmp<-Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.OneOne" & Generation[["Block.Nr"]]=="first" & Generation[["vR.revealed"]]=="postT.recently" & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
-agg <- aggregate(formula = korrekt~id, data = tmp, FUN = mean)
-ws.nonpracticed.1 <- apa.t(t.test(x = agg$korrekt, mu = .2, alternative = "less"), nrow(agg))
+agg <- aggregate(formula = FOC.correct~id, data = tmp, FUN = mean)
+ws.nonpracticed.1 <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
 
 ```
 
