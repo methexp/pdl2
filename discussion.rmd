@@ -1,0 +1,171 @@
+---
+bibliography: pdl.bib
+---
+
+## Summary of main findings
+
+Process-dissociation assumes that the controlled and automatic process are invariant under inclusion and exclusion instructions.
+In three sequence-learning experiments, we tested whether this invariance assumption holds in the generation task.
+The results show a consistent pattern.
+
+### Invariance of the controlled process
+
+The invariance assumption for explicit knowledge was consistently violated, in first-order as well as second-order material, and despite extensive opportunity for (as well as without) practice.
+In all cases, explicit knowledge was expressed to a greater degree under inclusion than under exclusion instructions:
+Participants succeeded in generating the revealed transition under inclusion conditions, but failed to refrain from generating that transition under exclusion conditions. 
+Specifically, under exclusion conditions, participants generated the revealed transition at chance levels, instead of suppressing its generation altogether as instructed. 
+
+Participants were largely unable to use their explicit knowledge to suppress the proportion of regular transitions generated in the exclusion task to levels below chance.
+Such below-chance generation levels for revealed transitions were robustly found only for material with a first-order regularity, and only in participants who had explicit knowledge about (at least) two transitions and engaged in generation-task practice specific to a given to-be-excluded transition (Exp. 3, Transfer condition).
+In these participants, there was even some evidence that below-chance exclusion performance transferred to non-practiced explicit knowledge.
+However, transition-specific practice was (necessary but) not sufficient for successful exclusion: 
+Whereas participants without such practice (i.e., the No-Practice and Unspecific-Practice conditions of Exp.3) failed to reach below-chance levels,
+participants with practice also failed to attain below-chance levels under exclusion instructions if they worked on the inclusion task first (i.e., Exp.3, Practice condition).
+Moreover, despite having explicit knowledge as well as transition-specific generation-task practice, participants were not able to exclude their explicit knowledge to below-chance levels with a second-order conditional sequence (Exp. 2).
+Taken together, across three Experiments we obtained strong evidence for a violation of invariance of the controlled process, and  the results of Experiment 3 suggest that this is due to a failure to suppress the generation of regular transitions below chance levels.
+
+### Invariance of the automatic process
+
+In Experiments 1 and 3 that used first-order conditional material, we found evidence suggesting a violation of the invariance assumption for implicit knowledge (no such evidence was found for the second-order conditional material used in Experiment 2).
+If interpreted in a standard PD framework, the inclusion-exclusion performance difference resulting from this violation may lead to erroneous conclusions about the presence of explicit knowledge (if such knowledge is indeed absent), or to overestimation of the contribution of explicit knowledge.
+We believe these findings of an inclusion-exclusion difference in estimates of the automatic parameter should be interpreted with some caution, for at least three reasons (see also the section Limitations below).
+First, the finding was inconsistent and there are multiple possible causes of this inconsistency:
+The lack of a violation in Experiment 2 may be due to specific properties of the material, or it may be due to the fact that sequence knowledge levels in that study were too low for differences in its expression to be measurable.
+
+Second, although robust and replicated, the violation was relatively small (i.e., the $A_{I}-A_{E}$ difference ranged between .01 and .03 in Exp.1, and between .00 and .03 in Exp.3).
+In the absence of controlled influences, this would be equivalent to a difference between inclusion and exclusion performance of approximately 2 percentage points---an effect barely noticeable under typical conditions.
+
+Third, it is unclear whether the observed invariance violation of parameter $A$ reflects implicit knowledge at all.
+Note that the parameter for the automatic process captures the sum of all non-controlled influences on generation performance.
+In particular, it might reflect guessing strategies, and these may differ under inclusion versus exclusion conditions [@stahl_distorted_2015].
+In other words, the above effect may reflect a violation of invariance of guessing or response strategies instead of a violation of invariance of the automatic expression of implicit knowledge.
+Taken together, we interpret the finding as too weak to conclude that the invariance assumption is violated also for the automatic process.
+
+## Limitations and open questions
+
+Before turning to the implications of the present findings, we discuss potential limitations and address open questions.
+
+### The invariance violation of the automatic process may reflect learned explicit knowledge
+
+Instead of being due to guessing, the inclusion-exclusion difference in estimates of the automatic parameter may be due to explicit knowledge acquired during learning.
+Such an effect, if present at all, is likely to be small given that (1) the material was probabilistic and therefore difficult to learn explicitly; (2) the model incorporating the assumption that no learned explicit knowledge was learned fitted the data well; and (3) the results were unchanged when we excluded the data from transitions that participants (correctly) reproduced during debriefing.
+However, we cannot exclude the possibility that small amounts of explicit knowledge, obtained during the SRTT phase, may have distorted our model's parameter estimates.
+This interpretation could also account for the lack of such an effect in Experiment 2 given that explicit knowledge was less likely to be learned from the more complex second-order conditional material used in that study.
+If this were true, then any differences between inclusion and exclusion that were attributed by the model to an invariance violation of the implicit process may in fact have been a consequence of residual explicit knowledge that was not reflected in our debriefing questionnaire (perhaps due to participants' conservative reporting criteria).
+For validating the PD approach, we know of no other ways to address this potential confound other than by controlling for explicit sequence knowledge as assessed by independent measures; successful control is then naturally limited by the validity of these independent measures.
+This limitation is another reason for caution in interpreting the above finding as evidence for a violation of invariance of the automatic process.
+Note that it does not limit the interpretation of our main finding of the invariance violation of the controlled process.
+
+### The evidence for sequence learning was weak for SOC material in Experiment 2
+
+As expected, second-order conditional material (Exp. 2) was more difficult to learn than first-order conditional material (Expts. 1 & 3).
+This was reflected here in the finding that (despite a 20% increase in learning trials) there was only weak evidence for sequence learning in Experiment 2.
+Specifically, responses to regular transitions were clearly faster and more accurate for both variants of the SOC materials, but the interaction between regularity and training block, which is critical for interpreting a performance advantage for regular transitions as an effect of learning, was not significant.
+Clearly, an even larger amount of SRTT training should be realized in future studies using SOC materials.
+Yet, it is unlikely that the advantage for regular transitions has any other causes than learning, given that it was absent from the random condition, and that the effect could not be attributed to properties of specific transitions because regularity of a transition was randomized for each participant anew.
+Nevertheless, because evidence for (implicit) sequence learning was not beyond doubt, it is not warranted to interpret the modeling results as stringent tests of the invariance assumption for the automatic process.
+
+### Explicit knowledge learned via instruction may be qualitatively different from acquired explicit knowledge
+
+The present study manipulated explicit knowledge via instruction.
+Although it is a common method [e.g., @liefooghe_instruction-based_2012] that has yielded important insights in other domains, one might argue that explicit knowledge acquired via instruction is somehow qualitatively different from explicit knowledge acquired during SRTT training, and that therefore the present results do not speak to the question of interest regarding the invariance of the expression of acquired knowledge.
+We believe our manipulation to be valid for the following reasons.
+First, the instructed explicit knowledge communicated the same proposition about the sequence that participants would have acquired during SRTT training (i.e., that a specific location was regularly followed by another location).
+Second, we took precautions to avoid any inconsistency or conflict with learned sequence knowledge: 
+Transitions that were revealed to participants were part of the regular sequence and therefore compatible with acquired (implicit or explicit) sequence knowledge.
+Third, we allowed participants to integrate instructed and acquired knowledge during the practice blocks before the generation task.
+
+Given that the instructed and acquired propositions are identical, we would argue that qualitative differences between acquired and instructed knowledge are likely to involve non-propositional forms of knowledge; such non-propositional knowledge is typically considered to be implicit.
+Indeed, it is likely that strong implicit knowledge is a precondition for acquiring explicit knowledge [@haider_conflicts_2009; @cleeremans_implicit_2002]:
+Instructed and acquired explicit knowledge are therefore likely to differ in the degree to which they are correlated with implicit knowledge.
+If participants are better able to control acquired than instructed explicit knowledge, this would then be due, paradoxically, to the presence of acquired implicit knowledge.
+Finally, even if that was the case, note that this would not salvage the PD method because a strong correlation between explicit and implicit knowledge would violate the independence assumption, thereby posing another problem for its validity.
+
+## Implications
+
+We will first discuss implications for the PD model and the ordinal approach before we suggest ways to improve measurement of sequence knowledge using the generation task.
+We conclude with a few broader implications.
+
+### Validity of the PD method
+
+The present findings show that participants fail to suppress generating regular sequences under exclusion instructions.
+This implies that the controlled process operates less effectively under exclusion than inclusion instructions, violating the invariance assumption.
+A model that nevertheless incorporates the invariance assumption will likely fail to adequately account for the data, and will yield distorted estimates of the automatic and controlled process.
+To illustrate, assume that the true values of the parameters are $C_{Inclusion} = .8, C_{Exclusion} = .4$, and $A_{Inclusion} = A_{Exclusion} = .25$.
+This yields the following generation proportions of regular transitions $I = .8 + (1-.8)*.25 = `r .8+(1-.8)*.25`$ and $E = (1-.4)*.25 = `r (1-.4)*.25`$.
+When fitting a traditional PD model enforcing the invariance assumption $C_{Inclusion} = C_{Exclusion}$ to these data, we get $C=.7$ that lies somewhere between the true values of $C$, and $A = .5$ which is a vast overestimation of the true $A$.
+Importantly, note that if the true value of $A=.25$ represents chance level, applications of the traditional PD method might lead to the erroneous conclusion that implicit knowledge had been learned even if such knowledge was in fact entirely absent.
+In addition, if we are interested in the amount of explicit knowledge learned from the SRTT training phase, it might be argued that the higher estimate obtained from the inclusion condition might be a more valid estimate of learned explicit knowledge; the inability to express this knowledge under exclusion may be of secondary interest.
+By this argument, applying the traditional PD method also yields an underestimation of explicit knowledge.
+
+We therefore recommend against using the PD method unless separate estimates of $C_{Inclusion}$ and $C_{Exclusion}$ can be obtained, for example as we have done in the present study.
+To do so, at least two levels of an implicit-knowledge factor are necessary across which the $C$ parameters could be equated to obtain stable parameter estimates.
+Note that this strategy may not be broadly applicable in typical SRTT studies because of the strong correlation between $C$ and $A$; the assumption that the level of implicit knowledge does not affect the amount of acquired explicit knowledge will be warranted only in special cases such as realized in the present studies.
+^[As another way to obtain separate estimates, instead of assuming equal levels of the controlled process across levels of the automatic process, one might assume that the level of the automatic process does not interact with instruction (i.e., it does not affect the relative magnitude of the invariance violation). 
+In this case, the controlled parameters need not be equated across both levels of implicit knowledge; instead, explicit knowledge in the lower level of the implicit-knowledge factor can be expressed as a proportion of the explicit knowledge in the higher level of that factor (i.e,  $C_{Inclusion/low} = w*C_{Inclusion/high}$ and $C_{Exclusion/low} = w*C_{Exclusion/high}$.)]
+
+### Ordinal PD
+
+As argued in the introduction to Experiment 3, it might be the case that, under certain conditions, certain violations of assumptions underlying the validity of the PD model equations might leave the ordinal interpretation of PD data unaffected.
+This is not true, however, for the specific violation of invariance of the controlled process reported here.
+To reiterate, given a single experimental condition, it is concluded in the ordinal approach that implicit knowledge is present if exclusion performance is above a (chance or empirical) baseline; and it is concluded that explicit knowledge is present if inclusion performance exceeds exclusion performance.
+The possible conclusions from comparing two experimental conditions are outlined by @hirshman_ordinal_2004 [, Table 1]. 
+They depend on the invariance assumption in the sense that a monotonically increasing controlled process should lead to a monotonic increase of inclusion performance and at the same time a monotonic decrease of exclusion performance. 
+The present study shows, however, that exclusion performance cannot be assumed to reliably decrease with increasing explicit knowledge.
+This implies that the assumptions underlying the ordinal-PD approach proposed by Hirshman are also violated for the generation task as applied to sequence learning.
+In addition, we have previously shown that another assumption of ordinal PD, namely that baseline performance is identical in the inclusion and exclusion tasks, is also violated at least in some cases [@stahl_distorted_2015].
+We conclude that the ordinal interpretation of PD data cannot be recommended as a fallback option.
+
+### Generation task as a measure of sequence knowledge
+
+The generation task has been proposed as a useful and sensitive measure of implicit knowledge [@perruchet_conscious_1992; @jimenez_comparing_1996].
+Its sensitivity may be called into question by the finding that RT effects obtained during the SRTT were often greater than implicit-knowledge effects in the generation task.
+In part, this may be attributed to the greater reliability of the RT measure, as it relies on aggregation across a larger number of trials than does the generation task.
+Another possible reason is that the generation task's sensitivity as a measure of implicit knowledge may be lower than previously thought. 
+For instance, previous findings of implicit knowledge using the generation task may have been overestimates of implicit knowledge due to a violation of invariance for the controlled process with $C_I > C_E$. Note that most studies used much easier-to-learn materials (with four instead of six locations); it is thus plausible that participants acquired more explicit knowledge than they did in our experiments, and that the overestimation bias was more severe in those studies.
+
+Another possible reason for overestimating implicit knowledge is that the regularities in the sequences implemented in previous research were such that the probability of reversals (e.g., 1-2-1) was below chance. 
+Given that participants spontaneously tend to generate reversals at below-chance levels, this implies that they instead generate other regular transitions at slightly above-chance levels even in the absence of any true sequence knowledge.
+As a consequence of this reversal-avoidance bias, implicit knowledge might be overestimated if one uses chance baselines as a reference.
+This problem has been discussed before [@reed_assessing_1994;@shanks_evaluating_1999;@destrebecqz_temporal_2003_doi], and was solved by comparing performance on the training sequence with performance on a transfer sequence containing a similarly low proportion of reversals.
+This implies, however, that the PD approach does not provide a measure of the absolute level of implicit or explicit knowledge; instead, by relying on a comparison of performance across two sequences, it yields a difference measure that is associated with reduced reliability. 
+This is because the transfer sequence is selected by the experimenter out of a large set of possible such sequences, and this random choice interacts with participants' partial acquired knowledge, as well as with their individual response tendencies, to introduce additional error into the measurement.
+In addition, the reversal-avoidance bias may not only mimic implicit knowledge; it may also mimic (or mask) explicit knowledge if it interacted with the inclusion-exclusion instructions, perhaps via different response strategies or criteria adopted under inclusion versus exclusion instructions.
+
+It might be possible to construct a version of the generation task that allows for the separation of automatic and controlled processes but does not depend on exclusion of explicit knowledge and does not induce different response criteria.
+For example, @dangelo_implementing_2013 implemented such a generation task variant in artificial grammar learning in which two different inclusion instructions were compared:
+After learning about two different grammars, participants were asked, in the first (second) inclusion block to generate exemplars from the first (second) grammar. 
+Under certain assumptions, performance differences between blocks can be interpreted as evidence for explicit controllable knowledge.
+Exclusion failure and different criteria presumably do not matter in this task: 
+Participants were not instructed to exclude explicit knowledge in this task, and it is plausible that the similarity of instructions for both generation tasks also induced comparable response criteria.
+As another example, in the domain of source memory, the PD procedure can be replaced by a source-memory task in which, instead of including versus excluding items from one of two study lists (A and B), participants are asked to indicate the source of the word [list A or list B; @buchner_nature_1997].
+Perhaps with a similar modification, an improved generation task may prove a useful measure of sequence knowledge.
+
+## Conclusion
+
+In light of the present findings suggesting limited validity of the PD generation task, what can we conclude about explicit and implicit sequence knowledge from its previous applications?
+We have seen that, when the traditional PD approach is used, an invariance violation of the controlled process leads to overestimation of implicit knowledge and to underestimation of the amount of explicit knowledge participants have acquired from the preceding SRTT training phase.
+In addition, an invariance violation of the automatic process may lead to a (small) overestimation of explicit knowledge.
+We can take into account these potential distortions in our interpretation of previous findings by distinguishing the two patterns of results found in the literature.
+
+In the first case, evidence for explicit but not for implicit knowledge was found [e.g., @wilkinson_intentional_2004]. 
+In this case, the evidence for explicit knowledge suggests that the distortions due to the invariance violation apply. 
+Obtaining evidence for explicit knowledge despite the underestimation bias implies that explicit knowledge was likely present.
+Obtaining no evidence for implicit knowledge despite the likely presence of an overestimation bias may indeed reflect the absence of implicit knowledge; alternatively, it may of course reflect lack of statistical power.
+
+In the second case, evidence for both explicit and implicit knowledge was reported [e.g., @destrebecqz_can_2001; @mong_evidence_2012;@destrebecqz_temporal_2003_doi;@jimenez_qualitative_2006].
+Here, two scenarios must be distinguished: 
+In the first, the evidence for explicit knowledge also suggests that the distortions resulting from the invariance violation may have compromised the results:
+Again, the evidence for explicit knowledge obtained despite the underestimation bias should probably be assumed to be reliable; however, the evidence for implicit knowledge may be an artifact of the overestimation bias and should be interpreted with caution.
+In the second scenario, explicit knowledge is absent, and the explicit-knowledge effect reflects an artifact of the invariance violation of the automatic process (i.e., $A_{I} > A_{E}$); the results obtained in the literature would then indicate the presence of implicit but not explicit knowledge.
+
+Of course, different scenarios might underlie different studies, and single studies may also reflect a mixture of scenarios.
+Taken together, when considering the limitations discovered in our studies, the PD approach to using the generation task as a measure of implicit and explicit sequence knowledge in the SRTT has so far yielded few reliable conclusions.
+Future research should consider using alternative methods of assessing implicit and explicit knowledge [for a recent overview see @timmermans_how_2015].
+
+## Outlook
+
+One of the great benefits of multinomial models such as the PD model is that they are flexibly adaptable measurement models for studying latent cognitive processes using a wide variety of experimental paradigms [@erdfelder_multinomial_2009].
+To validate a new model, it is common to assess its goodness of fit, and to empirically demonstrate that its parameters can be selectively manipulated and interpreted psychologically [i.e., parameter estimates reflect targeted experimental manipulations in the predicted manner; @batchelder_theoretical_1999].
+In many cases, however, simplifying assumptions need to be made; for instance, latent processes are equated across two or more experimental conditions (e.g., a single controlled process $C$ is assumed to operate under inclusion and exclusion conditions).
+Whenever such assumptions of invariance are made, we propose that they should also be tested empirically as part of the model-validation effort before a new model is proposed and used to investigate substantive issues.

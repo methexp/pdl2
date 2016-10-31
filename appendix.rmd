@@ -1,0 +1,136 @@
+
+This appendix provides a complete specification of the models and priors used.
+Code (R/rstan) is available at https://github.com/methexp/pdl2.
+
+## Experiment 1, model $\mathcal{M}_1$
+
+Priors on fixed effects were
+
+$$
+\begin{aligned}
+\mu_{km}^{(C)} \sim & N(0, 1), k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
+\mu_{jkm}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace
+\end{aligned}
+$$
+
+where $j$ indexes transition type (revealed vs. non-revealed), $k$ indexes learning material presented during the SRTT (random vs. probabilistic), and $m$ indexes *PD instruction* condition (inclusion vs. exclusion).
+
+<!-- $$ -->
+<!-- \boldsymbol{\delta}_i = -->
+<!-- \begin{pmatrix} -->
+<!--   \delta_{ik1}^{(C)}\\ -->
+<!--   \delta_{ik2}^{(C)}\\ -->
+<!--   \delta_{i1k1}^{(A)}\\ -->
+<!--   \delta_{i1k2}^{(A)}\\ -->
+<!--   \delta_{i2k1}^{(A)}\\ -->
+<!--   \delta_{i2k2}^{(A)}\\ -->
+<!-- \end{pmatrix} -->
+<!-- $$ -->
+
+For participants who did not receive explicit knowledge about a single transition, we assumed that all $C_{ijkm} = 0$. 
+Therefore, participant effects are only required for automatic processes ($\delta_{ijkm}^{(A)}$). 
+In participants who received explicit knowledge about one transition, two additional participant effects were needed to model controlled processes for revealed transitions ($\delta_{ikm}^{(C)}$). 
+We thus provide the specification of participant effects for these two groups of participants separately.
+
+#### Participants who did not receive explicit knowledge about one transition
+
+For participants who did not receive explicit knowledge about one transition, participant effects $\delta_{ijm}^{(A)}$ can be written as vectors $\boldsymbol{\delta}_i$
+that were modelled as draws from a multivariate normal
+
+$$
+\boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
+$$
+
+where $k$ indexes the learning material that was presented to participant $i$ and $l$ indexes his or her level of the explicit-knowledge factor.
+The covariance matrices $\Sigma_{kl}$ were obtained from the standard deviations of participant effects $\boldsymbol{\sigma}_{kl}$ and correlation matrices $\Omega_{kl}$
+
+$$
+\Sigma_{kl} = Diag(\boldsymbol{\sigma}_{kl})~\Omega_{kl}~Diag(\boldsymbol{\sigma}_{kl}), k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
+$$
+
+Each element $\sigma_{klp}$ of the vectors of standard deviations $\boldsymbol{\sigma}_{kl}$ was drawn from
+independent half-normal prior distributions.
+
+$$
+\sigma_{klp} \sim N (0, 1)_{\mathcal{I}(0, \infty)}, k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
+$$
+
+For the correlation matrices $\Omega_{k}$, we used LKJ priors with a scaling factor of 1 (Lewandowski, Kurowicka, & Joe, 2009):
+
+$$
+\Omega_{kl} \sim \textit{LKJcorr}(\nu = 1), k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
+$$
+
+
+#### Participants who received explicit knowledge about one transition
+
+For participants who received explicit knowledge about one transition, participant effects $\delta_{ijm}^{(A)}$ and $\delta_{im}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modelled as draws from a multivariate normal
+
+$$
+\boldsymbol{\delta}_i \sim N_6 (0, \Sigma_{kl}), i = 1, ..., I
+$$
+
+where $k$ indexes the learning material that was presented to participant $i$ and $l$ indexes his or her level of the explicit-knowledge factor.
+The covariance matrices $\Sigma_kl$ were specified as above, with the only exception that six instead of four parameters were required.
+
+
+## Experiment 1, model $\mathcal{M}_2$
+
+Priors on fixed effects were
+
+$$
+\begin{aligned}
+\mu_{jkl}^{(C)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace\\
+\mu_{jkl}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace\\
+\end{aligned}
+$$
+
+Participant effects $\delta_{ij}^{(A)}$ and $\delta_{ij}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modelled by
+$$
+\boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
+$$
+Priors for the covariance matrix $\Sigma_{kl}$ were specified as above.
+
+## Experiment 2, models $\mathcal{M}_1$ and $\mathcal{M}_2$
+
+For the model-based analyses, we used models $\mathcal{M}_1$ and $\mathcal{M}_2$ analogous to those used in Experiment 1.
+
+## Experiment 3, model $\mathcal{M}_1$
+
+Priors on fixed effects were
+
+$$
+\begin{aligned}
+\mu_{jlm}^{(C)} & \sim N(0, 1), j = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
+\mu_{mt}^{(A)} & \sim N(0, 1), t = \lbrace 1, ..., 6 \rbrace ; m = \lbrace 1, 2 \rbrace\\
+\end{aligned}
+$$
+
+where $j$ indexes *transition type* (revealed & practiced vs. revealed & non-practiced), $l$ indexes practice condition (Control, No-practice, Unspecific-practice, Practice, Transfer), $t$ indexes specific items (i.e., transitions), and $m$ indexes *PD instruction* (inclusion vs. exclusion).
+
+Participant effects $\delta_{imt}^{(A)}$ and $\delta_{ijm}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$.
+
+For participants in the *Control* group, these were modelled by
+$$
+\boldsymbol{\delta}_i \sim N_{12} (0, \Sigma_l), i = 1, ..., I
+$$
+
+For participants in the *No-Practice*, *Unspecific-Practice*, and *Practice* groups,
+$$
+\boldsymbol{\delta}_i \sim N_{14} (0, \Sigma_l), i = 1, ..., I
+$$
+
+For participants in the *Transfer* group
+$$
+\boldsymbol{\delta}_i \sim N_{16} (0, \Sigma_l), i = 1, ..., I
+$$
+
+The covariance matrices $\Sigma_l$ were modelled separately and independently for each between-subjects condition.
+Priors on these matrices were as described above for Experiment 1.
+
+<!--
+## Model fitting
+
+We used rstan (Carpenter et al., in press) to estimate model parameters and sampled a total of $15{,}000$ iterations in three MCMC chains for each model. 
+The chains mixed well, $\hat{R}=$, $n_{\text{eff}}$, mcmc-sd). 
+-->
