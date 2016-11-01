@@ -1,0 +1,2686 @@
+\documentclass[floatsintext,man]{apa6}
+
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+
+% Table formatting
+\usepackage{longtable, booktabs}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+\newenvironment{ltable}
+  {\begin{landscape}\begin{center}\begin{threeparttable}}
+  {\end{threeparttable}\end{center}\end{landscape}}
+
+\newenvironment{lltable}
+  {\begin{landscape}\begin{center}\begin{ThreePartTable}}
+  {\end{ThreePartTable}\end{center}\end{landscape}}
+
+\usepackage{ifthen} % Only add declarations when endfloat package is loaded
+\ifthenelse{\equal{man}{\string jou}}{%
+  \DeclareDelayedFloatFlavor{ThreePartTable}{table} % Make endfloat play with longtable
+  \DeclareDelayedFloatFlavor{ltable}{table} % Make endfloat play with lscape
+  \DeclareDelayedFloatFlavor{lltable}{table} % Make endfloat play with lscape & longtable
+}{}%
+
+
+% The following enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand\getlongtablewidth{%
+ \begingroup
+  \ifcsname LT@\roman{LT@tables}\endcsname
+  \global\longtablewidth=0pt
+  \renewcommand\LT@entry[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}%
+  \@nameuse{LT@\roman{LT@tables}}%
+  \fi
+\endgroup}
+
+
+  \usepackage{graphicx}
+  \makeatletter
+  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+  \makeatother
+  % Scale images if necessary, so that they will not overflow the page
+  % margins by default, and it is still possible to overwrite the defaults
+  % using explicit options in \includegraphics[width, height, ...]{}
+  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            pdfauthor={},
+            pdftitle={Assumptions of the process-dissociation procedure are violated in sequence learning},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=black,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+
+\setcounter{secnumdepth}{0}
+
+% Manuscript styling
+\captionsetup{font=singlespacing,justification=justified}
+\usepackage{csquotes}
+\usepackage{upgreek}
+
+
+
+\usepackage{tikz} % Variable definition to generate author note
+
+% fix for \tightlist problem in pandoc 1.14
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Essential manuscript parts
+  \title{Assumptions of the process-dissociation procedure are violated in
+sequence learning}
+
+  \shorttitle{Invariance assumption in sequence learning}
+
+
+  \author{Marius Barth, Christoph Stahl, \& Hilde Haider}
+
+  \def\affdep{{"", "", ""}}%
+  \def\affcity{{"", "", ""}}%
+
+  \affiliation{
+    \vspace{0.5cm}
+          \textsuperscript{} University of Cologne  }
+
+  \authornote{
+    \newcounter{author}
+    Marius Barth, Christoph Stahl, Hilde Haider, Department of Psychology,
+    University of Cologne.
+    
+    CS and HH designed the research; MB, CS, and HH planned the studies; MB
+    ran the studies; MB and CS analyzed the data; MB, CS, and HH wrote the
+    paper. We thank Jan Czarnomski, Conni Lebbing, Friederike Neugebauer,
+    and Imge Ürer for help with data collection. We also thank Ute J. Bayen
+    for generously opening her laboratory for data collection.
+    
+    This work was funded by Deutsche Forschungsgemeinschaft grant
+    STA-1269/1-1 to CS and grant HA-5447/8-1 to HH.
+    
+    Data, code, and materials necessary to reproduce the analyses reported
+    in this article are available at \url{https://github.com/methexp/pdl2}.
+
+                      Correspondence concerning this article should be addressed to Marius Barth, Herbert-Lewin-Str. 2, D-50931 Köln, Germany. E-mail: \href{mailto:marius.barth@uni-koeln.de}{\nolinkurl{marius.barth@uni-koeln.de}}
+                                    }
+
+  \note{\emph{(Unpublished manuscript, 2016-10-25)}.}
+
+  \abstract{In sequence learning, a process-dissociation (PD) approach has been
+proposed to dissociate implicit and explicit learning processes. Applied
+to the popular generation task, participants perform two different task
+versions: an \emph{inclusion} condition asking them to re-generate the
+learned sequence, and an \emph{exclusion} condition asking them to avoid
+generating the learned sequence. Whereas accurate performance under
+inclusion may be based on either implicit and/or explicit knowledge,
+avoiding to generate the learned sequence requires controllable explicit
+sequence knowledge. The PD approach yields separate estimates of
+explicit and implicit knowledge that are derived from the same task and
+therefore avoids many problems of previous measurement approaches.
+However, the PD approach rests on the critical assumption that the
+implicit and explicit processes are invariant across inclusion and
+exclusion conditions. We tested whether the invariance assumptions holds
+for the PD generation task. Across three studies using first-order as
+well as second-order regularities, invariance of the controlled process
+was found to be violated. In particular, despite extensive amounts of
+practice, explicit knowledge was not exhaustively expressed in the
+exclusion condition. We discuss the implications of these findings for
+the use of process-dissociation in assessing implicit knowledge.}
+  \keywords{sequence learning, process-dissociation procedure, invariance assumption \\
+
+    \indent Word count: 14,041
+  }
+
+
+
+
+\begin{document}
+
+\maketitle
+
+
+
+\section{Introduction}\label{introduction}
+
+Riding a bicycle is an easy task, but most of us will be hard-pressed to
+describe in detail the movements necessary for pedaling, keeping
+direction, and maintaining balance. Capturing this intuition, theories
+of human learning distinguish two types of knowledge: Explicit knowledge
+is acquired when a learner becomes aware of an environmental regularity
+and stores it in episodic memory; in contrast, implicit knowledge
+reflects regularities in the environment that may have been acquired
+without becoming aware of them (Shanks \& St. John, 1994). A classical
+paradigm for the study of implicit learning, the serial reaction time
+task (SRTT; Nissen \& Bullemer, 1987) has participants respond to
+stimuli presented at four horizontal screen locations by pressing the
+key that corresponds to the stimulus location. Unbeknownst to
+participants, the stimulus locations follow a regular sequence. With
+practice, participants learn to respond faster on trials with regular
+stimulus-location transitions than on irregular transitions. Despite
+this performance advantage for responses that follow the sequence,
+participants are often unable to verbalize any knowledge about the
+sequence.
+
+The measurement of implicit and explicit knowledge in this and other
+paradigms has been subject of debate. In the domain of sequence
+learning, the RT advantage of regular over irregular transitions has
+often been taken to indicate implicit knowledge. To assess explicit
+knowledge, verbal reports have been used, but they have been criticized
+as insensitive and potentially distorted by conservative reporting
+criteria, and they also differ from the RT measure in reliability (i.e.,
+verbal reports rely on only a single data point per participant), and in
+immediacy (i.e., verbal reports are assessed only after the SRTT) (see
+Shanks \& St. John, 1994). The application of the process-dissociation
+(PD) approach (introduced by Jacoby, 1991, to dissociate implicit and
+explicit memory) to sequence learning has therefore been an important
+improvement (Buchner, Steffens, Rothkegel, \& Erdfelder, 1997; Curran,
+2001; Destrebecqz \& Cleeremans, 2001). In the PD approach, measures of
+implicit and explicit knowledge are derived from two variants of the
+same task, thereby largely eliminating the criticized confounds.
+Specifically, under \emph{inclusion} instructions participants are asked
+to apply their explicit knowledge when solving the task, so that correct
+inclusion performance can arise from both explicit and implicit
+knowledge; in contrast, under \emph{exclusion} instructions they are
+asked to refrain from using explicit knowledge, so that correct
+exclusion performance can be attributed only to implicit knowledge.
+
+\subsection{Process dissociation in the generation
+task}\label{process-dissociation-in-the-generation-task}
+
+Destrebecqz and Cleeremans (2001) applied the PD approach to the
+generation task. Participants were instructed, after finishing the SRTT,
+to generate a sequence that is either similar (in the inclusion
+condition) or dissimilar (in the exclusion condition) to that observed
+during the SRTT. To the degree that participants can generate a similar
+sequence under the inclusion instruction, they can be said to have
+acquired knowledge about the sequence; yet, this knowledge may reflect
+implicit and/or explicit knowledge because both may be used to
+re-generate the learned sequence. However, only explicit knowledge is
+assumed to be under participants' control: When asked to generate a
+sequence that is dissimilar to the learned sequence -- that is, to
+\emph{exclude} their explicit knowledge -- participants can avoid
+generating similar transitions only \emph{to the degree that their
+sequence knowledge is explicit}. To the degree that their sequence
+knowledge is implicit, they would still generate a sequence
+\emph{similar} to the learned sequence despite being instructed to do
+the opposite. Based on this logic, conclusions about the presence or
+absence of explicit knowledge can be drawn from performance differences
+between the inclusion and exclusion conditions; conclusions about the
+presence or absence of implicit knowledge can be drawn from differences
+between exclusion performance and a control condition or chance
+baseline.
+
+The PD generation task has repeatedly been used to investigate sequence
+learning (e.g., Destrebecqz \& Cleeremans, 2001, 2003; Q. Fu, Dienes, \&
+Fu, 2010; Q. Fu, Fu, \& Dienes, 2008; Haider, Eichler, \& Lange, 2011;
+Jiménez, Vaquero, \& Lupiáñez, 2006; Mong, McCabe, \& Clegg, 2012;
+Norman, Price, \& Duff, 2006; Shanks, Rowland, \& Ranger, 2005;
+Wilkinson \& Shanks, 2004), and results showed some convergent validity:
+Participants who had acquired explicit knowledge -- as measured by the
+PD procedure -- were able to drastically reduce their RT during the
+learning phase by actively predicting the next response; this was not
+the case for participants who did not show evidence for explicit
+knowledge in the PD task (Haider et al., 2011). Investigations focusing
+on the relative contributions of implicit and explicit knowledge in
+sequence learning have, however, yielded mixed results: While some
+studies found evidence for implicit but no explicit knowledge, or
+reported combinations of implicit and explicit knowledge acting together
+(e.g., Destrebecqz \& Cleeremans, 2001, 2003; Q. Fu et al., 2010, 2008;
+Haider et al., 2011; Jiménez et al., 2006; Mong et al., 2012; Norman et
+al., 2006), other studies found only evidence for explicit knowledge
+(Shanks et al., 2005; e.g., Wilkinson \& Shanks, 2004). Whereas it is
+possible that moderating variables (e.g., the response-stimulus
+interval, cued vs.~uncued generation task) may be identified that can
+account for these discrepancies, they may also (at least in part) arise
+from unwarranted assumptions of the PD method as discussed next.
+
+\subsubsection{Process dissociation and its
+assumptions}\label{process-dissociation-and-its-assumptions}
+
+The PD approach has become a popular and versatile tool for measuring
+the relative contributions of implicit or automatic versus explicit or
+controlled processes in a variety of tasks (Yonelinas \& Jacoby, 2012).
+It can be formalized as a set of equations describing inclusion (\(I\))
+and exclusion (\(E\)) performance as a function of the probabilities of
+controlled process, \(C\), and the automatic process, \(A\), as follows:
+\[I=C+(1-C)*A\] and \[E=(1-C)*A\] These equations express the notions
+that (1) correct responses under inclusion can arise from either the
+controlled process (with probability \(C\)) or, given that it fails
+(with probability \(1-C\)), from the automatic process \(A\); and (2)
+correct responses under exclusion are solely due to the automatic
+process in the absence of the influence of the controlled process,
+\((1-C)*A\). Solving these equations for \(C\) and \(A\) (or using
+parameter estimation techniques for multinomial models) yields estimates
+of the contributions of the controlled and automatic process.
+
+The validity of the PD method and model has been the target of debate
+since its introduction by Jacoby (1991; see, e.g., Buchner, Erdfelder,
+\& Vaterrodt-Plünnecke, 1995; Curran \& Hintzman, 1995). This is because
+the PD approach is not a theory-free measurement tool but rests on a set
+of strong and possibly problematic assumptions. First and obviously, it
+assumes the existence of two qualitatively different---controlled and
+automatic---processes, and it aims to measure the magnitude of their
+respective contributions. It is, however, not well-suited for comparing
+single- and dual-process models: To illustrate, Ratcliff, Van Zandt and
+McKoon (1995) found that data generated from a single-process model
+could produce a data pattern that, when analyzed using the PD approach,
+appears to support the existence -- and differential contributions -- of
+two qualitatively distinct processes. This implies that empirical
+dissociations between the controlled and automatic estimates do not
+necessarily imply the existence of two qualitatively different
+underlying processes.
+
+Second, it is assumed that both processes operate independently; that
+is, on each trial, both the explicit and the implicit process attempt to
+produce a candidate response in parallel, and their respective candidate
+responses are not influencing each other. In particular, the response
+produced by the automatic process is assumed to be uninfluenced by
+whether the controlled process produces the same or a different
+response. Relatedly, the model assumes that independence holds across
+persons and items; when data are aggregated over (potentially
+heterogeneous) participants and items, a violation can lead to biases in
+parameter estimates. There has been considerable debate about the
+independence assumption in applications of the PD to episodic memory
+paradigms (Curran \& Hintzman, 1995, 1997; Hintzman \& Curran, 1997;
+Jacoby \& Shrout, 1997). Evidence suggests that aggregation independence
+may often be violated; hierarchical extension of the PD model have been
+proposed to address this problem (Rouder, Lu, Morey, Sun, \& Speckman,
+2008).
+
+Third, it is assumed that both the controlled and automatic processes
+are \emph{invariant} across the inclusion and exclusion instructions.
+This is reflected in the PD equations by the use of a single parameter
+\(C\) instead of separate parameters for inclusion and exclusion; in
+other words, the PD equations represent a simplified model that
+incorporates the invariance assumption
+\(C = C_{Inclusion}=C_{Exclusion}\). Similarly, the PD equations include
+only a single parameter \(A\), reflecting the simplifying assumption
+that the automatic process is invariant across inclusion and exclusion,
+\(A = A_{Inclusion} = A_{Exclusion}\). If the PD instruction affects
+those cognitive processes, the PD equations do no longer yield valid
+estimates. Recently, the invariance assumption was indeed found to be
+violated for the controlled process in three different paradigms
+(Klauer, Dittrich, Scholtes, \& Voss, 2015). The goal of the present
+study is to test whether the PD model's invariance assumption holds for
+the generation task.
+
+\subsection{Invariance assumption: Consequences of
+violations}\label{invariance-assumption-consequences-of-violations}
+
+Violations of the invariance assumptions may considerably distort
+parameter estimates and substantive conclusions (e.g., Buchner et al.,
+1995; Klauer et al., 2015). This is also true for the generation task.
+Assume first that participants have explicit but no implicit sequence
+knowledge: In the inclusion task, participants would easily express
+their knowledge. In the exclusion task, they would strategically
+generate a different sequence to avoid regular responses in this task.
+However, they would not notice that this different sequence also
+contains transitions of the (to-be-avoided) sequence. If this were the
+case, then explicit knowledge would be more likely to be expressed in
+the inclusion task than in the exclusion task. This implies that
+explicit knowledge would successfully lead to improved inclusion
+performance, but would fail to adequately reduce the rate of regular
+transitions generated under exclusion instructions. However, because the
+controlled parameter is assumed to be equal across inclusion and
+exclusion, this effect would distort estimates of the other parameters;
+in particular, it would lead to inflated estimates of implicit
+knowledge. In this case, researchers would erroneously conclude that
+both explicit and implicit knowledge were present.
+
+Next, assume that participants have acquired implicit but no explicit
+sequence knowledge. Assume further that they adopt a liberal criterion
+under the inclusion instruction, allowing them to correctly reproduce a
+substantial proportion of regular transitions by relying on motor
+fluency. Under exclusion instructions, lacking explicit and therefore
+controllable knowledge, they might try to reduce the generation rate of
+regular transitions by adopting one of several response strategies
+(e.g., subjective randomness, persevering specific patterns; Stahl,
+Barth, \& Haider, 2015). As a consequence, the acquired implicit
+knowledge would be expressed to a greater degree under inclusion than
+under exclusion instructions, a pattern that would typically be
+interpreted as the presence of explicit knowledge. Taken together,
+conclusions about the presence or absence of implicit and explicit
+knowledge, as well as their relative contributions across conditions,
+may be erroneous if one or both of the invariance assumptions are
+violated. It is therefore important to test whether these assumptions
+can be upheld in the investigation of sequence knowledge using the PD
+approach to the generation task.
+
+\section{Overview of present studies}\label{overview-of-present-studies}
+
+The present study aimed at testing, in the PD generation task, the
+invariance assumption for automatic and controlled processes. For this
+purpose, it was necessary to extend the traditional PD design by
+orthogonally manipulating explicit and implicit knowledge (see also
+Klauer et al., 2015). We manipulated \emph{explicit} knowledge by
+explicitly informing participants, after the SRTT training phase, about
+a subset of the regular transitions (e.g., 1 out of 6) of the sequence.
+By presenting information about the transitions \emph{after training} we
+ensured that participants did not use that information during the SRTT
+to strategically search for more regular transitions (i.e., we made sure
+the manipulation did not affect the amount of sequence knowledge
+acquired during training). We manipulated \emph{implicit} knowledge by
+varying the amount of regularity present in the SRTT training sequence.
+For this purpose, we used materials with a mere probabilistic
+regularity; such materials typically produce robust implicit knowledge
+in the absence of explicit knowledge.
+
+We then fit an extended process-dissociation model \(\mathcal{M}_1\)
+that allowed for testing the invariance assumption of both the
+controlled and the automatic process: The model provided us with
+separate estimates for these processes for both inclusion and exclusion
+tasks; and we used the differences between these estimates to test the
+invariance assumption. This model relies on the auxiliary assumptions
+that each experimental manipulation selectively influenced only one of
+both processes; these assumptions are tested by goodness-of-fit tests
+proposed by Klauer (2010). Moreover, in order to justify the auxiliary
+assumptions, we specified a standard process-dissociation model
+\(\mathcal{M}_2\) that does not enforce the auxiliary assumptions but
+enforces the invariance assumption; model comparison techniques (DIC;
+Spiegelhalter, Best, Carlin, \& Van Der Linde, 2002) were then used to
+compare model \(\mathcal{M}_1\) and model \(\mathcal{M}_2\). If model
+\(\mathcal{M}_1\) is favored over model \(\mathcal{M}_2\), this can be
+taken as evidence in favor of our auxiliary assumptions over the
+invariance assumption. Finally, instead of aggregating data, we used
+hierarchical Bayesian extensions of all models (e.g., Klauer, 2010;
+Rouder \& Lu, 2005; Rouder et al., 2008).
+
+The outline of this article is as follows: In Experiment 1, we applied
+the just-presented method to an SRTT with first-order conditional
+material. In Experiment 2, we replicated our findings from Experiment 1
+and extended them to second-order conditional material. Finally, because
+Experiments 1 and 2 found a violation of invariance for the controlled
+process, Experiment 3 explored potential mechanisms underlying this
+violation of invariance. We discuss the implications of our findings for
+the validity of the PD model equations as well as ordinal
+interpretations of findings obtained with the PD procedure as applied to
+the generation task. Furthermore, we point out directions in which the
+generation task could be developed to provide an improved measure of
+implicit and explicit knowledge in sequence learning.
+
+\section{Experiment 1}\label{experiment-1}
+
+Experiment 1 tested the invariance assumption for automatic and
+controlled processes using materials with first-order regularity. We
+implemented two different levels of implicit knowledge by presenting
+either random or probabilistic sequences to participants during the SRT
+task. Orthogonally, we implemented two different levels of explicit
+knowledge by experimentally inducing such knowledge: After the SRT task,
+we informed one half of participants about one of the six transitions in
+the sequence.
+
+\subsection{Method}\label{method}
+
+\subsubsection{Design}\label{design}
+
+The study realized a 2 (\emph{material}: random vs.~probabilistic)
+\(\times\) 2 (\emph{explicit knowledge}: no transition revealed vs.~one
+transition revealed) \(\times\) 2 (\emph{PD instruction}: inclusion
+vs.~exclusion) \(\times\) 2 (\emph{block order}: inclusion first
+vs.~exclusion first) design with repeated measures on the \emph{PD
+instruction} factor.
+
+\subsubsection{Participants}\label{participants}
+
+One hundred and twenty-one participants (87 women) aged between 17 and
+51 years (\(M = 23.7\) years) completed the study. Most were
+undergraduates from University of Cologne. Participants were randomly
+assigned to experimental conditions. They received either course credit
+or 3.50 Euro for their participation.
+
+\subsubsection{Materials}\label{materials}
+
+We used two different types of material:
+
+\begin{itemize}
+\tightlist
+\item
+  A \emph{random} sequence was randomly generated for each participant
+  anew by drawing with replacement from a uniform distribution of six
+  response locations.
+\item
+  A \emph{probabilistic} sequence was generated from the first-order
+  conditional sequence \(2-6-5-3-4-1\). With a probability of \(.6\), a
+  stimulus location was followed by the next location from this
+  sequence; otherwise, another stimulus location was randomly chosen
+  from a uniform distribution.
+\end{itemize}
+
+In both materials there were no direct repetitions of response
+locations. In the random group, there was no \enquote{correct} sequence,
+and transition frequencies varied across persons. To compute the
+dependent variable in the generation task (i.e., the proportion of
+rule-adhering or regular transitions), we used the generating sequence
+for participants who worked on \emph{probabilistic} material; for
+participants who worked on \emph{random} material, we determined an
+individual criterion for each participant based on their individual
+transition frequencies during learning: For each participant, the
+sequence that best fitted the transitions observed by that participant
+during the \emph{acquisition} phase served as a criterion for the
+\emph{generation} phase. For the group that was instructed about a
+regular transition, this \emph{criterion sequence} also contained the
+revealed transition.
+
+\subsubsection{Procedure}\label{procedure}
+
+The experiment consisted of three consecutive parts: Participants first
+worked on a SRTT (the \emph{acquisition task}), followed by a
+\emph{generation task} and, finally, a debriefing phase. In the
+acquisition task, participants performed a SRTT consisting of 8 blocks
+with 144 trials each (for a total of 1,152 responses). SRTT and
+generation task were run on 17" CRT monitors (with a screen resolution
+of \(1{,}024~\text{px} \times 768~\text{px}\)). The viewing distance was
+approximately \(60~\text{cm}\). A horizontal sequence of six white
+squares (\(56~\text{px}\)) was presented on a gray screen. The distance
+between squares was \(112~\text{px}\). Each screen location corresponded
+to a key on a QWERTZ keyboard (from left to right Y, X, C, B, N, M).
+Participants had to respond whenever a square's color changed from white
+to red by pressing the corresponding key. They were instructed to place
+the left ring-, middle- and index fingers on the keys Y, X and C. The
+right index-, middle- and ring fingers were to be placed on keys B, N
+and M. There was no time limit for responses in the learning phase (nor
+in the generation phase). A warning beep indicated an incorrect
+response. The response-stimulus interval (RSI) was \(250~\text{ms}\).
+
+Following the SRTT phase, participants were told that stimulus locations
+during the SRTT followed an underlying sequential structure (but were
+not informed about the exact sequence). They were then asked to try to
+generate a short sequence of six locations that followed this structure.
+
+Before working on practice blocks, one transition was revealed to one
+half of the participants. They were told to memorize that transition and
+to use this knowledge in the following tasks.
+
+The generation task contained a counterbalanced order of inclusion
+versus exclusion blocks. Under inclusion (exclusion) instructions,
+participants were told to generate a sequence as similar (dissimilar) as
+possible to the sequence from the acquisition task. For both task,
+participants were instructed to follow their intuition if they had no
+explicit knowledge about the underlying sequence. Participants who had
+received information about a transition were instructed to include
+(exclude) the revealed transition.
+
+To familiarize participants with both inclusion and exclusion
+instructions, they worked on short practice blocks of twelve consecutive
+responses. Prior to the inclusion task, two practice blocks involved
+inclusion instructions; prior to the exclusion task, the first practice
+block was performed under inclusion instructions and the second practice
+block was performed under exclusion instructions. If participants who
+were explicitly informed about one transition failed to include
+(exclude) the revealed transition in practice blocks, they were informed
+that they did something wrong; the already revealed transition was again
+presented and two additional practice blocks had to be performed. This
+procedure was repeated until the revealed transition was successfully
+included (excluded) in two consecutive practice blocks. In the main
+block of the generation task, participants freely generated 120
+consecutive response locations. Question marks appeared at all locations
+and participants' key presses were reflected by the corresponding
+square's color changing to red. Direct repetitions were explicitly
+discouraged and were followed by a warning beep.
+
+Upon completing the computerized task, participants were asked to
+complete a questionnaire containing the following items (translated from
+German): (1) \enquote{One of the tasks mentioned a sequence in which the
+squares lit up during the first part of the study. In one of the
+experimental conditions, the squares did indeed follow a specific
+sequence. Do you think you were in this condition or not?}, (2)
+\enquote{How confident are you (in \%)?}, and (3) \enquote{Can you
+describe the sequence in detail?}. Subsequently, participants were asked
+to indicate, for each of the six response keys, the next key in the
+sequence on a printed keyboard layout and to indicate how confident they
+were in this decision. Finally, participants were thanked and debriefed.
+
+\subsubsection{Data analysis}\label{data-analysis}
+
+All analyses were performed using the R software (R Core Team, 2016) and
+Stan (Carpenter et al., in press). For the model-based analyses, we used
+hierarchical Bayesian extensions of the process-dissociaton model
+(Klauer, 2010; Rouder \& Lu, 2005; Rouder et al., 2008). The first level
+of this hierarchical model extended the traditional process-dissociation
+model by allowing for a violation of the invariance assumption: The
+controlled and automatic processes were allowed to vary as a function of
+instruction (inclusion vs.~exclusion), \[
+\begin{aligned}
+  I_{ij} & =  C_{ijm} + (1-C_{ijm}) A_{ijm}, m = 1\\
+  E_{ij} & =  (1-C_{ijm}) A_{ijm}, m = 2
+\end{aligned}
+\] where \(i\) indexes participants, \(j\) indexes transition type
+(i.e., revealed: \(j = 1\); nonrevealed: \(j = 2\)), and \(m\) indexes
+the \emph{PD instruction} condition (inclusion: \(m=1\); exclusion:
+\(m=2\)).
+
+Parameters \(C_{ijm}\) and \(A_{ijm}\) are probabilities in the range
+between zero and one; following previous work (e.g. Albert \& Chib,
+1993; Klauer et al., 2015; Rouder et al., 2008), we used a probit
+function to link these probabilities to the second-level parameters as
+follows:
+
+\[
+  C_{ijm} = \begin{cases}
+    \Phi(\mu_{km}^{(C)} + \delta_{im}^{(C)}) & \text{if } j=1 \text{ (item has been revealed)}\\
+                                            0 & \text{if } j=2 \text{ (item has not been revealed)}\\
+    \end{cases}
+\] and \[
+  A_{ijm} = \Phi(\mu_{jkm}^{(A)} + \delta_{ijm}^{(A)})
+\]
+
+where \(\Phi\) denotes the standard normal cumulative distribution
+function, \(\mu_{km}^{(C)}\) is the fixed effect of material \(k\) (that
+participant \(i\) worked on during the SRTT) and \emph{PD instruction}
+condition \(m\) on controlled processes. \(\delta_{im}^{(C)}\) is the
+\(i\)th participant's deviation from his or her group's mean.
+
+Accordingly, \(\mu_{jkm}^{(A)}\) is the fixed effect of transition type
+\(j\), material \(k\), and \emph{PD instruction} condition \(m\) on
+automatic processes, and \(\delta_{ijm}^{(A)}\) is the \(i\)th
+participant's deviation from the corresponding mean. Priors on
+parameters are given in the Appendix.
+
+Note that this specification imposes two auxiliary assumptions to the
+model: First, it is assumed that controlled processes \(C\) are set to
+zero for nonrevealed transitions (i.e., \(C=0\) for \(j=2\)), in other
+words, we assumed that no explicit knowledge has been acquired during
+the SRT phase. Second, it is assumed that automatic processes \(A\) do
+not vary as a function of the between-subjects manipulation of explicit
+knowledge \(l\) (i.e., \(A_{l=1} = A_{l=2}\)). These assumptions allowed
+us to relax and test the invariance assumption by obtaining separate
+estimates of both \(C\) and \(A\) for the inclusion and exclusion
+conditions (note that a \emph{full} model relaxing all three assumptions
+cannot be estimated).
+
+To assess goodness of fit, we used posterior predictive model checks as
+proposed by Klauer (2010): Statistic \(T_{A1}\) summarizes how well the
+model describes the individual category counts for the eight categories
+(revealed vs.~nonrevealed transitions \(\times\) correct vs.~incorrect
+\(\times\) inclusion vs.~exclusion). Statistic \(T_{B1}\) summarizes how
+well the model describes the covariations in the data across
+participants.
+
+Additionally, we also estimated a model \(\mathcal{M}_2\) that does not
+impose the auxiliary assumptions but enforces the invariance assumptions
+(i.e., parameters were not allowed to vary as a function of PD
+instruction condition \(m\)):
+
+\[
+\begin{aligned}
+  I_{ij} & =  C_{ij} + (1-C_{ij}) A_{ij}\\
+  E_{ij} & =  (1-C_{ij}) A_{ij}
+\end{aligned}
+\]
+
+The second-level equations of model \(\mathcal{M}_2\) are then given by:
+
+\[
+  C_{ij} = \Phi(\mu_{jkl}^{(C)} + \delta_{ij}^{(C)})
+\] and \[
+  A_{ij} = \Phi(\mu_{jkl}^{(A)} + \delta_{ij}^{(A)})
+\]
+
+where \(i\) indexes participants, \(j\) indexes transition type, \(k\)
+indexes the learning material that participant \(i\) worked on during
+the SRTT, and \(l\) indexes the manipulation of explicit knowledge
+(i.e., whether or not a transition has been revealed to participant
+\(i\)). Note that, given this model specification, separate parameters
+are estimated for each between-subjects condition \(kl\) and each
+transition type \(j\), while the invariance assumption is maintained
+(i.e., there is no index \(m\) for \emph{PD instruction} in the model
+equations).
+
+These two models were compared using the deviance information criterion
+DIC (Spiegelhalter et al., 2002); if model \(\mathcal{M}_1\) outperforms
+model \(\mathcal{M}_2\), it can be concluded that the auxiliary
+assumptions are less problematic than the invariance assumptions.
+Furthermore, model \(\mathcal{M}_1\) yields separate estimates of
+controlled and automatic processes for both inclusion and exclusion. The
+invariance assumption can be targeted directly by calculating the
+posterior differences \(A_{I} - A_{E}\) and \(C_{I} - C_{E}\): If the
+posterior distributions of these differences include zero, it can be
+concluded that the respective invariance assumption holds; if the
+posterior does not contain zero, it can be concluded that the respective
+invariance assumption is violated.
+
+\subsection{Results}\label{results}
+
+We first analyzed the performance data from the SRT task to determine
+whether sequence knowledge had been acquired during the task. Next, we
+analyzed generation task performance using hierarchical PD models.
+
+\subsubsection{Acquisition task}\label{acquisition-task}
+
+If participants acquired knowledge about the (probabilistic) regularity
+underlying the sequence of key presses, we expect a performance
+advantage for regular over irregular transitions, reflected in reduced
+RT and/or error rate. If this advantage is due to learning, it is
+expected to increase over SRTT blocks.
+
+\paragraph{Reaction times}\label{reaction-times}
+
+
+
+For RT analyses, we excluded the first trial of each block because the
+first location cannot be predicted, as well as error trials, trials
+succeeding an error, reactions faster than 50 ms and slower than 1,000
+ms. Figure 1 shows reaction times during the SRTT.
+
+We conducted a 2 (\emph{Material}: Random vs.~Probabilistic) \(\times\)
+8 (\emph{Block number}) \(\times\) 2 (\emph{FOC transition status}:
+regular vs.~irregular) ANOVA that revealed a main effect of
+\emph{material}, \(F(1, 119) = 8.11\), \(\mathit{MSE} = 39,617.25\),
+\(p = .005\), \(\eta^2_G = .055\); a main effect of \emph{block number}
+\(F(4.89, 582.06) = 33.35\), \(\mathit{MSE} = 1,032.91\), \(p < .001\),
+\(\eta^2_G = .029\); a main effect of \emph{FOC transition status},
+\(F(1, 119) = 125.46\), \(\mathit{MSE} = 714.88\), \(p < .001\),
+\(\eta^2_G = .016\); an interaction of \emph{material} and \emph{FOC
+transition status}, \(F(1, 119) = 121.57\), \(\mathit{MSE} = 714.88\),
+\(p < .001\), \(\eta^2_G = .015\); an interaction of \emph{block number}
+and \emph{FOC transition status}, \(F(6.32, 752.52) = 10.68\),
+\(\mathit{MSE} = 197.96\), \(p < .001\), \(\eta^2_G = .002\); and a
+three-way interaction between \emph{material}, \emph{block number}, and
+\emph{FOC transition status}, \(F(6.32, 752.52) = 5.70\),
+\(\mathit{MSE} = 197.96\), \(p < .001\), \(\eta^2_G = .001\).
+
+Separate ANOVAs for each \emph{material} condition yielded, for random
+material, only a significant main effect of \emph{block number},
+\(F(4.38, 258.47) = 13.09\), \(\mathit{MSE} = 1,276.78\), \(p < .001\),
+\(\eta^2_G = .026\), with RTs decreasing over blocks (all other
+\emph{F}s \textless{} 1). For probabilistic material, in contrast, we
+obtained main effects of \emph{block number},
+\(F(5.07, 304.28) = 22.09\), \(\mathit{MSE} = 891.30\), \(p < .001\),
+\(\eta^2_G = .035\); and of \emph{transition status},
+\(F(1, 60) = 182.32\), \(\mathit{MSE} = 976.60\), \(p < .001\),
+\(\eta^2_G = .061\) (i.e.~responses to regular transitions were faster
+than those for irregular transitions); importantly, we also obtained an
+interaction of \emph{block number} and \emph{transition status},
+\(F(5.93, 356.02) = 15.83\), \(\mathit{MSE} = 194.03\), \(p < .001\),
+\(\eta^2_G = .007\), showing that the RT difference between regular and
+irregular transitions increased over blocks, indicating learning of the
+regularities inherent in the probabilistic material.
+
+\paragraph{Error rates}\label{error-rates}
+
+
+
+For analyses of error rates, we excluded the first trial of each block.
+Figure 2 shows error rates during acquisition. We conducted a 2
+(\emph{Material}: Random vs.~Probabilistic) \(\times\) 8 (\emph{Block
+number}) \(\times\) 2 (\emph{FOC transition status}: regular
+vs.~irregular) ANOVA that revealed a main effect of \emph{block number},
+\(F(5.83, 693.83) = 6.06\), \(\mathit{MSE} = 11.83\), \(p < .001\),
+\(\eta^2_G = .016\), indicating that error rates increased over blocks,
+and a main effect of \emph{FOC transition status},
+\(F(1, 119) = 38.19\), \(\mathit{MSE} = 13.49\), \(p < .001\),
+\(\eta^2_G = .019\), indicating that error rates were higher for
+nonregular transitions. The interaction of \emph{material} and \emph{FOC
+transition status} was also significant, \(F(1, 119) = 27.61\),
+\(\mathit{MSE} = 13.49\), \(p < .001\), \(\eta^2_G = .014\), reflecting
+the finding that the effect of the latter factor was limited to the
+probabilistic material. The three-way interaction of \emph{material},
+\emph{block number}, and \emph{FOC transition status} was however not
+significant, \(F(6.55, 778.97) = 1.84\), \(\mathit{MSE} = 7.94\),
+\(p = .082\), \(\eta^2_G = .004\).
+
+To disentangle these interactions, we analyzed both \emph{material}
+groups separately. As for RT, an ANOVA for the random material group
+revealed only a main effect of \emph{block number},
+\(F(4.94, 291.45) = 2.50\), \(\mathit{MSE} = 16.03\), \(p = .031\),
+\(\eta^2_G = .013\) (all other \emph{F}s \textless{} 1). The
+probabilistic material group showed a main effect of \emph{block number}
+\(F(5.73, 343.65) = 4.63\), \(\mathit{MSE} = 10.29\), \(p < .001\),
+\(\eta^2_G = .022\), and a main effect of \emph{FOC transition status},
+\(F(1, 60) = 62.50\), \(\mathit{MSE} = 14.23\), \(p < .001\),
+\(\eta^2_G = .070\). Importantly, the interaction of \emph{block number}
+and \emph{FOC transition status} was significant,
+\(F(5.9, 353.81) = 3.23\), \(\mathit{MSE} = 7.85\), \(p = .004\),
+\(\eta^2_G = .012\), indicating that the difference in error rates
+between regular and irregular transitions increased across blocks,
+consistent with the learning effect obtained for reaction times.
+
+\subsubsection{Generation task}\label{generation-task}
+
+In a second step, we investigated how learned knowledge was expressed in
+the generation task. We analyzed generation performance by fitting two
+hierarchical models, \(\mathcal{M}_1\) and \(\mathcal{M}_2\).
+\(\mathcal{M}_1\) allows the automatic and controlled processes to vary
+between inclusion and exclusion, but it assumes that participants
+acquired only implicit knowledge during the SRTT, and that revealing
+explicit knowledge after the SRTT did not affect implicit knowledge.
+\(\mathcal{M}_2\) is a hierarchical extension of the classical PD model
+that enforces the invariance assumption. We computed model fit
+statistics to test whether each model could account for the means,
+\(T_{A1}\), and covariances, \(T_{B1}\), of the observed frequencies. We
+compared both models using the DIC statistic that provides a combined
+assessment of parsimony and goodness of fit and penalizes models for
+unnecessary complexity. Parameter estimates from model \(\mathcal{M}_1\)
+were used to address the invariance assumptions, directly. The first
+trial of a block as well as any response repetitions were excluded from
+all generation task analyses.
+
+The model checks for model \(\mathcal{M}_1\) were satisfactory,
+\[T_{A1}^{observed} = 491.06, T_{A1}^{expected} = 469.94, p = .369,\]~
+\[T_{B1}^{observed} = 9.05, T_{B1}^{expected} = 6.95, p = .366.\] In
+contrast, the model checks for model \(\mathcal{M}_2\) revealed
+significant deviations of the model's predictions from the data,
+\[T_{A1}^{observed} = 1,092.06, T_{A1}^{expected} = 473.88, p = .002,\]~
+\[T_{B1}^{observed} = 190.05, T_{B1}^{expected} = 6.93, p < .001.\]
+
+Model \(\mathcal{M}_1\) attained a DIC value of 25,293.45 and clearly
+outperformed model \(\mathcal{M}_2\) that attained a DIC value of
+25,891.74. This implies that the auxiliary assumptions we introduced to
+\(\mathcal{M}_1\) were much less problematic than the invariance
+assumption. Moreover, the standard PD model enforcing the invariance
+assumption was not able to account for the data.
+
+
+
+Figure 3 shows the parameter estimates obtained from model
+\(\mathcal{M}_1\). Figure 4 shows that the invariance assumption for the
+automatic process was violated with \(A_I > A_E\), 95\% CI {[}.01,
+.03{]}, and a Bayesian \(p < .001\) (\(p = .360\) for revealed
+transitions). The invariance assumption for the controlled process was
+also violated with \(C_I > C_E\), 95\% CI {[}.08, .54{]}, and a Bayesian
+\(p = .003\).
+
+\subsection{Discussion}\label{discussion}
+
+The experimental manipulations had the expected results: Based on the
+SRTT results, we can conclude that participants acquired sequence
+knowledge during learning. In addition, explicit knowledge about one of
+the six transitions had a clear effect on generation performance for
+that transition.
+
+The extended process-dissociation model \(\mathcal{M}_1\) revealed a
+violation of the invariance assumptions for both the controlled process
+(i.e., \(C_I > C_E\)) and the automatic process (i.e., \(A_I > A_E\)).
+Model \(\mathcal{M}_1\) rested on two auxiliary assumptions: It was
+assumed that controlled processes were not affected by learning
+material, and that automatic processes were not affected by the
+manipulation of explicit knowledge (i.e., revealing a transition). Both
+assumptions found support in the current data as they did not harm model
+fit. Comparing model \(\mathcal{M}_1\) to a standard
+process-dissociation model \(\mathcal{M}_2\) that did not impose these
+assumptions but instead imposed the invariance assumption, model
+\(\mathcal{M}_1\) was strongly favored by the DIC.
+
+Despite the fact that the above auxiliary assumptions could be upheld in
+model comparison, and that the incorporating model was well able to
+account for the data, it may nevertheless still be the case that
+violations have biased parameter estimates. To assess this possibility,
+we used the questionnaire data to assess the assumption that the
+controlled process was not affected by learning material (i.e., that
+participants did not acquire explicit knowledge). Specifically, we
+excluded any transitions that participants reported in their explicit
+description of the sequence (while keeping the revealed transitions). If
+participants had in fact acquired explicit knowledge about nonrevealed
+transitions during learning, they may have used this knowledge to
+generate more regular transitions under inclusion than exclusion.
+Because of our assumption that \(C=0\) for nonrevealed transitions, this
+performance difference would have been reflected in greater estimates of
+implicit knowledge under inclusion than exclusion, and might account for
+the observed \(A_{I}>A_{E}\) pattern. If the acquired explicit knowledge
+was indeed the cause of the invariance violation, excluding the
+transitions for which knowledge was reported should make the violation
+disappear. To the contrary, excluding all correctly reported transitions
+(9.04\% of cases) did not affect the pattern of results.\footnote{Of the
+  reported (nonrevealed) transitions, only approximately 25.47\% were
+  indeed regular transitions. After excluding \emph{all} reported
+  transitions regardless of whether they reflect correct knowledge or
+  not (27.55\% of cases), the invariance violation was descriptively
+  unchanged but no longer statistically significant, Bayesian
+  \(p = .221\).} This confirms the above conclusions that the auxiliary
+assumptions can be upheld.
+
+Taken together, these findings suggest that the invariance assumption
+was violated for both the automatic and the controlled process.
+Invariance of the automatic process was significantly violated for
+nonrevealed but not for revealed transitions. This may be due to the
+small magnitude of the violation effect and the relatively small number
+of revealed (as compared to nonrevealed) transitions. The magnitude of
+the invariance violation was much greater for the controlled process:
+Explicit knowledge was used to a greater degree under inclusion than
+exclusion instructions.
+
+\section{Experiment 2}\label{experiment-2}
+
+Experiment 1 showed that the invariance assumption was violated for both
+automatic and controlled processes. The main goal of Experiment 2 was to
+replicate the previous findings and extend them to second-order
+conditional (SOC) material.
+
+A secondary goal was to explore whether different amounts of implicit
+knowledge are acquired with \emph{mixed} versus \emph{pure} SOC
+material. Previous studies of the SRTT using a PD generation task have
+employed a 12-item-sequence of four response locations (e.g.,
+Destrebecqz \& Cleeremans, 2001; Wilkinson \& Shanks, 2004). Analyzing
+these sequences more closely, it is evident that they did not only
+contain second order information (i.e., the last two locations predict
+the next location), but they also incorporate lower-order information:
+Direct repetitions never occur, reversals occur below chance (i.e.,
+1/12, whereas chance level would equal \(1/3\) given that repetitions
+are prohibited), and the last location of a triplet \(L_3\) is not
+independent of the first location \(L_1\) (e.g., for SOC1,
+\(p(L_3 = 2 | L_1 = 3) = 2/3\)). In other words, in two out of three
+cases, the third location of a triplet can be predicted by the first
+location of a triplet alone. It is plausible that participants are able
+to learn this lower-order information, and that learning effects may not
+(only) be based on second-order information (cf., Reed \& Johnson,
+1994). To investigate this possibility, Experiment 2 implemented two
+types of probabilistic material: A \emph{mixed SOC} material that
+incorporated both second-order and lower-order types of information, and
+another \emph{pure SOC} material that only followed a second-order
+regularity.
+
+\subsection{Method}\label{method-1}
+
+\subsubsection{Design}\label{design-1}
+
+The study realized a 3 (\emph{material}: random, mixed SOC, pure SOC)
+\(\times\) 2 (\emph{explicit knowledge}: no transition revealed vs.~two
+transitions revealed) \(\times\) 2 (\emph{PD instruction}: inclusion
+vs.~exclusion) \(\times\) 2 (\emph{block order}: inclusion first
+vs.~exclusion first) design with repeated measures on the \emph{PD
+instruction} factor.
+
+\subsubsection{Participants}\label{participants-1}
+
+One hundred and seventy-nine participants (120 women) aged between 18
+and 58 years (\(M = 22.8\) years) completed the study. Most were
+undergraduates from Heinrich-Heine-Universität Düsseldorf. Data from 8
+participants were excluded from generation task analyses because they
+had received erroneous exclusion instructions. Participants were
+randomly assigned to experimental conditions. They received either
+course credit or 3.50 Euro for their participation.
+
+\subsubsection{Materials}\label{materials-1}
+
+We implemented three different types of material:
+
+\begin{itemize}
+\tightlist
+\item
+  A \emph{random} sequence was randomly generated for each participant
+  anew by drawing with replacement from a uniform distribution of six
+  response locations.
+\item
+  A \emph{mixed SOC} sequence incorporated two types of information:
+  First, the third location of a triplet was conditional upon the first
+  two locations. Second, within such regular triplets, given a fixed
+  first-position location, there was one highly probable third-position
+  location and two somewhat less probable third-position locations; the
+  other three response locations never occurred for this first-position
+  location.
+\item
+  A \emph{pure SOC} sequence followed only the second-order regularity.
+\end{itemize}
+
+In both probabilistic materials (\emph{mixed} and \emph{pure} SOC),
+87.5\% of trials adhered to the second-order regularity, which was
+individually and randomly selected for each participant anew. In all
+conditions, the material adhered to the following (additional)
+restrictions: (1) there were no direct repetitions of response
+locations, and (2) there were no response location reversals (i.e.,
+1-2-1). To compute the dependent variable in the generation task (i.e.,
+the number of rule-adhering triplets), for both \emph{probabilistic}
+groups, we used the second-order sequence that was used to generate each
+participant's materials. For the \emph{random} group, there is no
+\enquote{correct} sequence and we again computed an individual criterion
+sequence for each participant. For convenience, we did not generate all
+possible second-order sequences for these participants (as we did for
+first-order materials in Experiment 1), but chose to use individual
+criterion sequences that were randomly generated similar to the
+\emph{pure SOC} material.
+
+\subsubsection{Procedure}\label{procedure-1}
+
+The experimental procedure closely followed that of Experiment 1: In the
+acquisition task, participants performed a SRTT consisting of 8 blocks
+with 180 trials each (for a total of 1,440 responses). The
+response-stimulus interval (RSI) was \(0~\text{ms}\). Following the SRTT
+phase, participants were told that stimulus locations during the SRTT
+followed some underlying sequential structure. They were then asked to
+try to generate a short sequence of thirty locations that followed this
+structure.
+
+The generation task followed, with inclusion vs.~exclusion block order
+counterbalanced. Deviating from Experiment 1, we fixed the number of
+practice blocks that preceded both inclusion and exclusion task: Prior
+to the inclusion task, three practice blocks involved inclusion
+instructions; prior to the exclusion task, the first and second practice
+block involved inclusion instructions, and the third involved exclusion
+instructions. Before working on practice blocks, two transitions were
+revealed to one half of the participants.
+
+Upon completing the computerized task, participants were asked to
+complete a questionnaire containing the following items: (1)
+\enquote{Did you notice anything special working on the task? Please
+mention anything that comes to your mind.}, (2) \enquote{One of the
+tasks mentioned a sequence in which the squares lit up during the first
+part of the study. In one of the experimental conditions, the squares
+did indeed follow a specific sequence. Do you think you were in this
+condition or not?}, (3) \enquote{How confident are you (in \%)?}, (4)
+\enquote{Can you describe the sequence in detail?}. Subsequently,
+participants were asked to indicate, for ten first-order transitions,
+the next three keys in the sequence on a printed keyboard layout. The
+first-order transitions were individually selected for each participant
+so that each participant had the chance to express full explicit
+knowledge about the second-order regularity.
+
+\subsection{Data analysis}\label{data-analysis-1}
+
+For the model-based analyses, models \(\mathcal{M}_1\) and
+\(\mathcal{M}_2\) were analogous to those used in Experiment 1 (see
+Appendix for detail).
+
+\subsection{Results}\label{results-1}
+
+We first analyzed reaction times and error rates during the SRT task to
+determine whether sequence knowledge had been acquired during the task.
+Next, we analyzed generation task performance using hierarchical PD
+models.
+
+\subsubsection{Acquisition task}\label{acquisition-task-1}
+
+If participants acquired sequence knowledge from probabilistic
+materials, we expect a performance advantage for regular over irregular
+transitions, reflected in reduced RT and/or error rate. If this
+advantage is due to learning, it is expected to increase over SRTT
+blocks. If participants are able to learn lower-order information that
+is only present in \emph{mixed SOC} material, the advantage is expected
+to be greater in \emph{mixed SOC} material compared to \emph{pure SOC}.
+If participants are able to learn second-order information, a
+performance advantage is to be expected not only in \emph{mixed SOC} but
+also in \emph{pure SOC} material.
+
+\paragraph{Reaction times}\label{reaction-times-1}
+
+
+
+For all RT analyses, we excluded the first two trials of each block
+because the first two locations cannot be predicted, as well as error
+trials, trials succeeding an error, reactions faster than 50 ms and
+slower than 1,000 ms. Figure 5 shows reaction times during acquisition.
+
+We conducted a 3 (\emph{Material}: random vs.~pure SOC vs.~mixed SOC)
+\(\times\) 2 (\emph{Transition status}: regular vs.~irregular SOC)
+\(\times\) 8 (\emph{Block number}) ANOVA with repeated measures on the
+last two factors that revealed a main effect of \emph{block number},
+\(F(4.46, 780.51) = 41.53\), \(\mathit{MSE} = 1,515.93\), \(p < .001\),
+\(\eta^2_G = .020\), reflecting decreasing RT over blocks; a main effect
+of \emph{transition status}, \(F(1, 175) = 40.02\),
+\(\mathit{MSE} = 582.10\), \(p < .001\), \(\eta^2_G = .002\), reflecting
+an RT advantage for regular transitions; and an interaction of
+\emph{block number} and \emph{transition status},
+\(F(6.39, 1118.42) = 2.81\), \(\mathit{MSE} = 439.60\), \(p = .009\),
+\(\eta^2_G = .001\), reflecting the finding that the RT advantage for
+regular transitions increased over block (i.e., the sequence learning
+effect). We also found an interaction of \emph{material} and
+\emph{transition status}, \(F(2, 175) = 7.40\),
+\(\mathit{MSE} = 582.10\), \(p = .001\), \(\eta^2_G = .001\), reflecting
+the finding that the effect of \emph{transition status} was absent in
+the random material group, \(F(1, 58) = 0.44\),
+\(\mathit{MSE} = 380.19\), \(p = .510\), \(\eta^2_G = .000\); trivially,
+no sequence knowledge was learned from random material.
+
+The three-way interaction was not significant,
+\(F(12.78, 1118.42) = 0.92\), \(\mathit{MSE} = 439.60\), \(p = .535\),
+\(\eta^2_G = .000\), suggesting that the sequence-learning effect did
+not differ across material groups. We conducted separate analyses to
+probe for sequence-learning effects in each material condition.
+Analyzing only the random material group revealed only a main effect of
+\emph{block number}, \(F(3.82, 221.55) = 15.74\),
+\(\mathit{MSE} = 1,484.04\), \(p < .001\), \(\eta^2_G = .020\) (all
+other \emph{p}s \textgreater{} .05). In the \emph{pure SOC} group, in
+contrast, a main effect of \emph{block number},
+\(F(3.96, 229.51) = 12.04\), \(\mathit{MSE} = 2,038.65\), \(p < .001\),
+\(\eta^2_G = .019\), was accompanied by a main effect of
+\emph{transition status}, \(F(1, 58) = 28.48\),
+\(\mathit{MSE} = 637.73\), \(p < .001\), \(\eta^2_G = .004\), and an
+interaction of both factors, \(F(6.03, 349.61) = 2.47\),
+\(\mathit{MSE} = 530.13\), \(p = .023\), \(\eta^2_G = .002\), reflecting
+a sequence learning effect on RT.
+
+In the \emph{mixed SOC} group, we obtained only main effects of
+\emph{block number}, \(F(4.91, 289.7) = 15.95\),
+\(\mathit{MSE} = 1,334.22\), \(p < .001\), \(\eta^2_G = .024\), and of
+\emph{transition status}, \(F(1, 59) = 18.83\),
+\(\mathit{MSE} = 725.90\), \(p < .001\), \(\eta^2_G = .003\), but the
+interaction of \emph{block number} and \emph{transition status} was not
+significant, \(F(5.74, 338.77) = 1.15\), \(\mathit{MSE} = 571.40\),
+\(p = .331\), \(\eta^2_G = .001\). This is despite the fact that the
+effect of transition status is also likely to be a result of sequence
+learning, and it is of similar magnitude to that obtained in the pure
+SOC group. The notion that both learning effects are similar was also
+supported by a joint analysis of the pure SOC and mixed SOC groups: The
+two-way interaction between block number and transition status was
+significant, \(F(6.39, 1118.42) = 2.81\), \(\mathit{MSE} = 439.60\),
+\(p = .009\), \(\eta^2_G = .001\), but the three-way-interaction of
+\emph{material}, \emph{block number}, and \emph{transition status} was
+not significant, \(F(12.78, 1118.42) = 0.92\),
+\(\mathit{MSE} = 439.60\), \(p = .535\), \(\eta^2_G = .000\). Taken
+together, we interpret these findings to show that the learning effect
+in the mixed SOC group was comparable to that observed in the pure SOC
+group but too small to reach significance in a separate analysis.
+
+\paragraph{Error rates}\label{error-rates-1}
+
+
+
+For all analyses of error rates, we excluded the first two trials of
+each block. Figure 6 shows error rates during acquisition. We conducted
+a 3 (\emph{Material}: Random vs.~mixed SOC vs.~pure SOC) \(\times\) 8
+(\emph{Block number}) \(\times\) 2 (\emph{SOC transition status}:
+regular vs.~irregular) ANOVA with repeated measures on the last two
+factors that revealed a main effect of \emph{block number},
+\(F(3.66, 644.87) = 3.78\), \(\mathit{MSE} = 39.10\), \(p = .006\),
+\(\eta^2_G = .008\), reflecting increasing error rates over blocks, and
+a main effect of \emph{transition status}, \(F(1, 176) = 16.14\),
+\(\mathit{MSE} = 9.08\), \(p < .001\), \(\eta^2_G = .002\), reflecting
+an accuracy advantage for regular transitions. The interaction of
+\emph{material} and \emph{transition status} was not significant,
+\(F(2, 176) = 2.66\), \(\mathit{MSE} = 9.08\), \(p = .073\),
+\(\eta^2_G = .001\),
+
+Separate analyses yielded no significant effects in the random material
+group (all \emph{p}s \textgreater{} .05). Importantly, an effect of
+\emph{transition status} was clearly absent from the random material
+group, \(F(1, 58) = 0.62\), \(\mathit{MSE} = 7.68\), \(p = .433\),
+\(\eta^2_G = .000\). In the \emph{mixed SOC} group, a main effect of
+\emph{block number} was found, \(F(5.66, 334.01) = 2.96\),
+\(\mathit{MSE} = 15.46\), \(p = .009\), \(\eta^2_G = .017\), along with
+a main effect of \emph{transition status}, \(F(1, 59) = 12.88\),
+\(\mathit{MSE} = 11.29\), \(p = .001\), \(\eta^2_G = .009\), reflecting
+higher error rates for irregular than for regular transitions. Finally,
+in the \emph{pure SOC} group, block number did not affect error rates,
+\(F(1.87, 110.6) = 1.72\), \(\mathit{MSE} = 133.60\), \(p = .185\),
+\(\eta^2_G = .011\); but a main effect of \emph{transition status} was
+also found, \(F(1, 59) = 5.55\), \(\mathit{MSE} = 8.24\), \(p = .022\),
+\(\eta^2_G = .001\), reflecting higher error rates for irregular than
+regular transitions.
+
+Taken together, error rates mirror RTs in that they also reflect a
+performance advantage for regular transitions in the mixed and pure SOC
+groups that was not evident in the random control group. Deviating from
+the RT result pattern, this advantage did not reliably increase across
+blocks.
+
+\subsubsection{Generation task}\label{generation-task-1}
+
+We analyzed generation performance by fitting the two hierarchical
+models \(\mathcal{M}_1\) and \(\mathcal{M}_2\) that we introduced above
+to the data from Experiment 2. For both models, we computed model fit
+statistics to assess whether each model could account for the data; we
+then compared both models using the DIC. Parameter estimates from model
+\(\mathcal{M}_1\) were then used to address the invariance assumptions
+directly. The first two trials of a block as well as any response
+repetitions and reversals were excluded from all generation task
+analyses.
+
+The model checks for model \(\mathcal{M}_1\) were satisfactory,
+\[T_{A1}^{observed} = 692.77, T_{A1}^{expected} = 653.45, p = .291,\]~
+\[T_{B1}^{observed} = 8.44, T_{B1}^{expected} = 6.04, p = .292.\] In
+contrast, the model checks for model \(\mathcal{M}_2\) revealed
+significant deviations of the model's predictions from the data,
+\[T_{A1}^{observed} = 1,077.52, T_{A1}^{expected} = 652.79, p = .003,\]~
+\[T_{B1}^{observed} = 49.97, T_{B1}^{expected} = 6.06, p < .001.\]
+
+Model \(\mathcal{M}_1\) attained a DIC value of 38,907.43 and
+outperformed model \(\mathcal{M}_2\) that attained a DIC value of
+39,210.66. This implies that our auxiliary assumptions that we
+introduced to make model \(\mathcal{M}_1\) identifiable (i.e., that
+participants did not acquire explicit knowledge during training, and
+that revealing explicit knowledge about a transition did not affect
+implicit knowledge) were less problematic than the invariance
+assumption. Moreover, the standard PD model enforcing the invariance
+assumption was not able to account for the data.
+
+
+
+Figure 7 shows the parameter estimates obtained from model
+\(\mathcal{M}_1\). Figure 8 shows that the invariance assumption for
+controlled processes was again violated with \(C_I > C_E\), 95\% CI
+{[}.27, .63{]}, Bayesian \(p < .001\). The invariance assumption for
+automatic processes could be upheld, 95\% CI {[}-.01, .01{]}, Bayesian
+\(p = .638\) for non-revealed transitions and 95\% CI {[}-.10, .05{]},
+\(p = .763\) for revealed transitions.
+
+\subsection{Discussion}\label{discussion-1}
+
+The experimental manipulations had the expected results: Based on the
+SRTT results, we can conclude that participants acquired some (albeit
+weak) sequence knowledge during learning. In addition, generation
+performance was clearly affected by instructed explicit knowledge.
+
+An extended process-dissociation model \(\mathcal{M}_1\) revealed a
+violation of the invariance assumption for controlled processes with
+\(C_I > C_E\). The invariance assumption for automatic processes could
+be upheld. Model \(\mathcal{M}_1\) rested on two auxiliary assumptions:
+It was assumed that controlled processes were not affected by learning
+material, and that automatic processes were not affected by the
+manipulation of explicit knowledge (i.e., revealing a transition). Both
+assumptions found support in the current data as they did not harm model
+fit. Importantly, comparing model \(\mathcal{M}_1\) to a standard
+process-dissociation model \(\mathcal{M}_2\) that did not impose these
+assumptions but left the invariance assumption intact, model
+\(\mathcal{M}_1\) was strongly favored by the DIC.
+
+Regarding our secondary goal to explore whether different amounts of
+sequence knowledge are acquired from mixed versus pure second-order
+conditional material, we did not find evidence for a difference between
+these two types of material in the SRTT. This may well be due to the
+overall low levels of acquired sequence knowledge in the present study.
+Clearly, the present data are not strong enough to rule out such
+differences; this question requires further study.
+
+\section{Experiment 3}\label{experiment-3}
+
+Experiments 1 and 2 found a violation of the invariance assumption,
+suggesting that the interpretation of the parametric PD approach may be
+problematic. In particular, the results of Experiments 1 and 2
+consistently suggest that the PD parameters may not yield an exhaustive
+measure of explicit knowledge: The degree to which participants made use
+of their explicit knowledge varied between the inclusion and exclusion
+tasks. Experiment 3 aimed at obtaining a better understanding of this
+invariance violation and its effect on the interpretation of generation
+task performance in the PD framework.
+
+Whereas the invariance violations clearly threaten the validity of the
+PD model, they may yet turn out to be uncritical for an ordinal
+interpretation of PD data that has often been used in applications
+(i.e., a comparison of inclusion versus exclusion performance, and of
+exclusion versus baseline performance). Even if the (independence and)
+invariance assumptions do not hold, the general approach of drawing
+conclusions about the underlying processes by comparing performance
+between inclusion and exclusion conditions may not be entirely
+invalidated: It has been formally shown that an ordinal interpretation
+of PD findings does not rely on parametric assumptions (Hirshman, 2004).
+However, the ordinal PD approach does assume that baseline performance
+is identical in the inclusion and exclusion tasks -- an assumption that
+has been shown to be violated at least in some cases (Stahl et al.,
+2015). More critically for the present question of invariance, it also
+assumes (not only that inclusion performance increases but also) that
+exclusion performance monotonically decreases with increasing explicit
+knowledge. Note that, if (contrary to this assumption) explicit
+knowledge does not affect exclusion performance at all, the ordinal PD
+approach may technically still be used. However, the results would be
+misleading if a difference in explicit (but not implicit) knowledge
+between two conditions led to a difference in inclusion but not in
+exclusion performance. In this case, the ordinal PD would suggest that
+the two conditions differ in explicit \emph{and implicit} knowledge
+(Hirshman, 2004, Data Pattern I). In other words, for the ordinal PD
+approach to yield valid results, exclusion performance must fall below
+baseline when explicit knowledge is present (this would yield Hirshman's
+Data Pattern IV, which indicates an increase in explicit knowledge).
+Therefore, a critical empirical test for the ordinal PD approach is
+whether, and under which conditions, participants are able to use
+explicit knowledge to suppress generation below baseline levels under
+exclusion conditions.
+
+A critical precondition for the expression of explicit knowledge may be
+the opportunity for practice with the generation task. Experiment 3
+investigated the effect of practice on the expression of explicit
+knowledge: In Experiments 1 and 2, participants were given the
+opportunity to practice inclusion and exclusion of the instructed
+explicit knowledge, but nevertheless failed to approach ceiling (floor)
+performance in the inclusion (exclusion) conditions. In Experiment 3, we
+investigated whether such transition-specific practice can help reduce
+the invariance violation by comparing practiced with non-practiced
+transitions. We also wanted to more directly investigate transfer of
+practice to unpracticed transitions about which participants had
+explicit knowledge. We therefore manipulated the number of revealed
+transitions, and whether these revealed transitions were revealed prior
+to or after practice blocks, both between and within subjects. We
+realized five between-subjects conditions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  In the \emph{Control} group, no explicit knowledge was revealed to
+  participants.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  In the \emph{No-Practice} group, one transition was revealed
+  immediately before the first generation block, but \emph{after} the
+  practice blocks that preceded the first generation block. To avoid
+  carry-over of practice effects from the first generation block, a
+  different non-practiced transition was revealed after the second
+  practice blocks and immediately preceding the second generation block.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  In the \emph{Unspecific-Practice} group, one transition was revealed
+  to participants \emph{after} practive, immediately before each
+  generation block (as in the \emph{No-Practice} group). In the third
+  practice block before the exclusion task, participants were asked to
+  inhibit a specific response location (i.e., they were asked \emph{not}
+  to use the \(5^{th}\) location/\(N\) key).
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  In the \emph{Practice} group, one transition was revealed to
+  participants immediately \emph{before} the practice blocks.
+  Participants were encouraged to include (exclude) the revealed
+  transition during practice and in the generation block.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  In the \emph{Transfer} group, information about two transitions was
+  revealed; one of them was non-practiced (as in the No-Practice group),
+  the other one practiced (as in the Practice group). The practiced
+  transition was revealed before the first practice blocks. After these
+  practice blocks, the second (non-practiced) transition was revealed
+  immediately before the first generation block. The practiced
+  transition was again named before participants worked on the practice
+  blocks of the second generation phase. After these practice blocks, a
+  second non-practiced transition was revealed immediately before the
+  second generation block.
+\end{enumerate}
+
+The Control and Practice groups were identical to Experiment 1; the
+other groups extended the previous design. This allowed us to assess
+generation performance for three main transition types; (1)
+\emph{non-revealed} transitions, (2) transitions that were revealed but
+remained \emph{non-practiced}, and (3) transitions that were revealed
+and \emph{practiced} in the practice blocks.\footnote{In the second
+  generation block of the No-Practice, Unspecific-Practice, and Transfer
+  groups, a fourth transition type can be distinguished: Transitions
+  that were revealed but non-practiced before the first generation
+  block. Because participants included (or excluded) these transitions
+  in the previous (i.e., the first) generation block, performance on
+  these transitions should be more similar to practiced than to
+  non-practiced transitions in the second block.}
+
+A comparison of \emph{non-revealed} with (revealed but)
+\emph{non-practiced} transitions allows us to assess the degree to which
+participants can spontaneously make use of their explicit knowledge in
+the generation task. Comparing \emph{non-practiced} with
+\emph{practiced} transitions allowed us to assess whether specific
+inclusion/exclusion practice could increase the use of explicit
+knowledge to a comparable level in the inclusion and exclusion tasks
+(i.e., eliminate the violation of invariance). We also compared whether
+performance for revealed but \emph{non-practiced} transitions differs
+between the No-Practice and Transfer groups, as would be expected if the
+effect of specific practice transfers to non-practiced explicit
+knowledge. Finally, we explored whether, in the Unspecific-Practice
+group, unspecific inhibition practice affects performance for both
+revealed but \emph{non-practiced} and/or \emph{non-revealed}
+transitions.
+
+In sum, we hypothesized that, as in Experiment 1, the invariance
+assumption for the controlled process would be violated. Relatedly, we
+aimed at replicating the finding that possessing explicit knowledge
+would not be sufficient for its expression in the generation task.
+Specifically, (a) explicit knowledge without practice
+(\emph{No-Practice} group) should not lead to below-chance exclusion
+performance, and (b) this should also hold for non-practiced transitions
+for participants who practiced another transition (\emph{Transfer}
+group). We had no clear hypothesis regarding the unspecific
+response-inhibition practice, but wanted to explore whether it would be
+as effective as transition-specific exclusion practice in improving the
+validity of the generation task as a measure of explicit knowledge.
+Finally, Experiment 3 addresses a possible artifactual effect of
+practice on the invariance violation. Specifically, the practice blocks
+administered in Experiments 1 and 2 might have \emph{caused} the
+invariance violation. If this was the case, then invariance should not
+be violated in the absence of such practice.
+
+\subsection{Method}\label{method-2}
+
+\subsubsection{Design}\label{design-2}
+
+The study realized a 5 (\emph{Practice group}: Control, No-Practice,
+Unspecific-Practice, Practice, Transfer) \(\times\) 2 (\emph{PD
+instruction}: inclusion vs.~exclusion) \(\times\) 2 (\emph{block order}:
+inclusion first vs.~exclusion first) design with repeated measures on
+the \emph{PD instruction} factor.
+
+\subsubsection{Participants}\label{participants-2}
+
+One hundred and forty-seven participants (113 women) aged between 17 and
+55 years (\(M = 23.7\) years) completed the study. Most were
+undergraduates from Heinrich-Heine-Universität Düsseldorf. Participants
+were randomly assigned to experimental conditions. They received either
+course credit or 3.50 Euro for their participation.
+
+\subsubsection{Materials and Procedure}\label{materials-and-procedure}
+
+The experimental procedure closely followed Experiment 1. During an SRTT
+consisting of 8 blocks with 144 trials each (for a total of 1,152
+responses), participants in all conditions were trained with a
+\emph{probabilistic} sequence similar to the one used in Experiment 1.
+After the SRTT, participants were informed about the underlying
+sequential structure of stimulus locations and asked to generate a short
+sequence of six key presses that followed this (unspecified) structure.
+
+The generation task followed, with counterbalanced order of inclusion
+versus exclusion blocks. The number of practice blocks was held constant
+(in contrast to Experiment 1, where it depended on performance). Upon
+completing the computerized task, participants answered the same
+questionnaire as in Experiment 1.
+
+\subsubsection{Data analysis}\label{data-analysis-2}
+
+Given that model \(\mathcal{M}_2\) failed to fit the data from both
+Experiments 1 and 2 and model, we fitted only model \(\mathcal{M}_1\)
+and used posterior analyses to evaluate the invariance assumption. For
+the model-based analyses, we adapted the equations from Experiment 1 to
+the design of Experiment 3 (which did not contain experimental groups
+with random material).
+
+In order to accommodate for the more complex design, we used a model
+specification that allowed for participant and item (i.e., transition)
+effects and their interactions by estimating fixed effects for each
+transition type plus individual participants' deviations from these
+effects. The model equations of model \(\mathcal{M}_1\) are given by:
+
+\[
+  C_{ijm} = \begin{cases}
+    \Phi(\mu_{jlm}^{(C)} + \delta_{ijm}^{(C)}) & \text{if } j \epsilon 1, 2 \text{ (item has been revealed \& practiced, revealed \& non-practiced)}\\
+                                              0 & \text{if }j=3 \text{ (item has not been revealed)}\\
+    \end{cases}
+\] and \[
+  A_{imt} = \Phi(\mu_{mt}^{(A)} + \delta_{imt}^{(A)})
+\]
+
+where \(\mu_{jlm}^{(C)}\) is the fixed effect of transition type \(j\)
+(non-revealed, revealed \& practiced, revealed \& non-practiced) in
+condition \(l\) and \emph{PD instruction} condition \(m\) on controlled
+processes, and \(\delta_{ijm}^{(C)}\) is the \(i\)th participant's
+deviation from the corresponding mean. Accordingly, \(\mu_{mt}^{(A)}\)
+is the fixed effect of \emph{PD instruction} condition \(m\) and
+transition \(t\) on automatic processes, and \(\delta_{imt}^{(A)}\) is
+the \(i\)th participant's deviation from the corresponding mean.
+
+Model \(\mathcal{M}_1\) imposes two auxiliary assumptions: First, it
+assumed that no explicit knowledge has been acquired during the SRT
+phase (i.e., \(C=0\) for non-revealed transitions). Second, it assumed
+that revealing sequence knowledge did not affect automatic processes
+(i.e., \(A\) does not vary as a function of the between-subjects
+manipulation of explicit knowledge, index \(l\)). Both auxiliary
+assumptions were tested by posterior predictive checks. In addition to
+reporting \(T_{A1}\) and \(T_{B1}\) as in the previous studies, we
+calculated additional model check statistics \(T_{A2}\), which
+summarizes how well the model describes the item-wise category counts
+(aggregated over participants), and \(T_{A3}\), which summarizes how
+well the model describes the category counts per participant-item
+combination; finally, the additional statistic \(T_{B2}\) summarizes how
+well the model describes the variances and covariances introduced by
+items. We also calculated the posterior differences \(C_I - C_E\) and
+\(A_I - A_E\) to more directly test the invariance assumption.
+
+\subsection{Results}\label{results-2}
+
+We first analyzed the performance data from the SRT task in a
+traditional way to determine whether sequence knowledge had been
+acquired during the task. Next, we analyzed generation task performance
+using a hierarchical PD model. Finally, to test our predictions
+regarding the different effects of practice in a model-free manner we
+analyzed generation performance for transitions that were revealed.
+
+\subsubsection{Acquisition task}\label{acquisition-task-2}
+
+If participants acquired knowledge about the regularity underlying the
+sequence of key presses, we expect a performance advantage for regular
+over irregular transitions, reflected in reduced RT and/or error rate.
+If this advantage is due to learning, it is expected to increase over
+SRTT blocks.
+
+\paragraph{Reaction times}\label{reaction-times-2}
+
+
+
+For all RT analyses, we excluded the first trial of each block as well
+as trials with errors, trials succeeding an error, reactions faster than
+50 ms and those slower than 1,000 ms. Figure 9 shows reaction times
+during acquisition.
+
+We conducted a 8 (\emph{Block number}) \(\times\) 2 (\emph{FOC
+transition status}: regular vs.~irregular) repeated-measures ANOVA.
+There was a main effect of \emph{block number},
+\(F(4.26, 622.43) = 96.37\), \(\mathit{MSE} = 1,034.51\), \(p < .001\),
+\(\eta^2_G = .059\), with RT decreasing over blocks. There also was a
+main effect of \emph{FOC transitions status}, \(F(1, 146) = 573.39\),
+\(\mathit{MSE} = 841.10\), \(p < .001\), \(\eta^2_G = .066\), reflecting
+faster responses to regular than to irregular transitions. The
+interaction of \emph{block} and \emph{FOC transition status} was also
+significant, \(F(6.47, 945.32) = 58.60\), \(\mathit{MSE} = 176.46\),
+\(p < .001\), \(\eta^2_G = .010\), reflecting the finding that the RT
+advantage for regular transitions increased over blocks, which indicated
+successful sequence learning.
+
+\paragraph{Error rates}\label{error-rates-2}
+
+
+
+For all analyses of error rates, we excluded the first trial of each
+block. Figure 10 shows error rates during acquisition.
+
+The pattern of findings was similar to that obtained for RT. We
+conducted an 8 (\emph{Block number}) \(\times\) 2 (\emph{FOC transition
+status}: regular vs.~irregular) repeated-measures ANOVA that revealed a
+main effect of \emph{block number}, \(F(6.29, 917.65) = 8.35\),
+\(\mathit{MSE} = 9.42\), \(p < .001\), \(\eta^2_G = .015\), reflecting
+increasing error rates over blocks; and a main effect of \emph{FOC
+transition status}, \(F(1, 146) = 188.88\), \(\mathit{MSE} = 11.92\),
+\(p < .001\), \(\eta^2_G = .066\), reflecting an accuracy advantage
+(i.e., lower error rates) for regular transitions. The interaction of
+\emph{block number} and \emph{FOC transition status} was also
+significant, \(F(6.53, 953.88) = 7.36\), \(\mathit{MSE} = 7.09\),
+\(p < .001\), \(\eta^2_G = .011\), reflecting an increase of the
+accuracy advantage for regular (as compared to irregular) transitions
+over blocks, indicating successful sequence learning.
+
+\subsubsection{Generation task}\label{generation-task-2}
+
+We analyzed generation performance by fitting \(\mathcal{M}_1\) and
+computed model fit statistics to assess whether the model can account
+for the data. Parameter estimates from model \(\mathcal{M}_1\) were used
+to address the invariance assumptions, directly. The first trial of a
+block as well as any response repetitions were excluded from all
+generation task analyses.
+
+The model checks for model \(\mathcal{M}_1\) were satisfactory,
+\[T_{A1}^{observed} = 35.97, T_{A1}^{expected} = 33.96, p = .322,\]~
+\[T_{A2}^{observed} = 0.05, T_{A2}^{expected} = 0.05, p = .480,\]~
+\[T_{A3}^{observed} = 1,763.79, T_{A3}^{expected} = 1,720.63, p = .372,\]~
+\[T_{B1}^{observed} = 5.31, T_{B1}^{expected} = 4.62, p = .457,\]~
+\[T_{B2}^{observed} = 3,852.65, T_{B2}^{expected} = 3,393.90, p = .464.\]
+
+Figure 11 shows the parameter estimates obtained from model
+\(\mathcal{M}_1\); while estimates of the automatic process were only
+slightly above chance in both \emph{PD instruction} conditions,
+estimates of the controlled process differ strongly between \emph{PD
+instruction} conditions.
+
+Figure 12 shows that the invariance assumption for automatic processes
+was violated with \(A_I > A_E\), 95\% CI {[}.00, .03{]}, and Bayesian
+\(p = .008\). For revealed and practiced transitions, the invariance
+assumption was violated with \(C_I > C_E\), 95\% CI {[}.19, .63{]} and a
+Bayesian \(p = .001\). For revealed but non-practiced transitions, the
+invariance assumption was violated with \(C_I > C_E\), 95\% CI {[}.03,
+.31{]} and a Bayesian \(p = .005\).
+
+
+
+\subsubsection{Effects of practice on generation of revealed
+transitions}\label{effects-of-practice-on-generation-of-revealed-transitions}
+
+To test our predictions regarding the different effects of practice in a
+model-free manner, we analyzed raw generation frequencies for only those
+transitions about which explicit knowledge was revealed.
+
+
+
+Figure 13 shows generation performance for revealed transitions. A 5
+(\emph{Condition}: Control vs.~No-Practice vs.~Unspecific-Practice
+vs.~Practice vs.~Transfer) \(\times\) 2 (\emph{Order}: Inclusion first
+vs.~Exclusion first) \(\times\) 2 (\emph{PD instruction}: Inclusion
+vs.~Exclusion) ANOVA revealed a nonsignificant main effect of
+\emph{Condition}, \(F(3, 110) = 2.00\), \(\mathit{MSE} = 660.29\),
+\(p = .119\), \(\eta^2_G = .028\), but a significant main effect of
+\emph{PD instruction}, \(F(1, 110) = 243.88\),
+\(\mathit{MSE} = 575.67\), \(p < .001\), \(\eta^2_G = .508\), and their
+significant interaction, \(F(3, 110) = 5.59\),
+\(\mathit{MSE} = 575.67\), \(p = .001\), \(\eta^2_G = .066\). The main
+effect of \emph{PD instruction} reflects the clear influence of the
+instructed explicit knowledge depicted in Figure 13. It is present in
+all practice conditions but modulated by amount of knowledge and type of
+practice (i.e., greater effects given specific practice): The effect was
+greatest in the \emph{Transfer} group, \(t(29) = 14.84\), \(p < .001\),
+\(d = 2.71\); somewhat smaller in the \emph{Practice} group,
+\(t(28) = 9.79\), \(p < .001\), \(d = 1.82\); it was still smaller and
+comparable without practice, \emph{No-practice} group, \(t(28) = 5.25\),
+\(p < .001\), \(d = 0.97\); or with only unspecific practice,
+\emph{Unspecific-practice} group, \(t(29) = 5.13\), \(p < .001\),
+\(d = 0.94\).
+
+We investigated this issue more closely in two sets of follow-up
+analyses. Whereas the above findings support the hypothesis that
+practice improves the degree to which explicit knowledge is expressed in
+the generation task, it does not elucidate the mechanism by which this
+occurs. One mechanism by which practice may improve performance is by
+boosting the proportion of regular transitions in inclusion blocks.
+
+\paragraph{Inclusion}\label{inclusion}
+
+
+
+Inclusion performance for revealed transitions in the \emph{No-Practice}
+and \emph{Practice} groups was analyzed as a function of practice
+(practiced vs.~non-practiced), as depicted in Figure 14. Results showed
+no effect of practice on generation performance, \(F(1, 56) = 0.21\),
+\(\mathit{MSE} = 696.48\), \(p = .652\), \(\eta^2_G = .004\). Similarly,
+when we compared inclusion performance for practiced vs.~non-practiced
+transitions in the \emph{Transfer} group, there was no effect of
+practice, \(F(1, 29) = 1.19\), \(\mathit{MSE} = 365.77\), \(p = .285\),
+\(\eta^2_G = .014\). We conclude that practice did not affect inclusion
+performance for revealed transitions.
+
+
+
+\paragraph{Exclusion}\label{exclusion}
+
+Next, we analyzed whether practice improves suppressing the regular
+transition in the exclusion task. We hypothesized that, without
+training, participants might not be able to suppress their generation of
+regular transitions below the chance level in the exclusion task. To
+test this hypothesis, we compared generation performance for the
+revealed transitions between the \emph{No-Practice} and \emph{Practice}
+groups, as depicted in the left panel of Figure 15. The expected
+below-chance performance was not found in the data from both blocks:
+Whereas the direction of effects was as expected, there was no deviation
+from chance, neither for the practice condition, \(t(28) = -0.79\),
+\(p = .219\), \(d = -0.15\), nor for the no-practice condition,
+\(t(28) = 1.60\), \(p = .940\), \(d = 0.30\). However, the expected
+pattern was found when only the first block was analyzed: Below-chance
+performance was found for the practice condition, \(t(14) = -4.89\),
+\(p < .001\), \(d = -1.26\), but not for the no-practice condition,
+\(t(13) = 0.18\), \(p = .569\), \(d = 0.05\).
+
+To more directly establish a practice effect, we next turned to the data
+from the \emph{Transfer} group for a within-subjects comparison of
+practiced and non-practiced transitions. In addition, we addressed the
+transfer hypothesis: If specific training is required for each single
+transition, the finding of at-chance exclusion performance should
+replicate for non-practiced transitions in participants who practiced
+another transition. In contrast, if training on one transition transfers
+to other transitions, we should find below-chance performance for
+non-practiced transitions in a parallel within-participants comparison
+in the \emph{Transfer} group. As can be seen from the right panel of
+Figure 15, generation performance was below chance for practiced,
+\(t(29) = -9.60\), \(p < .001\), \(d = -1.75\), as well as for
+non-practiced transitions, \(t(29) = -2.04\), \(p = .025\),
+\(d = -0.37\), indicating transfer of exclusion practice from practiced
+to non-practiced transitions.\footnote{Analyzing only the first block
+  revealed the same pattern of results: Generation performance was below
+  chance for practiced, \(t(14) = -5.42\), \(p < .001\), \(d = -1.40\),
+  as well as for non-practiced transitions, \(t(14) = -4.56\),
+  \(p < .001\), \(d = -1.18\).}
+
+\subsection{Discussion}\label{discussion-2}
+
+The experimental manipulations had the expected effects on implicit and
+explicit sequence knowledge: Participants in Experiment 3 acquired
+knowledge about the sequence, as expressed in RT- and accuracy
+advantages for regular transition that increased over SRTT blocks.
+Participants received different amounts of instructed explicit
+knowledge, and they were able to express this knowledge in the
+generation task, as revealed by the effect of \emph{PD instruction} on
+generation of revealed transitions. However, performance differed across
+groups (i.e., practice conditions), suggesting that specific exclusion
+practice was beneficial to implementing PD instructions. Finally, even
+with practice, inclusion performance did not reach ceiling and exclusion
+performance did not reach floor levels, indicating that participants
+were not able to exhaustively express their explicit knowledge in the
+generation task.
+
+The invariance assumption was again found to be violated for both
+controlled and automatic processes. Explicit knowledge was expressed to
+a greater degree in the inclusion than in the exclusion blocks of the
+generation task. Generation practice improved the degree to which
+explicit knowledge was expressed under exclusion instructions, but
+invariance was violated despite repeated opportunities for practicing to
+include/exclude a specific transition.
+
+Results showed that practice increased the magnitude of the invariance
+violation (i.e., the I-E difference). Importantly, however, this does
+not imply that our evidence for invariance violation reflect an artifact
+of practice. First, increasing the overall expression of explicit
+knowledge (as suggested by parameter estimates, as well as the
+below-chance exclusion performance under practice conditions) is of
+course precisely the intended effect of practice. Second, only with
+practice were participants sometimes able to suppress exclusion
+performance below chance baselines (as required by the PD model). Third,
+invariance was also violated in the absence of practice. We conclude
+that invariance was violated because, overall, participants were not
+able to refrain from using their explicit knowledge under exclusion
+conditions (even if practiced). Perhaps more precisely, participants
+failed to generate a sufficiently high proportion of irregular
+transitions under exclusion conditions.
+
+\section{General Discussion}\label{general-discussion}
+
+\subsection{Summary of main findings}\label{summary-of-main-findings}
+
+Process-dissociation assumes that the controlled and automatic process
+are invariant under inclusion and exclusion instructions. In three
+sequence-learning experiments, we tested whether this invariance
+assumption holds in the generation task. The results show a consistent
+pattern.
+
+\subsubsection{Invariance of the controlled
+process}\label{invariance-of-the-controlled-process}
+
+The invariance assumption for explicit knowledge was consistently
+violated, in first-order as well as second-order material, and despite
+extensive opportunity for (as well as without) practice. In all cases,
+explicit knowledge was expressed to a greater degree under inclusion
+than under exclusion instructions: Participants succeeded in generating
+the revealed transition under inclusion conditions, but failed to
+refrain from generating that transition under exclusion conditions.
+Specifically, under exclusion conditions, participants generated the
+revealed transition at chance levels, instead of suppressing its
+generation altogether as instructed.
+
+Participants were largely unable to use their explicit knowledge to
+suppress the proportion of regular transitions generated in the
+exclusion task to levels below chance. Such below-chance generation
+levels for revealed transitions were robustly found only for material
+with a first-order regularity, and only in participants who had explicit
+knowledge about (at least) two transitions and engaged in
+generation-task practice specific to a given to-be-excluded transition
+(Exp. 3, Transfer condition). In these participants, there was even some
+evidence that below-chance exclusion performance transferred to
+non-practiced explicit knowledge. However, transition-specific practice
+was (necessary but) not sufficient for successful exclusion: Whereas
+participants without such practice (i.e., the No-Practice and
+Unspecific-Practice conditions of Exp.3) failed to reach below-chance
+levels, participants with practice also failed to attain below-chance
+levels under exclusion instructions if they worked on the inclusion task
+first (i.e., Exp.3, Practice condition). Moreover, despite having
+explicit knowledge as well as transition-specific generation-task
+practice, participants were not able to exclude their explicit knowledge
+to below-chance levels with a second-order conditional sequence (Exp.
+2). Taken together, across three Experiments we obtained strong evidence
+for a violation of invariance of the controlled process, and the results
+of Experiment 3 suggest that this is due to a failure to suppress the
+generation of regular transitions below chance levels.
+
+\subsubsection{Invariance of the automatic
+process}\label{invariance-of-the-automatic-process}
+
+In Experiments 1 and 3 that used first-order conditional material, we
+found evidence suggesting a violation of the invariance assumption for
+implicit knowledge (no such evidence was found for the second-order
+conditional material used in Experiment 2). If interpreted in a standard
+PD framework, the inclusion-exclusion performance difference resulting
+from this violation may lead to erroneous conclusions about the presence
+of explicit knowledge (if such knowledge is indeed absent), or to
+overestimation of the contribution of explicit knowledge. We believe
+these findings of an inclusion-exclusion difference in estimates of the
+automatic parameter should be interpreted with some caution, for at
+least three reasons (see also the section Limitations below). First, the
+finding was inconsistent and there are multiple possible causes of this
+inconsistency: The lack of a violation in Experiment 2 may be due to
+specific properties of the material, or it may be due to the fact that
+sequence knowledge levels in that study were too low for differences in
+its expression to be measurable.
+
+Second, although robust and replicated, the violation was relatively
+small (i.e., the \(A_{I}-A_{E}\) difference ranged between .01 and .03
+in Exp.1, and between .00 and .03 in Exp.3). In the absence of
+controlled influences, this would be equivalent to a difference between
+inclusion and exclusion performance of approximately 2 percentage
+points---an effect barely noticeable under typical conditions.
+
+Third, it is unclear whether the observed invariance violation of
+parameter \(A\) reflects implicit knowledge at all. Note that the
+parameter for the automatic process captures the sum of all
+non-controlled influences on generation performance. In particular, it
+might reflect guessing strategies, and these may differ under inclusion
+versus exclusion conditions (Stahl et al., 2015). In other words, the
+above effect may reflect a violation of invariance of guessing or
+response strategies instead of a violation of invariance of the
+automatic expression of implicit knowledge. Taken together, we interpret
+the finding as too weak to conclude that the invariance assumption is
+violated also for the automatic process.
+
+\subsection{Limitations and open
+questions}\label{limitations-and-open-questions}
+
+Before turning to the implications of the present findings, we discuss
+potential limitations and address open questions.
+
+\subsubsection{The invariance violation of the automatic process may
+reflect learned explicit
+knowledge}\label{the-invariance-violation-of-the-automatic-process-may-reflect-learned-explicit-knowledge}
+
+Instead of being due to guessing, the inclusion-exclusion difference in
+estimates of the automatic parameter may be due to explicit knowledge
+acquired during learning. Such an effect, if present at all, is likely
+to be small given that (1) the material was probabilistic and therefore
+difficult to learn explicitly; (2) the model incorporating the
+assumption that no learned explicit knowledge was learned fitted the
+data well; and (3) the results were unchanged when we excluded the data
+from transitions that participants (correctly) reproduced during
+debriefing. However, we cannot exclude the possibility that small
+amounts of explicit knowledge, obtained during the SRTT phase, may have
+distorted our model's parameter estimates. This interpretation could
+also account for the lack of such an effect in Experiment 2 given that
+explicit knowledge was less likely to be learned from the more complex
+second-order conditional material used in that study. If this were true,
+then any differences between inclusion and exclusion that were
+attributed by the model to an invariance violation of the implicit
+process may in fact have been a consequence of residual explicit
+knowledge that was not reflected in our debriefing questionnaire
+(perhaps due to participants' conservative reporting criteria). For
+validating the PD approach, we know of no other ways to address this
+potential confound other than by controlling for explicit sequence
+knowledge as assessed by independent measures; successful control is
+then naturally limited by the validity of these independent measures.
+This limitation is another reason for caution in interpreting the above
+finding as evidence for a violation of invariance of the automatic
+process. Note that it does not limit the interpretation of our main
+finding of the invariance violation of the controlled process.
+
+\subsubsection{The evidence for sequence learning was weak for SOC
+material in Experiment
+2}\label{the-evidence-for-sequence-learning-was-weak-for-soc-material-in-experiment-2}
+
+As expected, second-order conditional material (Exp. 2) was more
+difficult to learn than first-order conditional material (Expts. 1 \&
+3). This was reflected here in the finding that (despite a 20\% increase
+in learning trials) there was only weak evidence for sequence learning
+in Experiment 2. Specifically, responses to regular transitions were
+clearly faster and more accurate for both variants of the SOC materials,
+but the interaction between regularity and training block, which is
+critical for interpreting a performance advantage for regular
+transitions as an effect of learning, was not significant. Clearly, an
+even larger amount of SRTT training should be realized in future studies
+using SOC materials. Yet, it is unlikely that the advantage for regular
+transitions has any other causes than learning, given that it was absent
+from the random condition, and that the effect could not be attributed
+to properties of specific transitions because regularity of a transition
+was randomized for each participant anew. Nevertheless, because evidence
+for (implicit) sequence learning was not beyond doubt, it is not
+warranted to interpret the modeling results as stringent tests of the
+invariance assumption for the automatic process.
+
+\subsubsection{Explicit knowledge learned via instruction may be
+qualitatively different from acquired explicit
+knowledge}\label{explicit-knowledge-learned-via-instruction-may-be-qualitatively-different-from-acquired-explicit-knowledge}
+
+The present study manipulated explicit knowledge via instruction.
+Although it is a common method (e.g., Liefooghe, Wenke, \& De Houwer,
+2012) that has yielded important insights in other domains, one might
+argue that explicit knowledge acquired via instruction is somehow
+qualitatively different from explicit knowledge acquired during SRTT
+training, and that therefore the present results do not speak to the
+question of interest regarding the invariance of the expression of
+acquired knowledge. We believe our manipulation to be valid for the
+following reasons. First, the instructed explicit knowledge communicated
+the same proposition about the sequence that participants would have
+acquired during SRTT training (i.e., that a specific location was
+regularly followed by another location). Second, we took precautions to
+avoid any inconsistency or conflict with learned sequence knowledge:
+Transitions that were revealed to participants were part of the regular
+sequence and therefore compatible with acquired (implicit or explicit)
+sequence knowledge. Third, we allowed participants to integrate
+instructed and acquired knowledge during the practice blocks before the
+generation task.
+
+Given that the instructed and acquired propositions are identical, we
+would argue that qualitative differences between acquired and instructed
+knowledge are likely to involve non-propositional forms of knowledge;
+such non-propositional knowledge is typically considered to be implicit.
+Indeed, it is likely that strong implicit knowledge is a precondition
+for acquiring explicit knowledge (Cleeremans \& Jiménez, 2002; Haider \&
+Frensch, 2009): Instructed and acquired explicit knowledge are therefore
+likely to differ in the degree to which they are correlated with
+implicit knowledge. If participants are better able to control acquired
+than instructed explicit knowledge, this would then be due,
+paradoxically, to the presence of acquired implicit knowledge. Finally,
+even if that was the case, note that this would not salvage the PD
+method because a strong correlation between explicit and implicit
+knowledge would violate the independence assumption, thereby posing
+another problem for its validity.
+
+\subsection{Implications}\label{implications}
+
+We will first discuss implications for the PD model and the ordinal
+approach before we suggest ways to improve measurement of sequence
+knowledge using the generation task. We conclude with a few broader
+implications.
+
+\subsubsection{Validity of the PD
+method}\label{validity-of-the-pd-method}
+
+The present findings show that participants fail to suppress generating
+regular sequences under exclusion instructions. This implies that the
+controlled process operates less effectively under exclusion than
+inclusion instructions, violating the invariance assumption. A model
+that nevertheless incorporates the invariance assumption will likely
+fail to adequately account for the data, and will yield distorted
+estimates of the automatic and controlled process. To illustrate, assume
+that the true values of the parameters are
+\(C_{Inclusion} = .8, C_{Exclusion} = .4\), and
+\(A_{Inclusion} = A_{Exclusion} = .25\). This yields the following
+generation proportions of regular transitions
+\(I = .8 + (1-.8)*.25 = 0.85\) and \(E = (1-.4)*.25 = 0.15\). When
+fitting a traditional PD model enforcing the invariance assumption
+\(C_{Inclusion} = C_{Exclusion}\) to these data, we get \(C=.7\) that
+lies somewhere between the true values of \(C\), and \(A = .5\) which is
+a vast overestimation of the true \(A\). Importantly, note that if the
+true value of \(A=.25\) represents chance level, applications of the
+traditional PD method might lead to the erroneous conclusion that
+implicit knowledge had been learned even if such knowledge was in fact
+entirely absent. In addition, if we are interested in the amount of
+explicit knowledge learned from the SRTT training phase, it might be
+argued that the higher estimate obtained from the inclusion condition
+might be a more valid estimate of learned explicit knowledge; the
+inability to express this knowledge under exclusion may be of secondary
+interest. By this argument, applying the traditional PD method also
+yields an underestimation of explicit knowledge.
+
+We therefore recommend against using the PD method unless separate
+estimates of \(C_{Inclusion}\) and \(C_{Exclusion}\) can be obtained,
+for example as we have done in the present study. To do so, at least two
+levels of an implicit-knowledge factor are necessary across which the
+\(C\) parameters could be equated to obtain stable parameter estimates.
+Note that this strategy may not be broadly applicable in typical SRTT
+studies because of the strong correlation between \(C\) and \(A\); the
+assumption that the level of implicit knowledge does not affect the
+amount of acquired explicit knowledge will be warranted only in special
+cases such as realized in the present studies.\footnote{As another way
+  to obtain separate estimates, instead of assuming equal levels of the
+  controlled process across levels of the automatic process, one might
+  assume that the level of the automatic process does not interact with
+  instruction (i.e., it does not affect the relative magnitude of the
+  invariance violation). In this case, the controlled parameters need
+  not be equated across both levels of implicit knowledge; instead,
+  explicit knowledge in the lower level of the implicit-knowledge factor
+  can be expressed as a proportion of the explicit knowledge in the
+  higher level of that factor (i.e,
+  \(C_{Inclusion/low} = w*C_{Inclusion/high}\) and
+  \(C_{Exclusion/low} = w*C_{Exclusion/high}\).)}
+
+\subsubsection{Ordinal PD}\label{ordinal-pd}
+
+As argued in the introduction to Experiment 3, it might be the case
+that, under certain conditions, certain violations of assumptions
+underlying the validity of the PD model equations might leave the
+ordinal interpretation of PD data unaffected. This is not true, however,
+for the specific violation of invariance of the controlled process
+reported here. To reiterate, given a single experimental condition, it
+is concluded in the ordinal approach that implicit knowledge is present
+if exclusion performance is above a (chance or empirical) baseline; and
+it is concluded that explicit knowledge is present if inclusion
+performance exceeds exclusion performance. The possible conclusions from
+comparing two experimental conditions are outlined by Hirshman (2004,
+Table 1). They depend on the invariance assumption in the sense that a
+monotonically increasing controlled process should lead to a monotonic
+increase of inclusion performance and at the same time a monotonic
+decrease of exclusion performance. The present study shows, however,
+that exclusion performance cannot be assumed to reliably decrease with
+increasing explicit knowledge. This implies that the assumptions
+underlying the ordinal-PD approach proposed by Hirshman are also
+violated for the generation task as applied to sequence learning. In
+addition, we have previously shown that another assumption of ordinal
+PD, namely that baseline performance is identical in the inclusion and
+exclusion tasks, is also violated at least in some cases (Stahl et al.,
+2015). We conclude that the ordinal interpretation of PD data cannot be
+recommended as a fallback option.
+
+\subsubsection{Generation task as a measure of sequence
+knowledge}\label{generation-task-as-a-measure-of-sequence-knowledge}
+
+The generation task has been proposed as a useful and sensitive measure
+of implicit knowledge (Jiménez, Méndez, \& Cleeremans, 1996; Perruchet
+\& Amorim, 1992). Its sensitivity may be called into question by the
+finding that RT effects obtained during the SRTT were often greater than
+implicit-knowledge effects in the generation task. In part, this may be
+attributed to the greater reliability of the RT measure, as it relies on
+aggregation across a larger number of trials than does the generation
+task. Another possible reason is that the generation task's sensitivity
+as a measure of implicit knowledge may be lower than previously thought.
+For instance, previous findings of implicit knowledge using the
+generation task may have been overestimates of implicit knowledge due to
+a violation of invariance for the controlled process with \(C_I > C_E\).
+Note that most studies used much easier-to-learn materials (with four
+instead of six locations); it is thus plausible that participants
+acquired more explicit knowledge than they did in our experiments, and
+that the overestimation bias was more severe in those studies.
+
+Another possible reason for overestimating implicit knowledge is that
+the regularities in the sequences implemented in previous research were
+such that the probability of reversals (e.g., 1-2-1) was below chance.
+Given that participants spontaneously tend to generate reversals at
+below-chance levels, this implies that they instead generate other
+regular transitions at slightly above-chance levels even in the absence
+of any true sequence knowledge. As a consequence of this
+reversal-avoidance bias, implicit knowledge might be overestimated if
+one uses chance baselines as a reference. This problem has been
+discussed before (Destrebecqz \& Cleeremans, 2003; Reed \& Johnson,
+1994; Shanks \& Johnstone, 1999), and was solved by comparing
+performance on the training sequence with performance on a transfer
+sequence containing a similarly low proportion of reversals. This
+implies, however, that the PD approach does not provide a measure of the
+absolute level of implicit or explicit knowledge; instead, by relying on
+a comparison of performance across two sequences, it yields a difference
+measure that is associated with reduced reliability. This is because the
+transfer sequence is selected by the experimenter out of a large set of
+possible such sequences, and this random choice interacts with
+participants' partial acquired knowledge, as well as with their
+individual response tendencies, to introduce additional error into the
+measurement. In addition, the reversal-avoidance bias may not only mimic
+implicit knowledge; it may also mimic (or mask) explicit knowledge if it
+interacted with the inclusion-exclusion instructions, perhaps via
+different response strategies or criteria adopted under inclusion versus
+exclusion instructions.
+
+It might be possible to construct a version of the generation task that
+allows for the separation of automatic and controlled processes but does
+not depend on exclusion of explicit knowledge and does not induce
+different response criteria. For example, D'Angelo, Milliken, Jiménez,
+\& Lupiáñez (2013) implemented such a generation task variant in
+artificial grammar learning in which two different inclusion
+instructions were compared: After learning about two different grammars,
+participants were asked, in the first (second) inclusion block to
+generate exemplars from the first (second) grammar. Under certain
+assumptions, performance differences between blocks can be interpreted
+as evidence for explicit controllable knowledge. Exclusion failure and
+different criteria presumably do not matter in this task: Participants
+were not instructed to exclude explicit knowledge in this task, and it
+is plausible that the similarity of instructions for both generation
+tasks also induced comparable response criteria. As another example, in
+the domain of source memory, the PD procedure can be replaced by a
+source-memory task in which, instead of including versus excluding items
+from one of two study lists (A and B), participants are asked to
+indicate the source of the word (list A or list B; Buchner, Erdfelder,
+Steffens, \& Martensen, 1997). Perhaps with a similar modification, an
+improved generation task may prove a useful measure of sequence
+knowledge.
+
+\subsection{Conclusion}\label{conclusion}
+
+In light of the present findings suggesting limited validity of the PD
+generation task, what can we conclude about explicit and implicit
+sequence knowledge from its previous applications? We have seen that,
+when the traditional PD approach is used, an invariance violation of the
+controlled process leads to overestimation of implicit knowledge and to
+underestimation of the amount of explicit knowledge participants have
+acquired from the preceding SRTT training phase. In addition, an
+invariance violation of the automatic process may lead to a (small)
+overestimation of explicit knowledge. We can take into account these
+potential distortions in our interpretation of previous findings by
+distinguishing the two patterns of results found in the literature.
+
+In the first case, evidence for explicit but not for implicit knowledge
+was found (e.g., Wilkinson \& Shanks, 2004). In this case, the evidence
+for explicit knowledge suggests that the distortions due to the
+invariance violation apply. Obtaining evidence for explicit knowledge
+despite the underestimation bias implies that explicit knowledge was
+likely present. Obtaining no evidence for implicit knowledge despite the
+likely presence of an overestimation bias may indeed reflect the absence
+of implicit knowledge; alternatively, it may of course reflect lack of
+statistical power.
+
+In the second case, evidence for both explicit and implicit knowledge
+was reported (e.g., Destrebecqz \& Cleeremans, 2001, 2003; Jiménez et
+al., 2006; Mong et al., 2012). Here, two scenarios must be
+distinguished: In the first, the evidence for explicit knowledge also
+suggests that the distortions resulting from the invariance violation
+may have compromised the results: Again, the evidence for explicit
+knowledge obtained despite the underestimation bias should probably be
+assumed to be reliable; however, the evidence for implicit knowledge may
+be an artifact of the overestimation bias and should be interpreted with
+caution. In the second scenario, explicit knowledge is absent, and the
+explicit-knowledge effect reflects an artifact of the invariance
+violation of the automatic process (i.e., \(A_{I} > A_{E}\)); the
+results obtained in the literature would then indicate the presence of
+implicit but not explicit knowledge.
+
+Of course, different scenarios might underlie different studies, and
+single studies may also reflect a mixture of scenarios. Taken together,
+when considering the limitations discovered in our studies, the PD
+approach to using the generation task as a measure of implicit and
+explicit sequence knowledge in the SRTT has so far yielded few reliable
+conclusions. Future research should consider using alternative methods
+of assessing implicit and explicit knowledge (for a recent overview see
+Timmermans \& Cleeremans, 2015).
+
+\subsection{Outlook}\label{outlook}
+
+One of the great benefits of multinomial models such as the PD model is
+that they are flexibly adaptable measurement models for studying latent
+cognitive processes using a wide variety of experimental paradigms
+(Erdfelder et al., 2009). To validate a new model, it is common to
+assess its goodness of fit, and to empirically demonstrate that its
+parameters can be selectively manipulated and interpreted
+psychologically (i.e., parameter estimates reflect targeted experimental
+manipulations in the predicted manner; Batchelder \& Riefer, 1999). In
+many cases, however, simplifying assumptions need to be made; for
+instance, latent processes are equated across two or more experimental
+conditions (e.g., a single controlled process \(C\) is assumed to
+operate under inclusion and exclusion conditions). Whenever such
+assumptions of invariance are made, we propose that they should also be
+tested empirically as part of the model-validation effort before a new
+model is proposed and used to investigate substantive issues.
+
+\clearpage
+
+\section{References}\label{references}
+
+\setlength{\parindent}{-0.5in} \setlength{\leftskip}{0.5in}
+\setlength{\parskip}{8pt}
+
+\hypertarget{refs}{}
+\hypertarget{ref-albertux5fbayesianux5f1993}{}
+Albert, J. H., \& Chib, S. (1993). Bayesian Analysis of Binary and
+Polychotomous Response Data. \emph{Journal of the American Statistical
+Association}, \emph{88}(422), 669--679.
+doi:\href{https://doi.org/10.1080/01621459.1993.10476321}{10.1080/01621459.1993.10476321}
+
+\hypertarget{ref-batchelderux5ftheoreticalux5f1999}{}
+Batchelder, W. H., \& Riefer, D. M. (1999). Theoretical and Empirical
+Review of Multinomial Process Tree Modeling. \emph{Psychonomic Bulletin
+\& Review}, \emph{6}(1), 57--86.
+doi:\href{https://doi.org/10.3758/BF03210812}{10.3758/BF03210812}
+
+\hypertarget{ref-buchnerux5ftowardux5f1995}{}
+Buchner, A., Erdfelder, E., \& Vaterrodt-Plünnecke, B. (1995). Toward
+Unbiased Measurement of Conscious and Unconscious Memory Processes
+within the Process Dissociation Framework. \emph{Journal of Experimental
+Psychology: General}, \emph{124}(2), 137--160.
+doi:\href{https://doi.org/10.1037/0096-3445.124.2.137}{10.1037/0096-3445.124.2.137}
+
+\hypertarget{ref-buchnerux5fnatureux5f1997}{}
+Buchner, A., Erdfelder, E., Steffens, M. C., \& Martensen, H. (1997).
+The nature of memory processes underlying recognition judgments in the
+process dissociation procedure. \emph{Memory \& Cognition},
+\emph{25}(4), 508--517.
+doi:\href{https://doi.org/10.3758/BF03201126}{10.3758/BF03201126}
+
+\hypertarget{ref-buchnerux5fmultinomialux5f1997}{}
+Buchner, A., Steffens, M. C., Rothkegel, R., \& Erdfelder, E. (1997). A
+Multinomial Model to Assess Fluency and Recollection in a Sequence
+Learning Task. \emph{The Quarterly Journal of Experimental Psychology
+Section A}, \emph{50}(3), 631--663.
+doi:\href{https://doi.org/10.1080/713755723}{10.1080/713755723}
+
+\hypertarget{ref-carpenterux5fstanux5finpress}{}
+Carpenter, B., Gelman, A., Hoffman, M., Lee, D., Goodrich, B.,
+Betancourt, M., \ldots{} Riddell, A. (in press). Stan: A Probabilistic
+Programming Language. \emph{Journal of Statistical Software}. Retrieved
+from
+\url{http://www.stat.columbia.edu/~gelman/research/unpublished/stan-resubmit-JSS1293.pdf}
+
+\hypertarget{ref-cleeremansux5fimplicitux5f2002}{}
+Cleeremans, A., \& Jiménez, L. (2002). Implicit Learning and
+Consciousness: A Graded, Dynamic Perspective. In R. M. French \& A.
+Cleeremans (Eds.), \emph{Implicit Learning and Consciousness: An
+Empirical, Philosophical and Computational Consensus in the Making} (pp.
+1--40). Hove: Psychology Press. Retrieved from
+\url{http://journalpsyche.org/articles/0xc03a.pdf}
+
+\hypertarget{ref-curranux5fimplicitux5f2001}{}
+Curran, T. (2001). Implicit Learning Revealed by the Method of
+Opposition. \emph{Trends in Cognitive Sciences}, \emph{5}(12), 503--504.
+doi:\href{https://doi.org/10.1016/S1364-6613(00)01791-5}{10.1016/S1364-6613(00)01791-5}
+
+\hypertarget{ref-curranux5fviolationsux5f1995}{}
+Curran, T., \& Hintzman, D. L. (1995). Violations of the Independence
+Assumption in Process Dissociation. \emph{Journal of Experimental
+Psychology: Learning, Memory, and Cognition}, \emph{21}(3), 531--547.
+doi:\href{https://doi.org/10.1037/0278-7393.21.3.531}{10.1037/0278-7393.21.3.531}
+
+\hypertarget{ref-curranux5fconsequencesux5f1997}{}
+Curran, T., \& Hintzman, D. L. (1997). Consequences and Causes of
+Correlations in Process Dissociation. \emph{Journal of Experimental
+Psychology. Learning, Memory \& Cognition}, \emph{23}(2), 496.
+doi:\href{https://doi.org/10.1037/0278-7393.23.2.496}{10.1037/0278-7393.23.2.496}
+
+\hypertarget{ref-destrebecqzux5fcanux5f2001}{}
+Destrebecqz, A., \& Cleeremans, A. (2001). Can sequence learning be
+implicit? New evidence with the process dissociation procedure.
+\emph{Psychonomic Bulletin \& Review}, \emph{8}(2), 343--350.
+doi:\href{https://doi.org/10.3758/BF03196171}{10.3758/BF03196171}
+
+\hypertarget{ref-destrebecqzux5ftemporalux5f2003ux5fdoi}{}
+Destrebecqz, A., \& Cleeremans, A. (2003). Temporal Effects in Sequence
+Learning. In \emph{Attention and Implicit Learning} (pp. 181--213).
+Amsterdam, Netherlands: John Benjamins Publishing Company.
+doi:\href{https://doi.org/10.1075/aicr.48.11des}{10.1075/aicr.48.11des}
+
+\hypertarget{ref-dangeloux5fimplementingux5f2013}{}
+D'Angelo, M. C., Milliken, B., Jiménez, L., \& Lupiáñez, J. (2013).
+Implementing Flexibility in Automaticity: Evidence from Context-Specific
+Implicit Sequence Learning. \emph{Consciousness and Cognition},
+\emph{22}(1), 64--81.
+doi:\href{https://doi.org/10.1016/j.concog.2012.11.002}{10.1016/j.concog.2012.11.002}
+
+\hypertarget{ref-erdfelderux5fmultinomialux5f2009}{}
+Erdfelder, E., Auer, T.-S., Hilbig, B. E., Aßfalg, A., Moshagen, M., \&
+Nadarevic, L. (2009). Multinomial Processing Tree Models: A Review of
+the Literature. \emph{Zeitschrift Für Psychologie / Journal of
+Psychology}, \emph{217}(3), 108--124.
+doi:\href{https://doi.org/10.1027/0044-3409.217.3.108}{10.1027/0044-3409.217.3.108}
+
+\hypertarget{ref-fuux5fcanux5f2010}{}
+Fu, Q., Dienes, Z., \& Fu, X. (2010). Can Unconscious Knowledge Allow
+Control in Sequence Learning? \emph{Consciousness and Cognition},
+\emph{19}(1), 462--474.
+doi:\href{https://doi.org/10.1016/j.concog.2009.10.001}{10.1016/j.concog.2009.10.001}
+
+\hypertarget{ref-fuux5fimplicitux5f2008}{}
+Fu, Q., Fu, X., \& Dienes, Z. (2008). Implicit Sequence Learning and
+Conscious Awareness. \emph{Consciousness and Cognition}, \emph{17}(1),
+185--202.
+doi:\href{https://doi.org/10.1016/j.concog.2007.01.007}{10.1016/j.concog.2007.01.007}
+
+\hypertarget{ref-haiderux5fconflictsux5f2009}{}
+Haider, H., \& Frensch, P. A. (2009). Conflicts between expected and
+actually performed behavior lead to verbal report of incidentally
+acquired sequential knowledge. \emph{Psychological Research},
+\emph{73}(6), 817--834.
+doi:\href{https://doi.org/10.1007/s00426-008-0199-6}{10.1007/s00426-008-0199-6}
+
+\hypertarget{ref-haiderux5foldux5f2011}{}
+Haider, H., Eichler, A., \& Lange, T. (2011). An Old Problem: How Can We
+Distinguish between Conscious and Unconscious Knowledge Acquired in an
+Implicit Learning Task? \emph{Consciousness and Cognition},
+\emph{20}(3), 658--672.
+doi:\href{https://doi.org/10.1016/j.concog.2010.10.021}{10.1016/j.concog.2010.10.021}
+
+\hypertarget{ref-hintzmanux5fmoreux5f1997}{}
+Hintzman, D. L., \& Curran, T. (1997). More than One Way to Violate
+Independence: Reply to Jacoby and Shrout (1997). \emph{Journal of
+Experimental Psychology. Learning, Memory \& Cognition}, \emph{23}(2),
+511.
+doi:\href{https://doi.org/10.1037/0278-7393.23.2.511}{10.1037/0278-7393.23.2.511}
+
+\hypertarget{ref-hirshmanux5fordinalux5f2004}{}
+Hirshman, E. (2004). Ordinal Process Dissociation and the Measurement of
+Automatic and Controlled Processes. \emph{Psychological Review},
+\emph{111}(2), 553--560.
+doi:\href{https://doi.org/10.1037/0033-295X.111.2.553}{10.1037/0033-295X.111.2.553}
+
+\hypertarget{ref-jacobyux5fprocessux5f1991}{}
+Jacoby, L. L. (1991). A Process Dissociation Framework: Separating
+Automatic from Intentional Uses of Memory. \emph{Journal of Memory and
+Language}, \emph{30}(5), 513--541.
+doi:\href{https://doi.org/10.1016/0749-596X(91)90025-F}{10.1016/0749-596X(91)90025-F}
+
+\hypertarget{ref-jacobyux5ftowardux5f1997}{}
+Jacoby, L. L., \& Shrout, P. E. (1997). Toward a Psychometric Analysis
+of Violations of the Independence Assumption in Process Dissociation.
+\emph{Journal of Experimental Psychology. Learning, Memory \&
+Cognition}, \emph{23}(2), 505.
+doi:\href{https://doi.org/10.1037/0278-7393.23.2.505}{10.1037/0278-7393.23.2.505}
+
+\hypertarget{ref-jimenezux5fcomparingux5f1996}{}
+Jiménez, L., Méndez, C., \& Cleeremans, A. (1996). Comparing Direct and
+Indirect Measures of Sequence Learning. \emph{Journal of Experimental
+Psychology: Learning, Memory, and Cognition}, \emph{22}(4), 948.
+doi:\href{https://doi.org/10.1037/0278-7393.22.4.948}{10.1037/0278-7393.22.4.948}
+
+\hypertarget{ref-jimenezux5fqualitativeux5f2006}{}
+Jiménez, L., Vaquero, J. M., \& Lupiáñez, J. (2006). Qualitative
+Differences between Implicit and Explicit Sequence Learning.
+\emph{Journal of Experimental Psychology: Learning, Memory, and
+Cognition}, \emph{32}(3), 475.
+doi:\href{https://doi.org/10.1037/0278-7393.32.3.475}{10.1037/0278-7393.32.3.475}
+
+\hypertarget{ref-klauerux5fhierarchicalux5f2010}{}
+Klauer, K. C. (2010). Hierarchical Multinomial Processing Tree Models: A
+Latent-Trait Approach. \emph{Psychometrika}, \emph{75}(1), 70--98.
+doi:\href{https://doi.org/10.1007/s11336-009-9141-0}{10.1007/s11336-009-9141-0}
+
+\hypertarget{ref-klauerux5finvarianceux5f2015}{}
+Klauer, K. C., Dittrich, K., Scholtes, C., \& Voss, A. (2015). The
+invariance assumption in process-dissociation models: An evaluation
+across three domains. \emph{Journal of Experimental Psychology:
+General}, \emph{144}(1), 198--221.
+doi:\href{https://doi.org/10.1037/xge0000044}{10.1037/xge0000044}
+
+\hypertarget{ref-lewandowskiux5fgeneratingux5f2009}{}
+Lewandowski, D., Kurowicka, D., \& Joe, H. (2009). Generating Random
+Correlation Matrices Based on Vines and Extended Onion Method.
+\emph{Journal of Multivariate Analysis}, \emph{100}(9), 1989--2001.
+doi:\href{https://doi.org/10.1016/j.jmva.2009.04.008}{10.1016/j.jmva.2009.04.008}
+
+\hypertarget{ref-liefoogheux5finstruction-basedux5f2012}{}
+Liefooghe, B., Wenke, D., \& De Houwer, J. (2012). Instruction-Based
+Task-Rule Congruency Effects. \emph{Journal of Experimental Psychology:
+Learning, Memory, and Cognition}, \emph{38}(5), 1325--1335.
+doi:\href{https://doi.org/10.1037/a0028148}{10.1037/a0028148}
+
+\hypertarget{ref-mongux5fevidenceux5f2012}{}
+Mong, H. M., McCabe, D. P., \& Clegg, B. A. (2012). Evidence of
+automatic processing in sequence learning using process-dissociation.
+\emph{Advances in Cognitive Psychology / University of Finance and
+Management in Warsaw}, \emph{8}(2), 98--108.
+doi:\href{https://doi.org/10.2478/v10053-008-0107-z}{10.2478/v10053-008-0107-z}
+
+\hypertarget{ref-nissenux5fattentionalux5f1987}{}
+Nissen, M. J., \& Bullemer, P. (1987). Attentional Requirements of
+Learning: Evidence from Performance Measures. \emph{Cognitive
+Psychology}, \emph{19}(1), 1--32.
+doi:\href{https://doi.org/10.1016/0010-0285(87)90002-8}{10.1016/0010-0285(87)90002-8}
+
+\hypertarget{ref-normanux5ffringeux5f2006}{}
+Norman, E., Price, M. C., \& Duff, S. C. (2006). Fringe Consciousness in
+Sequence Learning: The Influence of Individual Differences.
+\emph{Consciousness and Cognition}, \emph{15}(4), 723--760.
+doi:\href{https://doi.org/10.1016/j.concog.2005.06.003}{10.1016/j.concog.2005.06.003}
+
+\hypertarget{ref-perruchetux5fconsciousux5f1992}{}
+Perruchet, P., \& Amorim, M.-A. (1992). Conscious Knowledge and Changes
+in Performance in Sequence Learning: Evidence against Dissociation.
+\emph{Journal of Experimental Psychology: Learning, Memory, and
+Cognition}, \emph{18}(4), 785.
+doi:\href{https://doi.org/10.1037/0278-7393.18.4.785}{10.1037/0278-7393.18.4.785}
+
+\hypertarget{ref-R-base}{}
+R Core Team. (2016). \emph{R: A Language and Environment for Statistical
+Computing}. Vienna, Austria: R Foundation for Statistical Computing.
+Retrieved from \url{https://www.R-project.org/}
+
+\hypertarget{ref-ratcliffux5fprocessux5f1995}{}
+Ratcliff, R., Van Zandt, T., \& McKoon, G. (1995). Process Dissociation,
+Single-Process Theories, and Recognition Memory. \emph{Journal of
+Experimental Psychology: General}, \emph{124}(4), 352--374.
+doi:\href{https://doi.org/10.1037/0096-3445.124.4.352}{10.1037/0096-3445.124.4.352}
+
+\hypertarget{ref-reedux5fassessingux5f1994}{}
+Reed, J., \& Johnson, P. (1994). Assessing Implicit Learning with
+Indirect Tests: Determining What Is Learned about Sequence Structure.
+\emph{Journal of Experimental Psychology: Learning, Memory, and
+Cognition}, \emph{20}(3), 585--594.
+doi:\href{https://doi.org/10.1037/0278-7393.20.3.585}{10.1037/0278-7393.20.3.585}
+
+\hypertarget{ref-rouderux5fintroductionux5f2005}{}
+Rouder, J. N., \& Lu, J. (2005). An Introduction to Bayesian
+Hierarchical Models with an Application in the Theory of Signal
+Detection. \emph{Psychonomic Bulletin \& Review}, \emph{12}(4),
+573--604.
+doi:\href{https://doi.org/10.3758/BF03196750}{10.3758/BF03196750}
+
+\hypertarget{ref-rouderux5fhierarchicalux5f2008}{}
+Rouder, J. N., Lu, J., Morey, R. D., Sun, D., \& Speckman, P. L. (2008).
+A Hierarchical Process-Dissociation Model. \emph{Journal of Experimental
+Psychology: General}, \emph{137}(2), 370--389.
+doi:\href{https://doi.org/10.1037/0096-3445.137.2.370}{10.1037/0096-3445.137.2.370}
+
+\hypertarget{ref-shanksux5fevaluatingux5f1999}{}
+Shanks, D. R., \& Johnstone, T. (1999). Evaluating the Relationship
+between Explicit and Implicit Knowledge in a Sequential Reaction Time
+Task. \emph{Journal of Experimental Psychology: Learning, Memory, and
+Cognition}, \emph{25}(6), 1435--1451.
+doi:\href{https://doi.org/10.1037/0278-7393.25.6.1435}{10.1037/0278-7393.25.6.1435}
+
+\hypertarget{ref-shanksux5fcharacteristicsux5f1994}{}
+Shanks, D. R., \& St. John, M. F. (1994). Characteristics of Dissociable
+Human Learning Systems. \emph{Behavioral and Brain Sciences},
+\emph{17}(3), 367--395.
+doi:\href{https://doi.org/10.1017/S0140525X00035032}{10.1017/S0140525X00035032}
+
+\hypertarget{ref-shanksux5fattentionalux5f2005}{}
+Shanks, D. R., Rowland, L. A., \& Ranger, M. S. (2005). Attentional load
+and implicit sequence learning. \emph{Psychological Research},
+\emph{69}(5-6), 369--382.
+doi:\href{https://doi.org/10.1007/s00426-004-0211-8}{10.1007/s00426-004-0211-8}
+
+\hypertarget{ref-spiegelhalterux5fbayesianux5f2002}{}
+Spiegelhalter, D. J., Best, N. G., Carlin, B. P., \& Van Der Linde, A.
+(2002). Bayesian Measures of Model Complexity and Fit. \emph{Journal of
+the Royal Statistical Society: Series B (Statistical Methodology)},
+\emph{64}(4), 583--639.
+doi:\href{https://doi.org/10.1111/1467-9868.00353}{10.1111/1467-9868.00353}
+
+\hypertarget{ref-stahlux5fdistortedux5f2015}{}
+Stahl, C., Barth, M., \& Haider, H. (2015). Distorted Estimates of
+Implicit and Explicit Learning in Applications of the
+Process-Dissociation Procedure to the SRT Task. \emph{Consciousness and
+Cognition}, \emph{37}, 27--43.
+doi:\href{https://doi.org/10.1016/j.concog.2015.08.003}{10.1016/j.concog.2015.08.003}
+
+\hypertarget{ref-timmermansux5fhowux5f2015}{}
+Timmermans, B., \& Cleeremans, A. (2015). How Can We Measure Awareness?
+An Overview of Current Methods. In \emph{Behavioural Methods in
+Consciousness Research} (pp. 21--46). Oxford: Oxford University Press.
+
+\hypertarget{ref-wilkinsonux5fintentionalux5f2004}{}
+Wilkinson, L., \& Shanks, D. R. (2004). Intentional Control and Implicit
+Sequence Learning. \emph{Journal of Experimental Psychology: Learning,
+Memory, and Cognition}, \emph{30}(2), 354--369.
+doi:\href{https://doi.org/10.1037/0278-7393.30.2.354}{10.1037/0278-7393.30.2.354}
+
+\hypertarget{ref-yonelinasux5fprocess-dissociationux5f2012}{}
+Yonelinas, A. P., \& Jacoby, L. L. (2012). The process-dissociation
+approach two decades later: Convergence, boundary conditions, and new
+directions. \emph{Memory \& Cognition}, \emph{40}(5), 663--680.
+doi:\href{https://doi.org/10.3758/s13421-012-0205-5}{10.3758/s13421-012-0205-5}
+
+
+
+
+  \begin{appendix}
+  \section{}
+  This appendix provides a complete specification of the models and priors
+  used. Code (R/rstan) is available at
+  \url{https://github.com/methexp/pdl2}.
+  
+  \subsection{\texorpdfstring{Experiment 1, model
+  \(\mathcal{M}_1\)}{Experiment 1, model \textbackslash{}mathcal\{M\}\_1}}\label{experiment-1-model-mathcalmux5f1}
+  
+  Priors on fixed effects were
+  
+  \[
+  \begin{aligned}
+  \mu_{km}^{(C)} \sim & N(0, 1), k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
+  \mu_{jkm}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace
+  \end{aligned}
+  \]
+  
+  where \(j\) indexes transition type (revealed vs.~non-revealed), \(k\)
+  indexes learning material presented during the SRTT (random
+  vs.~probabilistic), and \(m\) indexes \emph{PD instruction} condition
+  (inclusion vs.~exclusion).
+  
+  For participants who did not receive explicit knowledge about a single
+  transition, we assumed that all \(C_{ijm} = 0\). Therefore, participant
+  effects are only required for automatic processes
+  (\(\delta_{ijm}^{(A)}\)). In participants who received explicit
+  knowledge about one transition, two additional participant effects were
+  needed to model controlled processes for revealed transitions
+  (\(\delta_{im}^{(C)}\)). We thus provide the specification of
+  participant effects for these two groups of participants separately.
+  
+  \paragraph{Participants who did not receive explicit knowledge about one
+  transition}\label{participants-who-did-not-receive-explicit-knowledge-about-one-transition}
+  
+  For participants who did not receive explicit knowledge about one
+  transition, participant effects \(\delta_{ijm}^{(A)}\) can be written as
+  vectors \(\boldsymbol{\delta}_i\) that were modeled as draws from a
+  multivariate normal
+  
+  \[
+  \boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
+  \]
+  
+  where \(k\) indexes the learning material that was presented to
+  participant \(i\) and \(l\) indexes his or her level of the
+  explicit-knowledge factor. The covariance matrices \(\Sigma_{kl}\) were
+  obtained from the standard deviations of participant effects
+  \(\boldsymbol{\sigma}_{kl}\) and correlation matrices \(\Omega_{kl}\)
+  
+  \[
+  \Sigma_{kl} = Diag(\boldsymbol{\sigma}_{kl})~\Omega_{kl}~Diag(\boldsymbol{\sigma}_{kl}), k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
+  \]
+  
+  Each element \(\sigma_{klp}\) of the vectors of standard deviations
+  \(\boldsymbol{\sigma}_{kl}\) was drawn from independent half-normal
+  prior distributions.
+  
+  \[
+  \sigma_{klp} \sim N (0, 1)_{\mathcal{I}(0, \infty)}, k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
+  \]
+  
+  For the correlation matrices \(\Omega_{k}\), we used LKJ priors with a
+  scaling factor of 1 (Lewandowski, Kurowicka, \& Joe, 2009):
+  
+  \[
+  \Omega_{kl} \sim \textit{LKJcorr}(\nu = 1), k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
+  \]
+  
+  \paragraph{Participants who received explicit knowledge about one
+  transition}\label{participants-who-received-explicit-knowledge-about-one-transition}
+  
+  For participants who received explicit knowledge about one transition,
+  participant effects \(\delta_{ijm}^{(A)}\) and \(\delta_{im}^{(C)}\) can
+  be written as vectors \(\boldsymbol{\delta}_i\) that were modeled as
+  draws from a multivariate normal
+  
+  \[
+  \boldsymbol{\delta}_i \sim N_6 (0, \Sigma_{kl}), i = 1, ..., I
+  \]
+  
+  where \(k\) indexes the learning material that was presented to
+  participant \(i\) and \(l\) indexes his or her level of the
+  explicit-knowledge factor. The covariance matrices \(\Sigma_{kl}\) were
+  specified as above, with the only exception that six instead of four
+  parameters were required.
+  
+  \subsection{\texorpdfstring{Experiment 1, model
+  \(\mathcal{M}_2\)}{Experiment 1, model \textbackslash{}mathcal\{M\}\_2}}\label{experiment-1-model-mathcalmux5f2}
+  
+  Priors on fixed effects were
+  
+  \[
+  \begin{aligned}
+  \mu_{jkl}^{(C)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace\\
+  \mu_{jkl}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace\\
+  \end{aligned}
+  \]
+  
+  Participant effects \(\delta_{ij}^{(A)}\) and \(\delta_{ij}^{(C)}\) can
+  be written as vectors \(\boldsymbol{\delta}_i\) that were modeled by \[
+  \boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
+  \] Priors for the covariance matrix \(\Sigma_{kl}\) were specified as
+  above.
+  
+  \subsection{\texorpdfstring{Experiment 2, models \(\mathcal{M}_1\) and
+  \(\mathcal{M}_2\)}{Experiment 2, models \textbackslash{}mathcal\{M\}\_1 and \textbackslash{}mathcal\{M\}\_2}}\label{experiment-2-models-mathcalmux5f1-and-mathcalmux5f2}
+  
+  For the model-based analyses, we used models \(\mathcal{M}_1\) and
+  \(\mathcal{M}_2\) analogous to those used in Experiment 1.
+  
+  \subsection{\texorpdfstring{Experiment 3, model
+  \(\mathcal{M}_1\)}{Experiment 3, model \textbackslash{}mathcal\{M\}\_1}}\label{experiment-3-model-mathcalmux5f1}
+  
+  Priors on fixed effects were
+  
+  \[
+  \begin{aligned}
+  \mu_{jlm}^{(C)} & \sim N(0, 1), j = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
+  \mu_{mt}^{(A)} & \sim N(0, 1), t = \lbrace 1, ..., 6 \rbrace ; m = \lbrace 1, 2 \rbrace\\
+  \end{aligned}
+  \]
+  
+  where \(j\) indexes \emph{transition type} (revealed \& practiced
+  vs.~revealed \& non-practiced), \(l\) indexes practice condition
+  (Control, No-practice, Unspecific-practice, Practice, Transfer), \(t\)
+  indexes specific items (i.e., transitions), and \(m\) indexes \emph{PD
+  instruction} (inclusion vs.~exclusion).
+  
+  Participant effects \(\delta_{imt}^{(A)}\) and \(\delta_{ijm}^{(C)}\)
+  can be written as vectors \(\boldsymbol{\delta}_i\).
+  
+  For participants in the \emph{Control} group, these were modeled by \[
+  \boldsymbol{\delta}_i \sim N_{12} (0, \Sigma_l), i = 1, ..., I
+  \]
+  
+  For participants in the \emph{No-Practice}, \emph{Unspecific-Practice},
+  and \emph{Practice} groups, \[
+  \boldsymbol{\delta}_i \sim N_{14} (0, \Sigma_l), i = 1, ..., I
+  \]
+  
+  For participants in the \emph{Transfer} group \[
+  \boldsymbol{\delta}_i \sim N_{16} (0, \Sigma_l), i = 1, ..., I
+  \]
+  
+  The covariance matrices \(\Sigma_l\) were modeled separately and
+  independently for each between-subjects condition. Priors on these
+  matrices were as described above for Experiment 1.
+  
+  \hypertarget{refs}{}
+  \end{appendix}
+  
+% Figures
+
+\clearpage
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp1_acquisition_RT-1.pdf}
+\caption{RTs during acquisition phase, split by \emph{material} and
+\emph{FOC transition status}. Error bars represent 95\% within-subjects
+confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp1_acquisition_err-1.pdf}
+\caption{Error rates during acquisition phase, split by \emph{material}
+and \emph{FOC transition status}. Error bars represent 95\%
+within-subjects confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/unnamed-chunk-6-1.pdf}
+\caption{Parameter estimates from Experiment 1. Error bars represent
+95\% confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/figure_exp1-1.pdf}
+\caption{Posterior differences between \(A_I - A_E\) and \(C_I - C_E\)
+in Experiment 1, plotted for each participant (gray dots) with 95\%
+credible intervals. Dashed lines represent the posterior means of the
+differences between mean parameter estimates. Dotted lines represent
+95\% credible intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp2_acq_RT-1.pdf}
+\caption{RTs during acquisition phase, split by \emph{material} and
+\emph{SOC transition status}. Error bars represent 95\% within-subjects
+confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp2_acq_err-1.pdf}
+\caption{Error rates during acquisition phase, split by \emph{material}
+and \emph{SOC transition status}. Error bars represent 95\%
+within-subjects confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/unnamed-chunk-7-1.pdf}
+\caption{Parameter estimates from Experiment 2. Error bars represent
+95\% confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/unnamed-chunk-8-1.pdf}
+\caption{Posterior differences \(A_I - A_E\) and \(C_I - C_E\) in
+Experiment 2, plotted for each participant (gray dots) with 95\%
+credible intervals. Dashed lines represent the posterior means of the
+differences between mean parameter estimates. Dotted lines represent
+95\% credible intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp3_acquisition_RT-1.pdf}
+\caption{RTs during acquisition phase, split by \emph{FOC transition
+status}. Error bars represent 95\% within-subjects confidence
+intervals.\label{fig:figure_exp3_RT}}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp3_acquisition_err-1.pdf}
+\caption{Error rates during acquisition phase, split by \emph{FOC
+transition status}. Error bars represent 95\% within-subjects confidence
+intervals. \label{fig:figure_exp3_ER}}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/unnamed-chunk-11-1.pdf}
+\caption{Parameter estimates from Experiment 3. Error bars represent
+95\% confidence intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/unnamed-chunk-12-1.pdf}
+\caption{Posterior differences between \(A_I - A_E\) and \(C_I - C_E\)
+in Experiment 3, plotted for each participant (gray dots) with 95\%
+credible intervals. Dashed lines represent the posterior means of the
+differences between mean parameter estimates. Dotted lines represent
+95\% credible intervals.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp3_gen_revealed-1.pdf}
+\caption{Generation performance for revealed transitions. Error bars
+represent 95\% confidence intervals. Horizontal lines represent chance
+baseline.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp3_gen_revealed_hyps_incl-1.pdf}
+\caption{Inclusion performance for revealed transitions. Left:
+Between-subjects comparison between \emph{No-Practice} and
+\emph{Practice} groups. Right: Within-subjects comparison in
+\emph{Transfer} group. Horizontal lines represent chance baseline.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{main_files/figure-latex/exp3_gen_revealed_hyps-1.pdf}
+\caption{Exclusion performance for revealed transitions. Left:
+Between-subjects comparison between \emph{No-Practice} and
+\emph{Practice} groups. Right: Within-subjects comparison in
+\emph{Transfer} group. Horizontal lines represent chance baseline.}
+\end{figure}
+
+\end{document}
