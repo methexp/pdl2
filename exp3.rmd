@@ -10,8 +10,6 @@ Acquisition[["excluded.id"]] <- as.integer(Acquisition[["id"]] %in% excludes)
 Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
 
 Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
-## This should be consistent!
-# table(Generation$id, Generation$excluded.id)
 ```
 
 Experiments 1 and 2 found a violation of the invariance assumption, suggesting that the interpretation of the parametric PD approach may be problematic. 
@@ -86,7 +84,6 @@ Specifically, the practice blocks administered in Experiments 1 and 2 might have
 ### Design
 
 The study realized a 5 (*Practice group*: Control, No-Practice, Unspecific-Practice, Practice, Transfer)
-<!-- *explicit knowledge*: no explicit knowledge, explicit knowledge with practice, explicit knowledge without practice, explicit knoledge with & without practice, explicit knowledge with unspecific inhibition practice)-->
 $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
 
 ### Participants
@@ -231,7 +228,7 @@ reflecting an increase of the accuracy advantage for regular (as compared to irr
 
 ### Generation task
 
-We analyzed generation performance by fitting $\mathcal{M}_1$ and computed model fit statistics to assess whether each model can account for the data. 
+We analyzed generation performance by fitting $\mathcal{M}_1$ and computed model fit statistics to assess whether the model can account for the data. 
 Parameter estimates from model $\mathcal{M}_1$ were used to address the invariance assumptions, directly.
 The first trial of a block as well as any response repetitions were excluded from all generation task analyses.
 
@@ -425,19 +422,7 @@ exp3gen.out <- apa.glm(data = exp3gen
                        , id="id"
                        , between=c("Condition","Order")
                        , within=c("PD instruction"))
-#knitr::kable(exp3gen.out$table)
 
-# apa_barplot(data = exp3gen, dv = "FOC.correct", id = "id", factors = c("Condition", "PD instruction"), ylim = c(0, 1), ylab = "Proportion correct")
-
-# apa_barplot(data = exp3gen[exp3gen[["PD instruction"]]=="Exclusion",], dv = "FOC.correct", id = "id", factors = c("Order"), ylim = c(0, 1), ylab = "Proportion correct")
-
-# 
-# library(BayesFactor)
-# 
-# exp3gen$id <- as.factor(exp3gen$id)
-# agg <- apa.aggregate(data = exp3gen, dv = "FOC.correct", factors = c("id", "Condition", "Order", "Instruktion"), fun = mean)
-# # BF <- anovaBF(formula = FOC.correct ~ Condition * Order * Instruktion + id, whichRandom = "id", data = agg, whichModels = "top")
-# # BF <- recompute(BF, multicore = TRUE, iterations = 10^5)
 
 ## separate t tests
 fun.tmp <- function(x) {
@@ -493,7 +478,7 @@ exp3gen_rev.out <- apa.glm(data=exp3gen_rev
 
 #knitr::kable(exp3gen_rev.out$table)
 
-apa_barplot(data = exp3gen_rev, dv = "FOC.correct", id = "id", factors = c("Condition", "PD instruction"), ylim = c(0, 100), ylab = "Percentage correct")
+apa_barplot(data = exp3gen_rev, dv = "FOC.correct", id = "id", factors = c("Condition", "PD instruction"), ylim = c(0, 100), ylab = "Percentage correct", intercept = 20)
 
 ## separate t tests
 fun.tmp <- function(x) {
@@ -716,7 +701,7 @@ The invariance assumption was again found to be violated for both controlled and
 Explicit knowledge was expressed to a greater degree in the inclusion than in the exclusion blocks of the generation task.
 Generation practice improved the degree to which explicit knowledge was expressed under exclusion instructions, but invariance was violated despite repeated opportunities for practicing to include/exclude a specific transition.
 
-Result showed that practice increased the magnitude of the invariance violation (i.e., the I-E difference).
+Results showed that practice increased the magnitude of the invariance violation (i.e., the I-E difference).
 Importantly, however, this does not imply that our evidence for invariance violation reflect an artifact of practice. 
 First, increasing the overall expression of explicit knowledge (as suggested by parameter estimates, as well as the below-chance exclusion performance under practice conditions) is of course precisely the intended effect of practice.
 Second, only with practice were participants sometimes able to suppress exclusion performance below chance baselines (as required by the PD model). 

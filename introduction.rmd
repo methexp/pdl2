@@ -2,7 +2,7 @@
 Riding a bicycle is an easy task, but most of us will be hard-pressed to describe in detail the movements necessary for pedaling, keeping direction, and maintaining balance.
 Capturing this intuition, theories of human learning distinguish two types of knowledge: 
 Explicit knowledge is acquired when a learner becomes aware of an environmental regularity and stores it in episodic memory;
-in contrast, implicit knowledge reflects regularities in the environment that may have been acquired without becoming aware of them [reference].
+in contrast, implicit knowledge reflects regularities in the environment that may have been acquired without becoming aware of them [@shanks_characteristics_1994].
 A classical paradigm for the study of implicit learning, the serial reaction time task [SRTT; @nissen_attentional_1987] has participants respond to stimuli presented at four horizontal screen locations by pressing the key that corresponds to the stimulus location.
 Unbeknownst to participants, the stimulus locations follow a regular sequence.
 With practice, participants learn to respond faster on trials with regular stimulus-location transitions than on irregular transitions.
@@ -10,7 +10,7 @@ Despite this performance advantage for responses that follow the sequence, parti
 
 The measurement of implicit and explicit knowledge in this and other paradigms has been subject of debate.
 In the domain of sequence learning, the RT advantage of regular over irregular transitions has often been taken to indicate implicit knowledge.
-To assess explicit knowledge, verbal reports have been used, but they have been criticized as insensitive and potentially distorted by conservative reporting criteria, and they also differ from the RT measure in reliability (i.e., verbal reports rely on only a single data point per participant), and in immediacy (i.e., verbal reports are assessed only after the SRTT)[see @shanks_characteristics_1994].
+To assess explicit knowledge, verbal reports have been used, but they have been criticized as insensitive and potentially distorted by conservative reporting criteria, and they also differ from the RT measure in reliability (i.e., verbal reports rely on only a single data point per participant), and in immediacy (i.e., verbal reports are assessed only after the SRTT) [see @shanks_characteristics_1994].
 The application of the process-dissociation (PD) approach (introduced by Jacoby, 1991, to dissociate implicit and explicit memory) to sequence learning has therefore been an important improvement [@destrebecqz_can_2001; @buchner_multinomial_1997; @curran_implicit_2001].
 In the PD approach, measures of implicit and explicit knowledge are derived from two variants of the same task, thereby largely eliminating the criticized confounds.
 Specifically, under *inclusion* instructions participants are asked to apply their explicit knowledge when solving the task, so that correct inclusion performance can arise from both explicit and implicit knowledge; in contrast, under *exclusion* instructions they are asked to refrain from using explicit knowledge, so that correct exclusion performance can be attributed only to implicit knowledge.
@@ -100,7 +100,7 @@ This model relies on the auxiliary assumptions that each experimental manipulati
 Moreover, in order to justify the auxiliary assumptions, we specified a standard process-dissociation model $\mathcal{M}_2$ that does not enforce the auxiliary assumptions but enforces the invariance assumption;
 model comparison techniques [DIC; @spiegelhalter_bayesian_2002] were then used to compare model $\mathcal{M}_1$ and model $\mathcal{M}_2$.
 If model $\mathcal{M}_1$ is favored over model $\mathcal{M}_2$, this can be taken as evidence in favor of our auxiliary assumptions over the invariance assumption.
-Finally, instead of aggregating data, we used hierarchical Bayesian extensions of all models [e.g., @rouder_hierarchical_2008; @rouder_introduction_2005; @klauer_hierarchical_2010].
+Finally, instead of aggregating data, we used hierarchical Bayesian extensions of all models [e.g., @klauer_hierarchical_2010; @rouder_hierarchical_2008; @rouder_introduction_2005].
 
 The outline of this article is as follows:
 In Experiment 1, we applied the just-presented method to an SRTT with first-order conditional material.

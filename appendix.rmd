@@ -27,15 +27,15 @@ where $j$ indexes transition type (revealed vs. non-revealed), $k$ indexes learn
 <!-- \end{pmatrix} -->
 <!-- $$ -->
 
-For participants who did not receive explicit knowledge about a single transition, we assumed that all $C_{ijkm} = 0$. 
-Therefore, participant effects are only required for automatic processes ($\delta_{ijkm}^{(A)}$). 
-In participants who received explicit knowledge about one transition, two additional participant effects were needed to model controlled processes for revealed transitions ($\delta_{ikm}^{(C)}$). 
+For participants who did not receive explicit knowledge about a single transition, we assumed that all $C_{ijm} = 0$. 
+Therefore, participant effects are only required for automatic processes ($\delta_{ijm}^{(A)}$). 
+In participants who received explicit knowledge about one transition, two additional participant effects were needed to model controlled processes for revealed transitions ($\delta_{im}^{(C)}$). 
 We thus provide the specification of participant effects for these two groups of participants separately.
 
 #### Participants who did not receive explicit knowledge about one transition
 
 For participants who did not receive explicit knowledge about one transition, participant effects $\delta_{ijm}^{(A)}$ can be written as vectors $\boldsymbol{\delta}_i$
-that were modelled as draws from a multivariate normal
+that were modeled as draws from a multivariate normal
 
 $$
 \boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
@@ -64,14 +64,14 @@ $$
 
 #### Participants who received explicit knowledge about one transition
 
-For participants who received explicit knowledge about one transition, participant effects $\delta_{ijm}^{(A)}$ and $\delta_{im}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modelled as draws from a multivariate normal
+For participants who received explicit knowledge about one transition, participant effects $\delta_{ijm}^{(A)}$ and $\delta_{im}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modeled as draws from a multivariate normal
 
 $$
 \boldsymbol{\delta}_i \sim N_6 (0, \Sigma_{kl}), i = 1, ..., I
 $$
 
 where $k$ indexes the learning material that was presented to participant $i$ and $l$ indexes his or her level of the explicit-knowledge factor.
-The covariance matrices $\Sigma_kl$ were specified as above, with the only exception that six instead of four parameters were required.
+The covariance matrices $\Sigma_{kl}$ were specified as above, with the only exception that six instead of four parameters were required.
 
 
 ## Experiment 1, model $\mathcal{M}_2$
@@ -85,7 +85,7 @@ $$
 \end{aligned}
 $$
 
-Participant effects $\delta_{ij}^{(A)}$ and $\delta_{ij}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modelled by
+Participant effects $\delta_{ij}^{(A)}$ and $\delta_{ij}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modeled by
 $$
 \boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
 $$
@@ -110,7 +110,7 @@ where $j$ indexes *transition type* (revealed & practiced vs. revealed & non-pra
 
 Participant effects $\delta_{imt}^{(A)}$ and $\delta_{ijm}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$.
 
-For participants in the *Control* group, these were modelled by
+For participants in the *Control* group, these were modeled by
 $$
 \boldsymbol{\delta}_i \sim N_{12} (0, \Sigma_l), i = 1, ..., I
 $$
@@ -125,7 +125,7 @@ $$
 \boldsymbol{\delta}_i \sim N_{16} (0, \Sigma_l), i = 1, ..., I
 $$
 
-The covariance matrices $\Sigma_l$ were modelled separately and independently for each between-subjects condition.
+The covariance matrices $\Sigma_l$ were modeled separately and independently for each between-subjects condition.
 Priors on these matrices were as described above for Experiment 1.
 
 <!--

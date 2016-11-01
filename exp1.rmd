@@ -66,8 +66,8 @@ The experiment consisted of three consecutive parts:
 Participants first worked on a SRTT (the *acquisition task*), followed by a *generation task* and, finally, a debriefing phase. 
 In the acquisition task, participants performed a SRTT consisting of 8 blocks with 144 trials each (for a total of 1,152 responses).
 SRTT and generation task were run on 17" CRT monitors (with a screen resolution of $1{,}024~\text{px} \times 768~\text{px}$).
-The viewing distance was approximately 60cm. 
-A horizontal sequence of six white squares ($56~px$) was presented on a gray screen. The distance between squares was $112~\text{px}$.
+The viewing distance was approximately $60~\text{cm}$. 
+A horizontal sequence of six white squares ($56~\text{px}$) was presented on a gray screen. The distance between squares was $112~\text{px}$.
 Each screen location corresponded to a key on a QWERTZ keyboard (from left to right Y, X, C, B, N, M).
 Participants had to respond whenever a square's color changed from white to red by pressing the corresponding key. 
 They were instructed to place the left ring-, middle- and index fingers on the keys Y, X and C. 
@@ -152,7 +152,7 @@ Second, it is assumed that automatic processes $A$ do not vary as a function of 
 These assumptions allowed us to relax and test the invariance assumption by obtaining separate estimates of both $C$ and $A$ for the inclusion and exclusion conditions (note that a *full* model relaxing all three assumptions cannot be estimated).
 
 To assess goodness of fit, we used posterior predictive model checks as proposed by Klauer [-@klauer_hierarchical_2010]:
-Statistic $T_{A1}$ summarizes how well the model describes the individual category counts for the eight categories (revealed vs. nonrevealed transitions X correct vs. incorrect X inclusion vs. exclusion).
+Statistic $T_{A1}$ summarizes how well the model describes the individual category counts for the eight categories (revealed vs. nonrevealed transitions $\times$ correct vs. incorrect $\times$ inclusion vs. exclusion).
 Statistic $T_{B1}$ summarizes how well the model describes the covariations in the data across participants.
 
 Additionally, we also estimated a model $\mathcal{M}_2$ that does not impose the auxiliary assumptions but enforces the invariance assumptions (i.e., parameters were not allowed to vary as a function of PD instruction condition $m$):

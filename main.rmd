@@ -24,7 +24,7 @@ note: |
 author_note: |  
   Marius Barth, Christoph Stahl, Hilde Haider, Department of Psychology, University of Cologne. 
   
-  CS and HH designed the research; MB, CS, and HH planned the studies; MB ran the studies; MB and CS analyzed the data; MB, CS, and HH wrote the paper. We thank Jan Czarnomski, Conni Lebbing, Friederike Neugebauer, and Imge Ürer for help with data collection.
+  CS and HH designed the research; MB, CS, and HH planned the studies; MB ran the studies; MB and CS analyzed the data; MB, CS, and HH wrote the paper. We thank Jan Czarnomski, Conni Lebbing, Friederike Neugebauer, and Imge Ürer for help with data collection. We also thank Ute J. Bayen for generously opening her laboratory for data collection.
 
   This work was funded by Deutsche Forschungsgemeinschaft grant STA-1269/1-1 to CS and grant HA-5447/8-1 to HH. 
   
@@ -32,7 +32,7 @@ author_note: |
   
 keywords: "sequence learning, process-dissociation procedure, invariance assumption"
 
-wordcount: "14,112"
+wordcount: "14,041"
 
 class: man
 figsintext: yes
