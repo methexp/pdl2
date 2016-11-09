@@ -8,4 +8,4 @@
 
 This repository contains the manuscript, as well as data, code, and materials necessary to reproduce the manuscript (<a href="https://github.com/methexp/pdl2/archive/master.zip">download entire project</a> and open main.rmd in RStudio).
 
-The manuscript is also available at PsyArxiv ().
+The manuscript is also available at PsyArxiv (<osf.io/p7uxn>).
