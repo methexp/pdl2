@@ -34,9 +34,9 @@ apa.glm <- function(...){
   print_args <- list()
   print_args$MSE <- args$MSE
   
-  args <- papaja:::defaults(args, set = list(MSE = NULL), set.if.null = list(return = "Anova", fun.aggregate = mean))
+  args <- papaja:::defaults(args, set = list(MSE = NULL), set.if.null = list(return = "Anova", fun_aggregate = mean))
   
-  aggregated <- papaja:::fast_aggregate(data = args$data, factors = c(args$id, args$between, args$within), dv = args$dv, fun = args$fun.aggregate)
+  aggregated <- papaja:::fast_aggregate(data = args$data, factors = c(args$id, args$between, args$within), dv = args$dv, fun = args$fun_aggregate)
   
   aov_out <- do.call("aov_ez", args)
   

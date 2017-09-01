@@ -42,7 +42,7 @@ apa.t.test<-function(data, id, dv, between = NULL, within = NULL, fun.aggregate 
     des <- rep("NA", 2)
     names(des) <- names(M)
     for (i in 1:2){
-      des[i] <- paste0("*M* = ", printnum(M[i], gt1 = FALSE), ", *SD* = ", printnum(SD[i], gt1=FALSE))
+      des[i] <- paste0("*M* = ", printnum(M[i], gt1 = TRUE), ", *SD* = ", printnum(SD[i], gt1=TRUE))
     }
     value$des <- des
   }
@@ -60,7 +60,7 @@ apa.t.test<-function(data, id, dv, between = NULL, within = NULL, fun.aggregate 
     des <- rep("NA", 2)
     names(des) <- names(M)
     for (i in 1:2){
-      des[i] <- paste0("*M* = ", printnum(M[i], gt1 = FALSE), ", *SD* = ", printnum(SD[i], gt1=FALSE))
+      des[i] <- paste0("*M* = ", printnum(M[i], gt1 = TRUE), ", *SD* = ", printnum(SD[i], gt1=TRUE))
     }
     value$des <- des
   }
@@ -85,10 +85,11 @@ apa.t<-function(output,n=NA){
   
   if(p<.001){
     p<-".001"
-    value<-paste(c("$t(",df,") = ", t,"$, $p < .001$, $d = ", d, "$"),collapse="")
-  } else{
-    p <- format(round(p,digits=3),nsmall=3)
-    p <- unlist(strsplit(p, split="\\."))[2]
+    value<-paste(c("$t(",df,") = ", t,"$, $p < ",p,"$, $d = ", d, "$"),collapse="")
+  }
+  else{
+    p<-format(round(p,digits=3),nsmall=3)
+    p<-unlist(strsplit(p,split="\\."))[2]
     value<-paste(c("$t(", df, ") = ",t,"$, $p = .", p,"$, $d = ", d, "$"),collapse="")
   }
   

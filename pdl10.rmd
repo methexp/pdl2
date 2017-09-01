@@ -1,0 +1,1154 @@
+```{r 'exp3_prepare'}
+# source("R/pdl10.export.raw.data.R")
+load("data/pdl10.RData")
+
+Acquisition$error <- 100 * Acquisition$error
+Acquisition$Material <- factor(Acquisition$Material, levels = c("rand", "fsoc", "psoc"), labels = c("Random", "mixed SOC", "pure SOC"))
+
+Generation$SOC.correct <- 100 * Generation$SOC.correct
+```
+
+The main goal of Experiment 3 was to replicate the previous findings and extend them to second-order conditional (SOC) material.
+
+A secondary goal was to explore whether different amounts of implicit knowledge are acquired with *mixed* versus *pure* SOC material.
+Previous studies of the SRTT using a PD generation task have employed 12-item-sequences of four response locations [e.g., SOC1 = $3{-}4{-}2{-}3{-}1{-}2{-}1{-}4{-}3{-}2{-}4{-}1$; SOC2 = $3{-}4{-}1{-}2{-}4{-}3{-}1{-}4{-}2{-}1{-}3{-}2$, @destrebecqz_can_2001; @wilkinson_intentional_2004].
+Analyzing these sequences more closely, it is evident that they did not only contain second order information (i.e., the last two locations predict the next location), but they also incorporate lower-order information:
+First, direct repetitions never occur; and reversals occur below chance (i.e., 1/12, whereas chance level would equal $1/3$ given that repetitions are prohibited).
+Second, the last location of a triplet $L_3$ is not independent of the first location $L_1$ (e.g., for SOC1, $p(L_3 = 2 | L_1 = 3) = 2/3$). 
+In other words, in two out of three cases, the third location of a triplet can be predicted by the first location of a triplet alone.
+It is plausible that participants are able to learn this lower-order information, and that learning effects may not (only) be based on second-order information [cf., @koch_patterns_2000; @reed_assessing_1994]. 
+To investigate this possibility, Experiment 3 implemented two types of probabilistic material:
+A *mixed SOC* material that incorporated both second-order and first-order types of information, and another *pure SOC* material that only followed a second-order regularity.
+
+
+## Method
+
+
+### Design
+
+The study realized a 3 (*material*: random, mixed SOC, pure SOC) $\times$ 2 (*explicit knowledge*: no transition revealed vs. two transitions revealed) $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
+
+
+### Participants
+
+```{r pdl10-participants}
+## exclude participants who received erroneous exlusion practice blocks:
+excluded.id <- unique(Generation$id[Generation$excluded.id==1])
+
+N <- length(unique(Generation[["id"]]))
+n.excludes <- length(unique(c(excluded.id)))
+
+tmp <- aggregate(formula = RT~id+female+age, data = Generation, FUN = mean)
+Sex <- table(tmp[["female"]])
+
+meanAge <- paste0("$M = ", (round(mean(tmp[["age"]]), digits = 1)), "$")
+rangeAge <- paste(c(min(tmp[["age"]]), max(tmp[["age"]])), collapse = " and ")
+```
+
+`r #N` One hundred and seventy-nine participants (`r Sex["1"]` women) aged between `r rangeAge` years (`r meanAge` years) completed the study.
+Most were undergraduates from Heinrich-Heine-Universität Düsseldorf.
+Data from `r length(excluded.id)` participants were excluded from generation task analyses because they had received erroneous exclusion instructions.
+Participants were randomly assigned to experimental conditions.
+They received either course credit or 3.50 Euro for their participation.
+
+
+### Materials
+
+We implemented three different types of material:
+
+- A *random* sequence was randomly generated for each participant anew by drawing with replacement from a uniform distribution of six response locations.
+- A *mixed SOC* sequence incorporated two types of information: 
+First, the third location of a triplet was conditional upon the first two locations.
+Second, within such regular triplets, given a fixed first-position location, there was one highly probable third-position location and two somewhat less probable third-position locations; the other three response locations never occurred for this first-position location.
+- A *pure SOC* sequence followed only the second-order regularity.
+
+In both probabilistic materials (*mixed* and *pure* SOC), 87.5% of trials adhered to the second-order regularity, which was individually and randomly selected for each participant anew.
+In all conditions, the material adhered to the following (additional) restrictions: 
+(1) there were no direct repetitions of response locations, and (2) there were no response location reversals (i.e., 1-2-1). 
+To compute the dependent variable in the generation task (i.e., the number of rule-adhering triplets), for both *probabilistic* groups, we used the second-order sequence that was used to generate each participant's materials. For the *random* group, there is no 'regular' sequence and we again computed an individual criterion sequence for each participant. For convenience, we did not generate all possible second-order sequences for these participants (as we did for first-order materials in Experiment 1), but chose to use individual criterion sequences that were randomly generated similar to the *pure SOC* material.
+
+
+### Procedure
+
+The experimental procedure closely followed that of Experiment 1:
+In the acquisition task, participants performed a SRTT consisting of 8 blocks with 180 trials each (for a total of 1,440 responses).
+The response-stimulus interval (RSI) was $0~\text{ms}$.
+Following the SRTT phase, participants were told that stimulus locations during the SRTT followed some underlying sequential structure. 
+They were then asked to try to generate a short sequence of thirty locations that followed this structure.
+
+The generation task followed, with inclusion versus exclusion block order counterbalanced.
+We fixed the number of practice blocks that preceded both inclusion and exclusion task:
+Prior to the inclusion task, three practice blocks involved inclusion instructions;
+prior to the exclusion task, the first and second practice block involved inclusion instructions, and the third involved exclusion instructions.
+Before working on practice blocks, two transitions were revealed to one half of the participants.
+
+Upon completing the computerized task, participants were asked to complete a questionnaire containing the following items:
+(1) "Did you notice anything special working on the task? Please mention anything that comes to your mind.", 
+(2) "One of the tasks mentioned a sequence in which the squares lit up during the first part of the study.
+In one of the experimental conditions, the squares did indeed follow a specific sequence. Do you think you were in this condition or not?", 
+(3) "How confident are you (in %)?", (4) "Can you describe the sequence in detail?". 
+Subsequently, participants were asked to indicate, for ten first-order transitions, the next three keys in the sequence on a printed keyboard layout.
+The first-order transitions were individually selected for each participant so that each participant had the chance to express full explicit knowledge about the second-order regularity.
+
+
+### Data analysis
+
+For analyses of reaction times during the acquisition task, we excluded the first two trials of each block because the first two locations cannot be predicted, as well as error trials, trials succeeding an error, reactions faster than 50 ms and slower than 1,000 ms.
+For analyses of error rates during the acquisition task, we excluded the first two trials of each block.
+
+Generation task analyses were conducted with the first two trials of a block as well as any response repetitions and reversals excluded.
+Model-based analyses were conducted with models $\mathcal{M}_1$ and $\mathcal{M}_2$ analogous to those used in Experiment 2 (see Appendix for details).
+
+## Results
+
+We first analyzed reaction times and error rates during the SRT task to determine whether sequence knowledge had been acquired during the task.
+Next, we analyzed generation task performance using hierarchical PD models
+(descriptive statistics are reported in Appendix C).
+
+
+### Acquisition task
+
+If participants acquired sequence knowledge from probabilistic materials, we expect a performance advantage for regular over irregular transitions, reflected in reduced RT and/or error rate.
+If this advantage is due to learning, it is expected to increase over SRTT blocks.
+If participants are able to learn lower-order information that is only present in *mixed SOC* material, the advantage is expected to be greater in *mixed SOC* material compared to *pure SOC*.
+If participants are able to learn second-order information, a performance advantage is to be expected not only in *mixed SOC* but also in *pure SOC* material.
+
+
+#### Reaction times
+
+```{r pdl10-acquisition-rt, fig.cap="RTs during acquisition phase of Experiment 3, split by *material* and *SOC transition status*. Error bars represent 95% within-subjects confidence intervals."}
+
+pdl10_acquisition_rt <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["error"]]==0 & Acquisition[["vR.error"]]==0 & Acquisition[["RT"]]<1000 & Acquisition[["RT"]]>50 & Acquisition[["excluded.id"]]==0,]
+
+
+# standard ANOVA
+pdl10_acquisition_rt.out <- apa.glm(
+  data = pdl10_acquisition_rt
+  , id = "id"
+  , dv = "RT"
+  , between = "Material"
+  , within = c("Block number", "SOC transition status")
+)
+#knitr::kable(pdl10_acquisition_rt.out$table)
+
+# RT plots
+apa_lineplot(
+  data = pdl10_acquisition_rt
+  , dv = "RT"
+  , id = "id"
+  , factors = c("Block number", "SOC transition status", "Material")
+  , ylim = c(540, 640)
+  , dispersion = wsci
+  , ylab = "Reaction time [msec]"
+  , args_arrows = list(length = .05)
+)
+
+# Anova w/o Random material group
+pdl10_acquisition_rt.out2 <- apa.glm(
+  data = subset(pdl10_acquisition_rt, Material!="Random")
+  , id = "id"
+  , dv = "RT"
+  , between = c("Material")
+  , within = c("Block number", "SOC transition status")
+)
+
+# str(tmp2)
+# library(BayesFactor)
+# tmp2 <- pdl10_acquisition_rt
+# tmp2$id <- as.factor(tmp2$id)
+# tmp2$korrekt.2nd.P <- as.factor(tmp2$korrekt.2nd.P)
+# tmp2$Block.Nr <- as.factor(tmp2$Block.Nr)
+# 
+# tmp3 <- apa.aggregate(data = tmp2, factors = c("id", "Material", "Block.Nr", "korrekt.2nd.P"), fun = mean, dv = "RT")
+# tmp3$korrekt.2nd.P <- as.factor (tmp3$korrekt.2nd.P)
+# str(tmp3)
+
+# M1 <- lmBF(formula = RT~Material*korrekt.2nd.P*Block.Nr+id, whichRandom = "id", data = tmp3)
+# M3 <- lmBF(formula = RT~Material + Block.Nr + korrekt.2nd.P + Material:Block.Nr + Material:korrekt.2nd.P + Block.Nr:korrekt.2nd.P +Material:Block.Nr:korrekt.2nd.P+ id,  whichRandom = "id", data = tmp3)
+# # model w/o three-way-interaction
+# M2 <- lmBF(formula = RT~Material + Block.Nr + korrekt.2nd.P + Material:Block.Nr + Material:korrekt.2nd.P + Block.Nr:korrekt.2nd.P + id, whichRandom = "id", data = tmp3)
+# M2/M1
+# M3/M1
+
+# Anova for rand group
+pdl10_acquisition_rt.out.rand <- apa.glm(data = subset(pdl10_acquisition_rt, Material=="Random")
+                                , id = "id"
+                                , dv = "RT"
+                                , within = c("Block number", "SOC transition status"))
+
+# -> nofx
+
+# Anova for fsoc group
+pdl10_acquisition_rt.out.fsoc <- apa.glm(data = subset(pdl10_acquisition_rt, Material=="mixed SOC")
+                                , id = "id"
+                                , dv = "RT"
+                                , within = c("Block number", "SOC transition status"))
+# -> two main effects, no interaction
+
+# Anova for psoc group
+pdl10_acquisition_rt.out.psoc <- apa.glm(data = subset(pdl10_acquisition_rt, Material=="pure SOC")
+                                , id = "id"
+                                , dv = "RT"
+                                , within = c("Block number", "SOC transition status"))
+# -> two main effects + interaction
+
+# Anova for fsoc group, excluding trials that were predicted by first order rule
+# tmp[["not fully irregular"]] <- as.integer(tmp[["SOC transition status"]] == "irregular" & tmp[["FOC transition status"]] != "low")
+
+# tmp[tmp[["not fully irregular"]]==1,c("SOC transition status", "FOC transition status")]
+
+# table(tmp6[["SOC transition status"]], tmp6[["FOC transition status"]])
+
+#tmp6 <- tmp[tmp[["Material"]]=="fsoc" & tmp[["not fully irregular"]]==0 & tmp[["FOC transition status"]]!="mid", ]
+#out6 <- apa.glm(data = tmp6, id = "id", dv = "RT", within = c("Block number", "SOC transition status"))
+
+# apa_lineplot(data = tmp6, dv = "RT", id = "id", factors = c("Block number", "SOC transition status"), ylim = c(540, 640), dispersion = wsci)
+
+
+
+# tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["error"]]==0 & Acquisition[["vR.error"]]==0 & Acquisition[["RT"]] > 100 & Acquisition[["RT"]] < 800,]
+# apa_lineplot(data = tmp, dv = "RT", id = "id", factors = c("Block number", "SOC transition status", "Material"), fun.aggregate = sd, dispersion = wsci, ylim = c(70, 120), ylab = "SD of Reaction times")
+# 
+# tmp2 <- tmp[tmp[["Material"]]!="rand",]
+# out2 <- apa.glm(data = tmp2, id = "id", dv = "RT", between = c("Material"), within=c("Block number","SOC transition status"))
+# Acquisition$vR.RT <- pdl.vR(R = Acquisition$RT, Trial.Nr = Acquisition[["Trial"]])
+# Acquisition[["deltaRT"]] <- abs(Acquisition$RT-Acquisition$vR.RT)
+# Acquisition$obs <- (as.integer(Acquisition$Block.Nr)-1)*180+Acquisition$Trial
+# 
+# par(mfrow = c(1, 1))
+# 
+# Acquisition$dummy <- round(Acquisition$obs/9)
+# 
+# tmp <- apa.aggregate(data = Acquisition, factors = c("id", "dummy"), dv = "deltaRT", fun = mean)
+# tmp2 <- apa.aggregate (data =tmp, factors =c("dummy"), dv = "deltaRT", fun = mean)
+# plot(tmp2$dummy, tmp2$deltaRT, ylim = c(0, 700))
+# 
+# tmp <- apa.aggregate(data = Acquisition, factors = c("id", "dummy"), dv = "RT", fun = mean)
+# tmp2 <- apa.aggregate (data =tmp, factors =c("dummy"), dv = "RT", fun = mean)
+# plot(tmp2$dummy, tmp2$RT, ylim = c(400, 800))
+
+```
+
+Figure \@ref(fig:pdl10-acquisition-rt) shows reaction times during acquisition. 
+We conducted a 3 (*Material*: random vs. pure SOC vs. mixed SOC) $\times$ 2 (*Transition status*: regular vs. irregular SOC) $\times$ 8 (*Block number*) ANOVA with repeated measures on the last two factors that revealed
+a main effect of *block number*,  `r pdl10_acquisition_rt.out[["Block_number"]]`, reflecting decreasing RT over blocks;
+a main effect of *transition status*, `r pdl10_acquisition_rt.out[["SOC_transition_status"]]`, reflecting an RT advantage for regular transitions;
+and an interaction of *block number* and *transition status*, `r pdl10_acquisition_rt.out[["Block_number_SOC_transition_status"]]`,
+reflecting the finding that the RT advantage for regular transitions increased over block (i.e., the sequence learning effect).
+We also found an interaction of *material* and *transition status*, `r pdl10_acquisition_rt.out[["Material_SOC_transition_status"]]`,
+reflecting the finding that the effect of *transition status* was absent in the random material group,
+`r pdl10_acquisition_rt.out.rand[["SOC_transition_status"]]`;
+trivially, no sequence knowledge was learned from random material.
+
+The three-way interaction was not significant, 
+`r pdl10_acquisition_rt.out[["Material_Block_number_SOC_transition_status"]]`, suggesting that the sequence-learning effect did not differ across material groups.
+We conducted separate analyses to probe for sequence-learning effects in each material condition.
+Analyzing only the random material group revealed only a main effect of *block number*, `r pdl10_acquisition_rt.out.rand[["Block_number"]]` (all other *p*s > .05).
+In the *pure SOC* group, in contrast, a main effect of *block number*,
+`r pdl10_acquisition_rt.out.psoc[["Block_number"]]`, 
+was accompanied by a main effect of *transition status*,
+`r pdl10_acquisition_rt.out.psoc[["SOC_transition_status"]]`, 
+and an interaction of both factors,
+`r pdl10_acquisition_rt.out.psoc[["Block_number_SOC_transition_status"]]`,
+reflecting a sequence learning effect on RT.
+
+In the *mixed SOC* group, we obtained only main effects of *block number*,
+`r pdl10_acquisition_rt.out.fsoc[["Block_number"]]`, 
+and of *transition status*,
+`r pdl10_acquisition_rt.out.fsoc[["SOC_transition_status"]]`, 
+but the interaction of *block number* and *transition status* was not significant,
+`r pdl10_acquisition_rt.out.fsoc[["Block_number_SOC_transition_status"]]`.
+This is despite the fact that the effect of transition status is also likely to be a result of sequence learning, and it is of similar magnitude to that obtained in the pure SOC group.
+The notion that both learning effects are similar was also supported by a joint analysis of the pure SOC and mixed SOC groups:
+The two-way interaction between block number and transition status was significant, `r pdl10_acquisition_rt.out2[["Block_number_SOC_transition_status"]]`, 
+but the three-way-interaction of *material*, *block number*, and *transition status* was not significant, 
+`r pdl10_acquisition_rt.out2[["Material_Block_number_SOC_transition_status"]]`.
+Taken together, we interpret these findings to show that the learning effect in the mixed SOC group was comparable to that observed in the pure SOC group but too small to reach significance in a separate analysis.
+
+
+```{r pdl10-acquisition-rt2, fig.cap="RTs during acquisition phase of Experiment 3, split by *material* and *SOC transition status*. Error bars represent 95% within-subjects confidence intervals.", eval = FALSE}
+# separate analysis for fsoc material, split by first order regularity
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["error"]]==0 & Acquisition[["vR.error"]]==0 & Acquisition[["vvR.error"]]==0 & Acquisition[["Reaktionszeit"]]<1000 & Acquisition[["Reaktionszeit"]]>50 & Acquisition[["Material"]] == "fsoc",]
+
+# apa_lineplot(data = tmp, dv = "RT", id = "id", factors = c("Block number", "FOC transition status"), dispersion = wsci, ylim = c(520, 600))
+
+
+
+
+# Does FOC-rule play a role within second order-irregular transitions?
+FOCeffect <- tmp[tmp[["SOC transition status"]]=="irregular"&tmp[["FOC transition status"]]!="high",]
+out <- apa.glm(data = FOCeffect, id = "id", dv = "RT", within = c("Block number", "FOC transition status"))
+# apa_lineplot(data = FOCeffect, id = "id", dv = "RT", factors = c("Block number", "FOC transition status"), dispersion = wsci,  ylim = c(520, 650))
+# --> within SOC-irregular transitions, FOC transition status does not matter
+
+# Does FOC-rule play a role within second order-regular transitions?
+FOCeffect <- tmp[tmp[["SOC transition status"]]=="regular"&tmp[["FOC transition status"]]!="low",]
+out <- apa.glm(data = FOCeffect, id = "id", dv = "RT", within = c("Block number", "FOC transition status"))
+# apa_lineplot(data = FOCeffect, id = "id", dv = "RT", factors = c("Block number", "FOC transition status"), dispersion = wsci,  ylim = c(520, 650))
+# --> within SOC-regular transitions, FOC transition status does not matter
+
+
+# Does SOC-rule play a role within first order-regular transitions?
+SOCeffect <- tmp[tmp[["FOC transition status"]]== "mid",]
+out <- apa.glm(data = SOCeffect, id = "id", dv = "RT", within = c("Block number", "SOC transition status"))
+# --> yes, it matters!
+
+# Is a more sophisticated look necessary? ... alot of data are not used in ANOVAs
+tmp$foc <- tmp[["FOC transition status"]]
+tmp$soc <- tmp[["SOC transition status"]]
+# out <- lmer(formula = RT ~  soc + (soc|foc) + (1|id), data = tmp)
+
+
+# tmp[["FSOC transition status"]] <- NA
+# tmp[["FSOC transition status"]][tmp$soc == "regular" & tmp$foc == "high"] <- "both"
+# tmp[["FSOC transition status"]][tmp$soc != "regular" & tmp$foc == "high"] <- "FOC only"
+# 
+# tmp[["FSOC transition status"]][tmp$soc == "regular" & tmp$foc == "mid"] <- "SOC + FOC mid"
+# tmp[["FSOC transition status"]][tmp$soc != "regular" & tmp$foc == "mid"] <- "FOC mid only"
+# 
+# tmp[["FSOC transition status"]][tmp$soc == "regular" & tmp$foc == "low"] <- "SOC only"
+# tmp[["FSOC transition status"]][tmp$soc != "regular" & tmp$foc == "low"] <- "none"
+# tmp[["FSOC transition status"]] <- as.factor(tmp[["FSOC transition status"]])
+# 
+# 
+# tmp2 <- tmp[tmp[["FSOC transition status"]] %in% c("both", "SOC only", "SOC + FOC mid", "FOC mid only"),]
+# apa_lineplot(data = tmp2, id = "id", dv = "RT", factors = c("Block number", "FSOC transition status"), dispersion = wsci, ylim = c(540, 620))
+# 
+# tmp2 <- tmp[tmp[["FSOC transition status"]] %in% c("FOC mid only", "none"),]
+# apa.glm(data=tmp2, id = "id", dv="RT", within = c("Block number", "FSOC transition status"))
+# apa_lineplot(data = tmp2, id = "id", dv = "RT", factors = c("Block number", "FSOC transition status"), dispersion = wsci, ylim = c(540, 620))
+
+```
+
+
+#### Error rates
+
+```{r pdl10-acquisition-error, fig.cap="Error rates during acquisition phase of Experiment 3, split by *material* and *SOC transition status*. Error bars represent 95% within-subjects confidence intervals."}
+exp3_acq_err <- Acquisition[Acquisition[["Trial"]]>2, ]
+
+
+exp3_acq_err.out <- apa.glm(data = exp3_acq_err
+               , id = "id"
+               , dv = "error"
+               , between = "Material"
+               , within = c("Block number", "SOC transition status"))
+
+apa_lineplot(
+  id = "id"
+  , dv = "error"
+  , data = exp3_acq_err
+  , factors = c("Block number","SOC transition status", "Material")
+  , dispersion = wsci
+  , ylim = c(0, 10)
+  , las = 1
+  , args_arrows = list(length = .05)
+  # , ylab = "Percentage of erroneous responses"
+  , ylab = "Error rate [%]"
+)
+
+# separate anylses for each 'material' condition, exploring the almost significant interaction of material x SOC transition status:
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]]=="Random", ]
+exp3_acq_err.out.rand <- apa.glm(id="id", dv="error", data=tmp, within=c("Block number","SOC transition status"))
+# --> no effect of SOC transition status
+
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]]=="mixed SOC", ]
+exp3_acq_err.out.fsoc <- apa.glm(id="id", dv="error", data=tmp, within=c("Block number","SOC transition status"))
+# --> effect of block number and of SOC transition status
+
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]]=="pure SOC", ]
+exp3_acq_err.out.psoc <- apa.glm(id="id", dv="error", data=tmp, within=c("Block number","SOC transition status"))
+# --> effect of  SOC transition status
+
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]]!="Random", ]
+exp3_acq_err.out2 <- apa.glm(id="id", dv="error", data=tmp, between = "Material", within=c("Block number","SOC transition status"))
+# no interaction of 'SOC transition status' and 'material' if random group is excluded
+
+# do error rates vary with FOC transition status?
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]] == "mixed SOC", ]
+out1 <- apa.glm(id = "id", dv = "error", data = tmp, within = c("Block number","FOC transition status"))
+# apa_lineplot(id = "id", dv = "error", data = tmp, factors = c("Block number","FOC transition status"), dispersion = wsci, ylim = c(0, .1))
+# --> yes, but this may be explained with SOC-regularity
+
+# do error rates vary with FOC transition status within SOC-regular transitions?
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]] == "mixed SOC" & Acquisition[["SOC transition status"]] == "regular", ]
+out2 <- apa.glm(id = "id", dv = "error", data = tmp, within = c("Block number","FOC transition status"))
+# apa_lineplot(id = "id", dv = "error", data = tmp, factors = c("Block number","FOC transition status"), dispersion = wsci, ylim = c(0, .1))
+# --> no
+
+# do error rates vary with FOC transition status within SOC-irregular transitions?
+tmp <- Acquisition[Acquisition[["Trial"]]>2 & Acquisition[["Material"]] == "mixed SOC" & Acquisition[["SOC transition status"]] == "irregular" & Acquisition[["FOC transition status"]]!="high", ]
+out3 <- apa.glm(id = "id", dv = "error", data = tmp, within = c("Block number","FOC transition status"))
+# apa_lineplot(id = "id", dv = "error", data = tmp, factors = c("Block number","FOC transition status"), dispersion = wsci, ylim = c(0, .1))
+# --> too few observations
+```
+
+
+Figure \@ref(fig:pdl10-acquisition-error) shows error rates during acquisition.
+We conducted a `r exp3_acq_err.out$name` ANOVA with repeated measures on the last two factors that revealed
+a main effect of *block number*, `r exp3_acq_err.out[["Block_number"]]`,
+reflecting increasing error rates over blocks,
+and a main effect of *transition status*, `r exp3_acq_err.out[["SOC_transition_status"]]`,
+reflecting an accuracy advantage for regular transitions.
+The interaction of *material* and *transition status* was not significant, `r exp3_acq_err.out[["Material_SOC_transition_status"]]`,
+
+Separate analyses yielded no significant effects in the random material group (all *p*s > .05).
+Importantly, an effect of *transition status* was clearly absent from the random material group, `r exp3_acq_err.out.rand[["SOC_transition_status"]]`.
+In the *mixed SOC* group, a main effect of *block number* was found,
+`r exp3_acq_err.out.fsoc[["Block_number"]]`,
+along with a main effect of *transition status*,
+`r exp3_acq_err.out.fsoc[["SOC_transition_status"]]`,
+reflecting higher error rates for irregular than for regular transitions.
+Finally, in the *pure SOC* group, block number did not affect error rates, `r exp3_acq_err.out.psoc[["Block_number"]]`; 
+but a main effect of *transition status* was also found,
+`r exp3_acq_err.out.psoc[["SOC_transition_status"]]`, reflecting higher error rates for irregular than regular transitions.
+
+Taken together, error rates mirror RTs in that they also reflect a performance advantage for regular transitions in the mixed and pure SOC groups that was not evident in the random control group. 
+Deviating from the RT result pattern, this advantage did not reliably increase across blocks.
+
+
+### Generation task
+
+
+```{r pdl10-generation-1, fig.cap="Mean proportion of regular SOCs during generation task of Experiment 3, excluding repetitions"}
+# SOCs, repetitions excluded
+exp3gen <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["excluded.id"]]==0,]
+
+# ANOVA
+exp3gen.out <- apa.glm(data = exp3gen
+                       , id = "id"
+                       , dv = "SOC.correct"
+                       , between = c("Material", "Condition", "Order")
+                       , within = "PD instruction")
+
+# between <- c("Material","Condition","Order")
+# 
+# tmp2 <- apa.aggregate(data=tmp,factors=c("id",between,"Instruktion"), fun=mean, dv="SOC.correct")
+# tmp2$id <- as.factor(tmp2$id)
+# 
+# # Bayes Factor models
+# # Full model
+# M1 <- lmBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o interaction
+# M2 <- lmBF(formula=SOC.correct~Material+Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o complete 'material' term
+# M3 <- lmBF(formula=SOC.correct~Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# 
+# out.BF <- anovaBF(formula = SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom = "id", data = tmp2)
+# topdown1 <- anovaBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2, whichModel="top")
+
+# plots
+# apa_barplot(data=exp3gen,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),ylim=c(0,1),intercept=.2)
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.20),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg<-.aggregate(data=exp3gen,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
+exp3gen.t.out<-tapply(agg[["SOC.correct"]], list(agg[["PD instruction"]], agg[["Condition"]]), FUN = fun.tmp)
+
+```
+
+
+
+```{r pdl10-generation-2, fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions and reversals", eval=FALSE, results='hide'}
+# SOCs, repetitions and reversals excluded
+exp3gen2 <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]] > 2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0,]
+
+# ANOVA
+exp3gen2.out <- apa.glm(
+              data = exp3gen2
+              , id = "id"
+              , dv = "SOC.correct"
+              , between = c("Material", "Condition", "Order")
+              , within = c("PD instruction")
+)
+
+tmp <- exp3gen2[exp3gen2$Instruktion=="Exklusion", ]
+agg <- aggregate(formula = SOC.correct ~ Material + Condition + Order + id, FUN = mean, data = tmp)
+
+# BF <- anovaBF(formula = SOC.correct ~ Material * Condition + Order, data = agg, whichModels = "top")
+
+# BF_rand <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="rand", ], whichModels = "top")
+# BF_fsoc <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="fsoc", ], whichModels = "top")
+# BF_psoc <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="psoc", ], whichModels = "top")
+
+full <- lmBF(formula = SOC.correct ~ Material * Condition * Order, data = agg, iterations = 3e6)
+null <- lmBF(formula = SOC.correct ~ Material * Order + Condition:Material + Condition:Order + Material:Condition:Order, data = agg)
+null <- lmBF(formula = SOC.correct ~ Material * Order, data = agg)
+
+# two possible orderings, so prior odds 1/2
+prior_odds <- 1/2
+bf_restricted_against_full <- mean(posterior(full, iter = 1e5)[, "Condition-No transition revealed"]>0) / prior_odds
+# This is the bayes factor for delta>=0 against delta<0 (prediction of ordinal pd)
+bf_restricted_against_null <- bf_restricted_against_full * as.vector(full)/as.vector(null)
+1/bf_restricted_against_null
+
+apa_beeplot(data = agg, id = "id", dv = "SOC.correct", factors = c("Material", "Condition", "Order"))
+aov_ez(data = agg, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"))
+
+# between <- c("Material","Condition","Order")
+#
+# tmp2 <- apa.aggregate(data=tmp,factors=c("id",between,"Instruktion"), fun=mean, dv="SOC.correct")
+# tmp2$id <- as.factor(tmp2$id)
+#
+# tmp <- exp3gen2[exp3gen2[["revealed"]]==1, ]
+# agg <- apa.aggregate(data = tmp, factors = c("id", "Material", "PD instruction"), dv = "SOC.correct", fun = mean)
+# ## paarweise ausschlie?en
+# for (i in unique(agg$id)) {
+#   agg[agg$id==i, "full"] <-ifelse(sum(agg$id==i)==2, 1, 0)
+# }
+# agg <- agg[agg$full==1, 1:4]
+#
+#
+#
+# plot(x = c(0, 1), y = c(0, 1), type="n", main = "revealed", xlab="p(korrekt|Inklusion)",ylab="p(korrekt|Exklusion)")
+# text(
+#   x = agg[agg$`PD instruction`=="Inclusion", "SOC.correct"]
+#   , y = agg[agg$`PD instruction`=="Exclusion", "SOC.correct"]
+#   , labels = agg[agg$`PD instruction`=="Exclusion", "id"]
+#   , cex = 1
+# )
+# lines(x=c(0,1), y = c(0,1))
+
+# agg[agg$id %in% c(153, 58, 122, 84, 37), ]
+
+
+# # Bayes Factor models
+# topdown1 <- anovaBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2, whichModel="top")
+#
+# # Full model
+# M1 <- lmBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o interactions
+# M2 <- lmBF(formula=SOC.correct~Material+Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o complete 'material' term
+# M3 <- lmBF(formula=SOC.correct~Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # M3/M1
+# # w/o complete 'PD instruction' term
+# M4 <- lmBF(formula=SOC.correct~Material*Order+id, whichRandom="id", data=tmp2)
+# # M1/M4
+
+
+# separate analyses for *condition*
+exp3gen2.out.nt <- apa.glm(data=subset(exp3gen2, Condition=="No transition revealed")
+                  ,id="id"
+                  ,dv="SOC.correct"
+                  ,between=c("Material","Order")
+                  ,within=c("PD instruction"))
+exp3gen2.out.tt <- apa.glm(data=subset(exp3gen2, Condition=="Two transitions revealed")
+                  ,id="id"
+                  ,dv="SOC.correct"
+                  ,between=c("Material","Order")
+                  ,within=c("PD instruction"))
+
+exp3gen2.out.ex <- apa.glm(data=exp3gen2[exp3gen2[["PD instruction"]]=="Exclusion",]
+                  ,id="id"
+                  ,dv="SOC.correct"
+                  ,between=c("Material","Condition","Order"))
+
+# plots
+# apa_barplot(data=exp3gen2,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),intercept=.25,ylim=c(0,1))
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.25),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg<-.aggregate(data=exp3gen2,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
+exp3gen2.t.out<-tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Condition"]]),fun.tmp)
+
+# 
+# We conducted a `r exp3gen2.out$name` ANOVA with repeated measures on the last factor;
+# it revealed
+# a main effect of *condition*, `r exp3gen2.out[["Condition"]]` (more regular transitions were generated if sequence knowledge had been revealed);
+# a main effect of *PD instruction*, `r exp3gen2.out[["PD_instruction"]]` (more regular transitions were generated in *inclusion* than in exclusion blocks);
+# and an interaction of *condition* and *PD instruction*, `r exp3gen2.out[["Condition_PD_instruction"]]`, reflecting the finding that the *PD instruction* effect was much greater if explicit sequence knowledge had been revealed, `r exp3gen2.out.tt[["PD_instruction"]]`;
+# as compared to when no explicit knowledge was revealed, `r exp3gen2.out.nt[["PD_instruction"]]`.
+# The effect of *material* was again not significant, `r exp3gen2.out[["Material"]]`, suggesting that implicit knowledge acquired during the SRT was not expressed in the generation task.
+# 
+# To establish the relative performance patterns across inclusion (I), exclusion (E), and baseline (B) conditions, we computed a set of pairwise comparisons: *t* tests against a fixed baseline of $B = .25$ revealed that inclusion performance was above chance for both the *no-transition-revealed* group, `r exp3gen2.t.out["Inclusion","No transition revealed"]`,
+# and the *two-transitions-revealed* group, `r exp3gen2.t.out["Inclusion","Two transitions revealed"]`.
+# Exclusion performance was at chance in the the *no-transition-revealed* group, `r exp3gen2.t.out["Exclusion","No transition revealed"]`,
+# but above chance in the *two-transitions-revealed* group, `r exp3gen2.t.out["Exclusion","Two transitions revealed"]`.
+# 
+# Taken together, for the control condition in which no transitions were revealed, results showed $I > E$, $I > B$ and $E = B$ -- a pattern implicating the presence of explicit but the *absence* of implicit knowledge.
+# That is, excluding reversals eliminated the pattern suggesting the presence of implicit knowledge -- which would have been plausible at least for the *mixed SOC* and psoc groups -- but left a pattern that suggested the presence of explicit knowledge -- an interpretation unlikely to be correct, given that explicit knowledge was not conveyed to these participants.
+# For the condition in which two transitions were revealed, we obtained $I > E$, $I > B$ and $E > B$ -- a pattern typically taken to indicate the presence of both explicit *and implicit* knowledge.
+# In other words, in contrast to the control condition, revealing *explicit* knowledge about two transitions elicited the PD signature of evidence for *implicit* knowledge.
+# Note that this is precisely what one would expect if explicit knowledge is not exhaustively excluded, as suggested by our previous results.
+
+
+```
+
+
+
+
+```{r 'pdl10_load_ic_fit', cache = FALSE}
+load(file = "hierarchical_pd/pdl10_stan_summary.RData")
+```
+
+```{r 'pdl10_load_posteriors', cache = FALSE}
+load(file = "hierarchical_pd/pdl10/pd_Halt_cdfs.RData")
+
+a_non <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
+a_rev <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_rev(0)), "$")
+c_rev <- paste0("$p ", papaja::printp(cdfs$difference_of_means$c_rev(0)), "$")
+
+# credible interval of difference
+ci.a_non <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$a_non, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
+ci.a_rev <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$a_rev, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
+ci.c_rev <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$c_rev, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
+
+save(a_non, a_rev, c_rev, ci.a_non, ci.a_rev, ci.c_rev, file = "pdl10_CIs_ps.RData")
+DIC_1vs2 <- paste0("$\\Delta \\textrm{DIC}_{\\mathcal{M}_1 - \\mathcal{M}_2} = ", papaja::printnum(M1$num$DIC - M2$num$DIC, digits = 2, big.mark = "{,}"), "$")
+
+```
+
+
+We analyzed generation performance by fitting the two hierarchical models $\mathcal{M}_1$ and $\mathcal{M}_2$ that we introduced above to the data from Experiment 3.
+For both models, we computed model fit statistics to assess whether each model could account for the data; 
+we then compared both models using the DIC.
+Parameter estimates from model $\mathcal{M}_1$ were then used to address the invariance assumptions directly.
+
+The model checks for model $\mathcal{M}_1$ were satisfactory,
+`r M1$fit`
+In contrast, the model checks for model $\mathcal{M}_2$ revealed significant deviations of the model's predictions from the data,
+`r M2$fit`
+
+Model $\mathcal{M}_1$ attained a DIC value of `r M1$ic$DIC` and outperformed model $\mathcal{M}_2$ that attained a DIC value of `r M2$ic$DIC`, `r DIC_1vs2`.
+This implies that our auxiliary assumptions that we introduced to make model $\mathcal{M}_1$ identifiable (i.e., that participants did not acquire explicit knowledge during training, and that revealing explicit knowledge about a transition did not affect implicit knowledge) were less problematic than the invariance assumption.
+Moreover, the standard PD model enforcing the invariance assumption was not able to account for the data.
+
+
+
+```{r pdl10-parameter-estimates, fig.width = 8.8, fig.height = 5, fig.cap = "Parameter estimates from Experiment 3. Error bars represent 95% confidence intervals."}
+load("hierarchical_pd/pdl10/pd_Halt_posteriors.RData")
+par(mfrow = c(1, 2))
+apa_beeplot(
+  data = means_df[means_df$Parameter=="a",]
+  , id = "person"
+  , dv = "Estimate"
+  , factors = c("Material", "PD instruction")
+  , ylim = c(0, 1)
+  , args_legend = list(x = "topleft")
+  , main = expression("Automatic processes"~italic(A))
+)
+apa_beeplot(
+  data = means_df[means_df$Parameter=="c" & means_df$transition=="revealed" & means_df$Condition=="Two transitions revealed", ]
+  , id = "person"
+  , dv = "Estimate"
+  , factors = c("Material", "PD instruction")
+  , ylim = c(0, 1)
+  , args_legend = list(plot = FALSE)
+  , ylab = ""
+  , main = expression("Controlled processes"~italic(C))
+)
+```
+
+
+```{r pdl10-posterior-differences, fig.height = 5, fig.width = 8.8, fig.cap = "Posterior differences $A_I - A_E$ and $C_I - C_E$ in Experiment 3, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
+load(file = "hierarchical_pd/pdl10/posteriors_for_plot.RData")
+N <- 171
+N2 <- 82
+par(mfrow = c(1, 3))
+
+for (j in c("non-revealed", "revealed")){
+    k <- "a"
+    plot.default(
+      x = 1:N
+      , col = "white"
+      , xlim = c(0, N+1)
+      , ylim = c(-1, 1)
+      , xlab = "Participant"
+      , ylab = "Difference between Inclusion and Exclusion"
+      , main = bquote(italic(A[I]) -italic(A[E])~ .(paste0(", ", j, " transitions")))
+      , frame.plot = FALSE
+      , xaxt = "n"
+    )
+
+    tmp <- delta_quantiles[, order(delta_quantiles[3, , j, k]), j, k]
+    # Credible Intervals
+    segments(x0 = 1:N, x1 = 1:N, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+    segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+    segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+
+    abline(h = 0, lty = "solid", col = "grey60")
+    abline(h = posterior_mean_delta[j, "a"], lty = "dashed", col = "darkred")
+    abline(h = posterior_quantiles_delta["2.5%", j, "a"], lty = "dotted", col = "darkred")
+    abline(h = posterior_quantiles_delta["97.5%", j, "a"], lty = "dotted", col = "darkred")
+
+    # Medians: posterior_mean_delta
+    points(x = 1:N, tmp[3, ], col = "grey40", pch = 21, bg = "grey40", cex = .5)
+    # points(x = 1:121, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .05)
+
+    ## Credible Interval eye-candy
+    segments(x0 = 1:N, x1 = 1:N, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+    segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+    segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+
+    axis(side = 1, at = c(1, N), labels = c(1, N))
+}
+
+
+k <- "c"
+j <- "revealed"
+delta_quantiles <- delta_quantiles[, (171-82+1):171, , ]
+tmp <- delta_quantiles[, order(delta_quantiles[3, , j, k]), j, k]
+
+plot.default(
+      x = 1:N2
+      , col = "white"
+      , xlim = c(0, N2+1)
+      , ylim = c(-1, 1)
+      , xlab = "Participant"
+      , ylab = "Difference between Inclusion and Exclusion"
+      , main = bquote(italic(C[I]) - italic(C[E])~ .(paste0(", ", j, " transitions")))
+      , frame.plot = FALSE
+      , xaxt = "n"
+    )
+
+
+# Credible Intervals
+
+segments(x0 = 1:N2, x1 = 1:N2, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+
+abline(h = 0, lty = "solid", col = "grey60")
+abline(h = posterior_mean_delta["revealed", "c"], lty = "dashed", col = "darkred")
+abline(h = posterior_quantiles_delta["2.5%", "revealed", "c"], lty = "dotted", col = "darkred")
+abline(h = posterior_quantiles_delta["97.5%", "revealed", "c"], lty = "dotted", col = "darkred")
+
+# Medians
+points(x = 1:N2, tmp[3, ], col = "grey40", pch = 21, bg = "grey40")
+# points(x = 1:61, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .1)
+# Credible Intervals eye-candy
+segments(x0 = 1:N2, x1 = 1:N2, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+axis(side = 1, at = c(1, N2), labels = c(1, N2))
+
+par(mfrow = c(1, 1))
+```
+
+Figure \@ref(fig:pdl10-parameter-estimates) shows the parameter estimates obtained from model $\mathcal{M}_1$.
+Figure \@ref(fig:pdl10-posterior-differences) shows that the invariance assumption for controlled processes was again violated with $C_I > C_E$, `r ci.c_rev`, Bayesian `r c_rev`.
+The invariance violation was also obtained with model $\mathcal{M}_{1R}$, showing that it is robust to the specific modeling assumptions (see Appendix A).
+In contrast to the results of Experiment 2, the invariance assumption for automatic processes was not violated but could be upheld, `r ci.a_non`, Bayesian `r a_non` for non-revealed transitions and `r ci.a_rev`, `r a_rev` for revealed transitions.
+
+
+
+
+```{r 'exp3_model_frequency_files', eval = FALSE}
+# make model frequency files
+
+# only repetitions excluded
+tmp <- exp3gen
+tmp[["freq"]] <- 1
+tmp[["SOC.correct"]] <- factor(tmp[["SOC.correct"]], levels = 1:0, labels = c("correct", "incorrect"))
+tmp[["revealed"]] <- factor(tmp[["revealed"]], levels = 0:1, labels = c("non-revealed", "revealed"))
+
+## overall
+agg <- apa.aggregate(data = tmp, factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3:")
+
+## overall, non-reported transitions
+agg <- apa.aggregate(data = tmp[tmp[["SR.free"]]=="nicht.genannt", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3x_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3x.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3:")
+
+## only non-revealed
+agg <- apa.aggregate(data = tmp[tmp[["revealed"]]=="non-revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_non_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_non.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_non:")
+
+## only revealed
+agg <- apa.aggregate(data = tmp[tmp[["revealed"]]=="revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_rev_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_rev.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_rev:")
+
+
+# repetitions and reversals excluded
+tmp <- exp3gen2
+tmp[["freq"]] <- 1
+tmp[["SOC.correct"]] <- factor(tmp[["SOC.correct"]], levels = 1:0, labels = c("correct", "incorrect"))
+tmp[["revealed"]] <- factor(tmp[["revealed"]], levels = 0:1, labels = c("non-revealed", "revealed"))
+
+## overall
+agg <- apa.aggregate(data = tmp, factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_wo_reversals_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_wo_reversals:")
+
+## overall, non-reported transitions
+agg <- apa.aggregate(data = tmp[tmp[["SR.free"]]=="nicht.genannt", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3x_wo_reversals_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3x_wo_reversals.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3:")
+
+
+
+## only block1
+agg <- apa.aggregate(data = tmp[tmp[["Block.Nr"]]=="first", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_wo_reversals_block1_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_block1.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_block1:")
+
+## only non-revealed
+agg <- apa.aggregate(data = tmp[tmp[["revealed"]]=="non-revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_wo_reversals_non_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_non.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_non:")
+
+## only revealed
+agg <- apa.aggregate(data = tmp[tmp[["revealed"]]=="revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_wo_reversals_rev_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_rev.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_rev:")
+
+## only no-transitions-revealed
+agg <- apa.aggregate(data = tmp[tmp[["Condition"]]=="No transition revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_wo_reversals_no-trans-rev_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_no-trans-rev.mdt", index = "Material x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_no-trans-rev:")
+
+## only two-transitions-revealed
+agg <- apa.aggregate(data = tmp[tmp[["Condition"]]=="Two transitions revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+write.table(agg, file = "model_data/exp3_wo_reversals_two-trans-rev_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_two-trans-rev.mdt", index = "Material x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_two-trans-rev:")
+
+```
+
+```{r 'exp3_pdmodel', results='hide', message=FALSE, eval = FALSE}
+
+# overall
+
+# fit baseline model
+f.b <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals.mdt", c("C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+# fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3x_wo_reversals.mdt", c("C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+
+# test invariance of a
+f.b_i <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p","C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+inv_a <- apa.g2(f.b_i, f.b)
+## inv_a violated, p=.02
+
+# test invariance of c
+f.b_ic <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p","C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p=C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+inv_c <- apa.g2(f.b_ic, f.b)
+## inv_c violated, p<.001
+
+
+# only first block
+
+#baseline
+f.b1 <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals_block1.mdt", c("C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+f.b1_i <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals_block1.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p","C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+# test invariance of c
+f.b1_ic <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals_block1.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p","C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p=C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+
+
+# non-revealed (no C, but different guessing in two-trans-rev)
+
+#baseline model
+f.b_non <- fit_mpt(eqnfile = "exp3_non.eqn", mdtfile = "model_data/exp3_wo_reversals_non.mdt")
+f.b_non <- fit_mpt(eqnfile = "exp3_non.eqn", mdtfile = "model_data/exp3_wo_reversals_non.mdt")
+# test for invariance of A/implicit
+f.b_non_i <- fit_mpt(eqnfile = "exp3_non.eqn", mdtfile = "model_data/exp3_wo_reversals_non.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p"))
+inv_a <- apa.g2(f.b_non_i, f.b_non)
+## invariance of a is violated, p=.027 (but perhaps due to artifact of explicit knowledge)
+
+
+# only revealed 
+
+#baseline model
+f.b_rev <- fit_mpt(eqnfile = "exp3_rev.eqn", mdtfile = "model_data/exp3_wo_reversals_rev.mdt", c("A_inclusion_f=A_exclusion_f", "A_inclusion_p=A_exclusion_p", "R_inclusion=.265", "R_exclusion=.244"))
+#test invariance
+f.b_rev_ic <- fit_mpt(eqnfile = "exp3_rev.eqn", mdtfile = "model_data/exp3_wo_reversals_rev.mdt", c("A_inclusion_f=A_exclusion_f", "A_inclusion_p=A_exclusion_p", "R_inclusion=.265", "R_exclusion=.244", "C2_in=C2_ex"))
+apa.g2(f.b_rev_ic, f.b_rev)
+## invariance of c is violated, p<.001
+
+
+# only the no-transitions-revealed condition
+
+#baseline model
+f.b_no_trans_rev <- fit_mpt(eqnfile = "exp3_no-trans-rev.eqn", mdtfile = "model_data/exp3_wo_reversals_no-trans-rev.mdt")
+#test invariance
+f.b_no_trans_rev_i <- fit_mpt(eqnfile = "exp3_no-trans-rev.eqn", mdtfile = "model_data/exp3_wo_reversals_no-trans-rev.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p"))
+inv_a_no_trans_rev <- apa.g2(f.b_no_trans_rev_i, f.b_no_trans_rev)
+## a not violated, p=.99
+
+
+# only the two-transitions-revealed condition
+
+#baseline model
+f.b_two_trans_rev <- fit_mpt(eqnfile = "exp3_two-trans-rev.eqn", mdtfile = "model_data/exp3_wo_reversals_two-trans-rev.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p"))
+#test invariance
+f.b_two_trans_rev_i <- fit_mpt(eqnfile = "exp3_two-trans-rev.eqn", mdtfile = "model_data/exp3_wo_reversals_two-trans-rev.mdt", c("A_exclusion_f=A_inclusion_f","A_exclusion_p=A_inclusion_p", "C2_in=C2_ex"))
+inv_c_two_trans_rev <- apa.g2(f.b_two_trans_rev_i, f.b_two_trans_rev)
+## invariance of c is violated in revealed-only
+
+# The model was barely able to account for the data, `r apa.g2(f.b)`.
+# Parameter estimates are given in Table X: 
+# `r knitr::kable(f.b$parameters)`
+# We tested for invariance of the controlled/explicit parameters by equating them across inclusion and exclusion. 
+# The restricted model showed significantly reduced goodness-of-fit, `r apa.g2(f.b_ic, f.b)`.
+# Invariance was violated: Explicit knowledge affected inclusion and exclusion performance to significantly different degrees.
+# Next, we tested for invariance of the automatic/implicit parameters by equating them across inclusion and exclusion. 
+# The restricted model also showed significantly reduced goodness-of-fit, `r apa.g2(f.b_i, f.b)`.
+# This implies that implicit knowledge also affects performance differently under inclusion and exclusion instructions.
+# 
+# To test whether these findings may have been due to an order artifact, we repeated the above analysis using the data from the first block only.
+# Model fit was barely acceptable, `r apa.g2(f.b1)`.
+# A test of invariance of implicit parameters showed that the assumption was not significantly violated in the first half of the data, `r apa.g2(f.b1_i, f.b1)`. 
+# However, equating the controlled/explicit parameters again harmed goodness-of-fit, `r apa.g2(f.b1_ic, f.b1)`, supporting again an invariance violation of the explicit process.
+# 
+# We next tested whether the findings may have been due to interactions between the material and explicit-knowledge manipulations, or due to effects of explicit knowledge on nuisance parameters, by computing separate analyses for subsets of the data.
+# First, we analyzed data from the group of participants who did not receive explicit knowledge; in this group, generation performance could not have been distorted by the explicit-knowledge manipulation. 
+# Model fit could not be tested due to lack of $df$, `r apa.g2(f.b_no_trans_rev)`.
+# Equating the implicit parameters across inclusion and exclusion did not harm goodness-of-fit, `r apa.g2(f.b_no_trans_rev_i, f.b_no_trans_rev)`.
+# The invariance of implicit knowledge was not violated in these data, suggesting that its violation in the overal analysis may have been due to an artifact or independence violation.
+# Second, we analyzed data from the group of participants who were instructed about two transitions.
+# Model fit was again barely acceptable, `r apa.g2(f.b_two_trans_rev)`.
+# Equating the controlled/explicit parameters across inclusion and exclusion had a detrimental effect on goodness-of-fit, `r apa.g2(f.b_two_trans_rev_i, f.b_two_trans_rev)`.
+# The invariance of the explicit process was also violated in this subset, supporting the results of the overall analysis.
+# 
+# Taken together, we have again obtained strong evidence for a violation of the invariance assumption for controlled/explicit knowledge.
+# Invariance of implicit parameters was violated in the overall analysis, but could be upheld if only the data from the first block, or only the data from the no-transitions-revealed condition, were considered.
+```
+
+
+
+
+
+```{r 'exp3_nonrevealed_1', fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions, only non-revealed transitions", eval=FALSE}
+## SOCs, repetitions and reversals excluded, only non-revealed transitions
+
+exp3gen_non <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]]>2 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0,]
+
+# ANOVA
+exp3gen_non.out <- apa.glm(data=exp3gen_non
+                    ,id="id"
+                    ,dv="SOC.correct"
+                    ,between=c("Material","Condition","Order")
+                    ,within=c("PD instruction"))
+#knitr::kable(exp3gen_non.out$table)
+
+# post-hoc comparisons for 'material' factor
+fit <- aov_ez(data = exp3gen_non, id = "id", dv = "SOC.correct", between=c("Material","Condition","Order"), within=c("Instruktion"), fun.aggregate = mean)
+# tukey <- apa_print(pairs(lsmeans(fit, specs = "Material"))) ## papaja bug
+
+# plot
+# apa_barplot(data=exp3gen_non,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),ylim=c(0,1),intercept=.2)
+
+# Follow-up ANOVAs
+exp3gen_non.out.nt <- apa.glm(data=subset(exp3gen_non, Condition=="No transition revealed")
+                      ,id="id"
+                      ,dv="SOC.correct"
+                      ,between=c("Material","Order")
+                      ,within=c("PD instruction"))
+#knitr::kable(exp3gen_non.out.nt$table)
+exp3gen_non.out.tt <- apa.glm(data=subset(exp3gen_non, Condition=="Two transitions revealed")
+                      ,id="id"
+                      ,dv="SOC.correct"
+                      ,between=c("Material","Order")
+                      ,within=c("PD instruction"))
+#knitr::kable(exp3gen_non.out.tt$table)
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.2),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg <- .aggregate(data=exp3gen_non,factors=c("id","PD instruction","Material"),fun=mean,dv="SOC.correct")
+exp3gen_non.t.out <- tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Material"]]),FUN=fun.tmp)
+
+agg <- .aggregate(data=exp3gen_non,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
+exp3gen_non.t2.out <- tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Condition"]]),FUN=fun.tmp)
+
+```
+
+
+```{r 'exp3_revealed_1', fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions and reversals, only revealed transitions", eval=FALSE}
+## SOCs, repetitions and reversals excluded, only revealed transitions
+# Post-hoc comparisons using Tukey's HSDs indicated that participants with random material generated fewer regular transitions
+# than particpants in the psoc group, `r tukey[["full"]][["rand - psoc"]]`
+# or in the fsoc group, `r tukey[["full"]][["rand - fsoc"]]`,
+# while both groups with probabilistic material (fsoc & psoc) did not differ from each other, `r tukey[["full"]][["fsoc - psoc"]]`.
+# Post-hoc comparisons using Tukey's HSDs indicated that participants with random material generated fewer regular transitions
+# than particpants in the psoc group, `r tukey[["full"]][["rand - psoc"]]`
+# or in the fsoc group, `r tukey[["full"]][["rand - fsoc"]]`,
+# while both groups with probabilistic material (fsoc & psoc) did not differ from each other, `r tukey[["full"]][["fsoc - *pure SOC*"]]`.
+exp3gen_rev <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]]>2&Generation[["excluded.id"]]==0&Generation[["instruiert"]]==1,]
+
+# ANOVA
+exp3gen_rev.out <- apa.glm(data=exp3gen_rev
+               , id="id"
+               , dv="SOC.correct"
+               , between=c("Material","Order")
+               , within=c("PD instruction"))
+#knitr::kable(exp3gen_rev.out$table)
+
+# means
+agg <- .aggregate(data=exp3gen_rev,factors=c("PD instruction","Order"),fun=mean,dv="SOC.correct")
+## inclusion performance grows from 1st to 2nd block (gets better)
+## exclusion grows also (gets worse)
+
+# plot
+# apa.barplot(data=exp3gen_rev,id="id",dv="SOC.correct",factors=c("Material","PD instruction", "Block number"),ylim=c(0,1),intercept=.25)
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.25),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg <- .aggregate(data=exp3gen_rev,factors=c("id","PD instruction","Order"),fun=mean,dv="SOC.correct")
+exp3gen_rev.t.out <- tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Order"]]),FUN=fun.tmp)
+
+
+```
+
+
+```{r 'exp3_nonrevealed_2', fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions and reversals, only non-revealed transitions", eval=FALSE}
+## SOCs, repetitions and reversals excluded, only non-revealed transitions
+
+exp3gen_non <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0,]
+
+# exp3gen_non <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0 & Generation[["herbeigef?hrt"]]==0,]
+
+# ANOVA
+exp3gen_non.out <- apa.glm(data=exp3gen_non
+                    ,id="id"
+                    ,dv="SOC.correct"
+                    ,between=c("Material","Condition","Order")
+                    ,within=c("PD instruction"))
+#knitr::kable(exp3gen_non.out$table)
+
+# post-hoc comparisons for 'material' factor
+fit <- aov_ez(data = exp3gen_non, id = "id", dv = "SOC.correct", between=c("Material","Condition","Order"), within=c("Instruktion"), fun.aggregate = mean)
+# tukey <- apa_print(pairs(lsmeans(fit, specs = "Material")))  ## papaja bug
+
+# plot
+# apa_barplot(data=exp3gen_non,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),ylim=c(0,1),intercept=.25)
+
+# Follow-up ANOVAs
+exp3gen_non.out.nt <- apa.glm(data=subset(exp3gen_non, Condition=="No transition revealed")
+                      ,id="id"
+                      ,dv="SOC.correct"
+                      ,between=c("Material","Order")
+                      ,within=c("PD instruction"))
+exp3gen_non.out.tt <- apa.glm(data=subset(exp3gen_non, Condition=="Two transitions revealed" & herbeigef?hrt==0)
+                      ,id="id"
+                      ,dv="SOC.correct"
+                      ,between=c("Material","Order")
+                      ,within=c("PD instruction"))
+
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.25),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg <- .aggregate(data=exp3gen_non,factors=c("id","PD instruction","Material"),fun=mean,dv="SOC.correct")
+exp3gen_non.t.out <- tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Material"]]),FUN=fun.tmp)
+
+# 
+# Analysing only non-revealed transitions, a `r exp3gen_non.out$name` ANOVA revealed
+# a main effect of *material*, `r exp3gen_non.out[["Material"]]`;
+# and an interaction of *condition* and *PD instruction*, `r exp3gen_non.out[["Condition_PD_instruction"]]` (all other *p*s > .05).
+# 
+# The main effect of material, albeit weak, reflects greater proportions of regular transitions generated in the groups that were trained on probabilistic (*mixed* and *pure*) material, that is, evidence for sequence learning.
+# Post-hoc comparisons using Tukey's HSDs indicated that participants who worked on an SRT with random material generated fewer regular transitions than particpants in the probabilistic SRT groups, with $P(regular|random) \le P(regular|pure SOC) \le P(regular|mixed SOC)$:
+# There was a significant difference between the random and *mixed SOC* groups, `r # tukey[["full"]][["rand - fsoc"]]`,
+# but no significant difference between the random and *pure SOC* groups, `r # tukey[["full"]][["rand - psoc"]]`.
+# and both groups with probabilistic material (*mixed* and *pure SOC*) did not significantly differ from each other, `r # tukey[["full"]][["fsoc - psoc"]]`.
+# 
+# t-tests: `r # knitr::kable(exp3gen_non.t.out)`.
+# 
+# Taken together, analysing only the non-revealed transitions showed that participants were able to express their acquired sequence knowledge in the generation task.
+# As the *material* factor did not interact with *PD instruction*, the PD approach suggests that this knowledge remained implicit.
+# 
+# To further explore the significant two-way interaction between condition and PD instruction, we conducted separate ANOVAs for the two explicit-knowledge instruction groups:
+# In the *no-transition-revealed* group, a main effect of *PD instruction* was not found, `r exp3gen_non.out.nt[["PD_instruction"]]`.
+# In contrast, in the *two-transitions-revealed* group, a main effect of *PD instruction*, `r exp3gen_non.out.tt[["PD_instruction"]]`, reflected a greater proportion of regular transitions under *exclusion* instructions.
+# __This needs further explanation: May lead to artificially increased estimates of implicit knowledge__
+# 
+# #### Revealed transitions (excluding repetitions and reversals)
+
+```
+
+
+```{r 'exp3_revealed_2', fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions and reversals, only revealed transitions", eval=FALSE}
+## SOCs, repetitions and reversals excluded, only revealed transitions
+# Post-hoc comparisons using Tukey's HSDs indicated that participants with random material generated fewer regular transitions
+# than particpants in the psoc group, `r tukey[["full"]][["rand - psoc"]]`
+# or in the fsoc group, `r tukey[["full"]][["rand - fsoc"]]`,
+# while both groups with probabilistic material (fsoc & psoc) did not differ from each other, `r tukey[["full"]][["fsoc - psoc"]]`.
+# Post-hoc comparisons using Tukey's HSDs indicated that participants with random material generated fewer regular transitions
+# than particpants in the psoc group, `r tukey[["full"]][["rand - psoc"]]`
+# or in the fsoc group, `r tukey[["full"]][["rand - fsoc"]]`,
+# while both groups with probabilistic material (fsoc & psoc) did not differ from each other, `r tukey[["full"]][["fsoc - psoc"]]`.
+exp3gen_rev <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]]>2&Generation[["reversal"]]==0&Generation[["excluded.id"]]==0&Generation[["instruiert"]]==1,]
+
+# ANOVA
+exp3gen_rev.out <- apa.glm(data=exp3gen_rev
+               , id="id"
+               , dv="SOC.correct"
+               , between=c("Material","Order")
+               , within=c("PD instruction"))
+#knitr::kable(exp3gen_rev.out$table)
+
+# plot
+# apa.barplot(data=exp3gen_rev,id="id",dv="SOC.correct",factors=c("Material","PD instruction", "Block number"),ylim=c(0,1),intercept=.25)
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.25),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg <- .aggregate(data=exp3gen_rev,factors=c("id","PD instruction","Order"),fun=mean,dv="SOC.correct")
+exp3gen_rev.t.out <- tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Order"]]),FUN=fun.tmp)
+
+# 
+# In a next step, we separately analyzed generation performance for transitions about which explicit knowledge was revealed (excluding repetitions and reversals).
+# A `r exp3gen_rev.out$name` ANOVA with repeated measures on the last two factors revealed
+# a main effect of *PD instruction*,
+# `r exp3gen_rev.out[["PD_instruction"]]` (i.e., more regular transitions were generated in inclusion blocks).
+# This effect was modulated by an interaction with *Block order*,
+# `r exp3gen_rev.out[["Order_PD_instruction"]]`,
+# [...specific source: more regular transitions if exclusion followed inclusion -- or was the PD instruction effect greater in the exclusion-first order? seems so in Figure X].
+# 
+# We also tested whether performance deviated from chance (i.e., $B = .25$):
+# Inclusion performance was above chance for either inclusion preceding exclusion,
+# `r exp3gen_rev.t.out["Inclusion","Inclusion first"]`,
+# or inclusion following exclusion,
+# `r exp3gen_rev.t.out["Inclusion","Exclusion first"]`.
+# Exclusion performance was at chance for either exclusion following inclusion,
+# `r exp3gen_rev.t.out["Exclusion","Inclusion first"]`,
+# or exclusion preceding inclusion,
+# `r exp3gen_rev.t.out["Exclusion","Exclusion first"]`.
+# The obtained pattern for revealed transitions is therefore $I>E$, $I>B$, and $E=B$.
+# That is, when analyzed separately, for revealed transitions we found evidence for explicit knowledge but no longer any evidence for implicit knowledge.
+
+```
+
+
+
+## Discussion
+
+The experimental manipulations had the expected results:
+Based on the SRTT results, we can conclude that participants acquired some (albeit weak) sequence knowledge during learning.
+In addition, generation performance was clearly affected by instructed explicit knowledge, as revealed by the clearly above-zero estimates of the $C$ parameters for revealed transitions.
+
+An extended process-dissociation model $\mathcal{M}_1$ revealed a violation of the invariance assumption for controlled processes with $C_I > C_E$.
+The invariance assumption for automatic processes could be upheld.
+Model $\mathcal{M}_1$ rested on two auxiliary assumptions:
+It was assumed that controlled processes were not affected by learning material, and that automatic processes were not affected by the manipulation of explicit knowledge (i.e., revealing a transition).
+Both assumptions found support in the current data as they did not harm model fit.
+Importantly, when comparing model $\mathcal{M}_1$ to a standard process-dissociation model $\mathcal{M}_2$ that did not impose these assumptions but left the invariance assumption intact, model $\mathcal{M}_1$ was strongly favored by the DIC.
+
+Regarding our secondary goal to explore whether different amounts of sequence knowledge are acquired from mixed versus pure second-order conditional material,
+we did not find evidence for a difference between these two types of material in the SRTT.
+This may well be due to the overall low levels of acquired sequence knowledge in the present study.
+Clearly, the present data are not strong enough to rule out such differences; this question requires further study.
+<!-- 462 words -->

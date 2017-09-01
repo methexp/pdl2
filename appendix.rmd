@@ -1,8 +1,976 @@
+<!-- This appendix provides a complete specification of the models and priors used. -->
+<!-- Code (R/Stan) is available at [https://github.com/methexp/pdl2](https://github.com/methexp/pdl2). -->
 
-This appendix provides a complete specification of the models and priors used.
-Code (R/rstan) is available at https://github.com/methexp/pdl2.
+<!-- \setlength{\parindent}{0.5in} -->
+<!-- \setlength{\leftskip}{0in} -->
+<!-- \setlength{\parskip}{2pt} -->
+
+
+```{r}
+# Set chunk defaults
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8.8, fig.height = 5, cache = FALSE, par = TRUE)
+
+# Set global defaults for plotting
+knitr::knit_hooks$set(par = function(before, options, envir){
+if (before && options$fig.show!='none') par(mar = c(5, 4, 2, .1), las = 1, font.main = 1, cex.main = 1.05)
+})
+```
+
+# Generation performance
+
+This appendix provides the raw generation performance for all experiments in tables A1, A2, and A3.
+<!-- figure \@ref(fig:pdl10-generation) shows generation performance in Experiment 3. -->
+
+
+```{r appendix-pdl9-generation, fig.cap = "Generation performance in Experiment 1, excluding repetitions. Error bars represent 95% confidence intervals. Horizontal line represents chance baseline.", fig.show='hide', results='asis'}
+# load data
+load("data/pdl9.RData")
+
+# use percentages, not proportions
+Acquisition$error <- 100 * Acquisition$error
+Generation$FOC.correct <- 100 * Generation$FOC.correct
+
+# check excludes
+excludes <- c()
+Acquisition[["excluded.id"]] <- as.integer(Acquisition[["id"]] %in% excludes)
+Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
+Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
+
+# factor levels
+Generation$Condition <- factor(Generation$Condition, levels = as.character(c(1, 2, 5, 3, 4)), labels = c(
+  "Control"
+  , "No-Practice"
+  , "Unspecific-Practice"
+  , "Practice"
+  , "Transfer")
+)
+
+# subset
+pdl9_generation <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0,]
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Condition + `PD instruction` + id, data = pdl9_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp1 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)
+
+# subset
+pdl9_generation <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0 & Generation$`Transition type`=="non-revealed",]
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Condition + `PD instruction` + id, data = pdl9_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp2 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)
+
+# subset
+pdl9_generation <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0 & Generation$`Transition type`%in%c("first unpracticed", "second unpracticed"),]
+
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Condition + `PD instruction` + id, data = pdl9_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp3 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)[-c(1, 4), ]
+
+# subset
+pdl9_generation <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0 & Generation$`Transition type`=="practiced",]
+
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Condition + `PD instruction` + id, data = pdl9_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp4 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)[4:5, ]
+
+concatenated <- rbind(
+  rep("", ncol(tmp1))
+  , tmp1
+  , rep("", ncol(tmp2))
+  , tmp2
+  , rep("", ncol(tmp3))
+  , tmp3
+  , rep("", ncol(tmp4))
+  , tmp4
+)
+
+rownames(concatenated) <- c(
+    "$\\textit{Full dataset}$"
+  , rownames(tmp1)
+  , "$\\textit{Nonrevealed transitions}$"
+  , rownames(tmp2)
+  , "$\\textit{Revealed, but nonpracticed transitions}$"
+  , rownames(tmp3)
+  , "$\\textit{Revealed-and-practiced transitions}$"
+  , rownames(tmp4)
+)
+
+# build table
+apa_table(
+  concatenated
+  , caption = "Mean percentage of regular transitions generated in Experiment 1, excluding repetions. Standard deviations are given in parentheses."
+  , placement = "hp"
+)
+```
+
+```{r 'appendix-pdl7-generation', results='asis'}
+# load data
+load("data/pdl7.RData")
+
+# use percentages, not proportions
+Acquisition$error <- 100 * Acquisition$error
+Generation$FOC.correct <- 100 * Generation$FOC.correct
+
+# check excluded id
+excludes <- c()
+Acquisition[["excluded.id"]] <- as.integer(Acquisition[["id"]] %in% excludes)
+Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
+
+# select subset
+pdl7_generation <- Generation[Generation$Trial>1 & Generation$excluded.id==0 & Generation$repetition==0, ]
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Material + Condition + `PD instruction` + id, data = pdl7_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp1 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`, agg$Material)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)
+
+full <- cbind(tmp1[,, "Random"], tmp1[,,"Probabilistic"])
+
+# select subset
+pdl7_generation <- Generation[Generation$Trial>1 & Generation$excluded.id==0 & Generation$repetition==0 & Generation$revealed=="non-revealed", ]
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Material + Condition + `PD instruction` + id, data = pdl7_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp2 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`, agg$Material)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)
+
+nonrevealed <- cbind(tmp2[,, "Random"], tmp2[,,"Probabilistic"])
+
+# select subset
+pdl7_generation <- Generation[Generation$Trial>1 & Generation$excluded.id==0 & Generation$repetition==0 & Generation$revealed=="revealed", ]
+
+# aggregate
+agg <- aggregate(formula = FOC.correct ~ Material + Condition + `PD instruction` + id, data = pdl7_generation, FUN = mean)
+
+# calculate means and standard deviations
+tmp3 <- tapply(
+  agg$FOC.correct
+  , list(agg$Condition, agg$`PD instruction`, agg$Material)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)[2,,, drop = FALSE]
+
+revealed <- c(tmp3[,, "Random"], tmp3[,,"Probabilistic"])
+
+concatenated <- rbind(
+  rep("", ncol(full))
+  , full
+  , rep("", ncol(full))
+  , nonrevealed
+  , rep("", ncol(full))
+  , revealed
+)
+
+rownames(concatenated) <- c(
+  "$\\textit{Full dataset}$"
+  , "No transition revealed"
+  , "One transition revealed"
+  , "$\\textit{Nonrevealed transitions}$"
+  , "No transition revealed"
+  , "One transition revealed"
+  , "$\\textit{Revealed transitions}$"
+  , "One transition revealed"
+)
+
+
+# build table
+apa_table(
+  concatenated
+  , col_spanners = list("Random" = 2:3, "Probabilistic" = 4:5)
+  , added_stub_head = "Condition"
+  , caption = "Mean percentage of regular transitions generated in Experiment 2, excluding repetions. Standard deviations are given in parentheses."
+  , placement = "hp"
+  # , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
+)
+```
+
+
+
+
+```{r 'appendix-pdl10-generation', results='asis'}
+# load data
+load("data/pdl10.RData")
+
+# use percentages, not proportions:
+Acquisition$error <- 100 * Acquisition$error
+Generation$SOC.correct <- 100 * Generation$SOC.correct
+
+# factor labels
+Generation$Material <- factor(Generation$Material, levels = c("rand", "fsoc", "psoc"), labels = c("Random", "Mixed SOC", "Pure SOC"))
+
+# subset
+pdl10_generation <- Generation[Generation$Trial>2 & Generation$excluded.id==0 & Generation$repetition==0 & Generation$reversal==0 & Generation$vR.repetition==0, ]
+
+# aggregate
+agg <- aggregate(formula = SOC.correct ~ Material + Condition + `PD instruction` + id, data = pdl10_generation, FUN = mean)
+
+# means and standard deviations
+tmp <- tapply(
+  agg$SOC.correct
+  , list(agg$Condition, agg$`PD instruction`, agg$Material)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)
+
+full <- cbind(tmp[,, "Random"], tmp[,, "Mixed SOC"], tmp[,, "Pure SOC"])
+
+# subset (nonrevealed transitions)
+pdl10_generation <- Generation[Generation$Trial>2 & Generation$excluded.id==0 & Generation$repetition==0 & Generation$reversal==0 & Generation$vR.repetition==0 & Generation$revealed ==0, ]
+
+# aggregate
+agg <- aggregate(formula = SOC.correct ~ Material + Condition + `PD instruction` + id, data = pdl10_generation, FUN = mean)
+
+# means and standard deviations
+tmp <- tapply(
+  agg$SOC.correct
+  , list(agg$Condition, agg$`PD instruction`, agg$Material)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)
+
+nonrevealed <- cbind(tmp[,, "Random"], tmp[,, "Mixed SOC"], tmp[,, "Pure SOC"])
+
+# subset (revealed transitions)
+pdl10_generation <- Generation[Generation$Trial>2 & Generation$excluded.id==0 & Generation$repetition==0 & Generation$reversal==0 & Generation$vR.repetition==0 & Generation$revealed==1, ]
+
+# aggregate
+agg <- aggregate(formula = SOC.correct ~ Condition + Material + `PD instruction` + id, data = pdl10_generation, FUN = mean)
+
+# means and standard deviations
+tmp <- tapply(
+  agg$SOC.correct
+  , list(agg$Condition, agg$`PD instruction`, agg$Material)
+  , FUN = function(x){paste0(printnum(mean(x), digits = 2), " (", printnum(sd(x), digits = 2), ")")}
+)[2, , , drop = FALSE]
+
+revealed <- c(tmp[,, "Random"], tmp[,, "Mixed SOC"], tmp[,, "Pure SOC"])
+
+
+
+
+concatenated <- rbind(
+  rep("", ncol(full))
+  , full
+  , rep("", ncol(full))
+  , nonrevealed
+  , rep("", ncol(full))
+  , revealed
+)
+
+rownames(concatenated) <- c(
+  "$\\textit{Full dataset}$"
+  , "No transition revealed"
+  , "Two transitions revealed"
+  , "$\\textit{Nonrevealed transitions}$"
+  , "No transition revealed"
+  , "Two transitions revealed"
+  , "$\\textit{Revealed transitions}$"
+  , "Two transitions revealed"
+)
+
+
+# build table
+apa_table(
+  concatenated
+  , col_spanners = list("Random" = 2:3, "Mixed SOC" = 4:5, "Pure SOC" = 6:7)
+  , added_stub_head = "Condition"
+  , caption = "Mean percentage of regular transitions generated in Experiment 3, excluding repetions and reversals. Standard deviations are given in parentheses."
+  , placement = "hp"
+  # , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
+)
+```
+
+
+# Additional model analyses
+
+\setlength{\parindent}{0.5in}
+\setlength{\leftskip}{0in}
+\setlength{\parskip}{0pt}
+
+This appendix provides results of additional model analyses not included in the main text.
 
 ## Experiment 1, model $\mathcal{M}_1$
+
+<!-- Given that model  $\mathcal{M}_2$  failed to fit the data from both Experiments 2 and 3 and model -->
+In Experiment 1, we fitted model $\mathcal{M}_1$ and used posterior analyses to evaluate the invariance assumption.
+We adapted the equations from Experiment 2 to the design of Experiment 1 (which did not contain experimental groups with random material).
+In order to accommodate for the more complex design, we used a model specification that allowed for participant and item (i.e., transition) effects and their interactions by estimating fixed effects for each transition type plus individual participants' deviations from these effects.
+The model equations of model $\mathcal{M}_1$ are given by:
+
+$$
+  C_{ijm} = \begin{cases}
+    \Phi(\mu_{jlm}^{(C)} + \delta_{ijm}^{(C)}) & \text{if } j \epsilon 1, 2 \text{ (item has been revealed \& practiced, revealed \& non-practiced)}\\
+                                              0 & \text{if }j=3 \text{ (item has not been revealed)}\\
+    \end{cases}
+$$
+and
+$$
+  A_{imt} = \Phi(\mu_{mt}^{(A)} + \delta_{imt}^{(A)})
+$$
+where $\mu_{jlm}^{(C)}$
+is the fixed effect of transition type $j$ (non-revealed, revealed & practiced, revealed & non-practiced) in condition $l$ and *PD instruction* condition $m$ on controlled processes, and
+$\delta_{ijm}^{(C)}$ is the $i$th participant's deviation from the corresponding mean.
+Accordingly, $\mu_{mt}^{(A)}$ is the fixed effect of *PD instruction* condition $m$ and transition $t$ on automatic processes, and
+$\delta_{imt}^{(A)}$ is the $i$th participant's deviation from the corresponding mean.
+
+Model $\mathcal{M}_1$ imposes two auxiliary assumptions:
+First, it assumed that no explicit knowledge has been acquired during the SRT phase (i.e., $C=0$ for non-revealed transitions).
+Second, it assumed that revealing sequence knowledge did not affect automatic processes (i.e., $A$ does not vary as a function of the between-subjects manipulation of explicit knowledge, index $l$).
+Both auxiliary assumptions were tested by posterior predictive checks.
+In addition to reporting $T_{A1}$ and $T_{B1}$ as in Experiments 2 and 3, we calculated additional model check statistic $T_{A2}$, which summarizes how well the model describes the item-wise category counts (aggregated over participants), and $T_{A3}$, which summarizes how well the model describes the category counts per participant-item combination; finally, the additional statistic $T_{B2}$ summarizes how well the model describes the variances and covariances introduced by items.
+We also calculated the posterior differences $C_I - C_E$ and $A_I - A_E$ to more directly test the invariance assumption.
+
+### Results
+
+We analyzed generation performance by fitting $\mathcal{M}_1$ and computed model fit statistics to assess whether each model can account for the data.
+Parameter estimates from model $\mathcal{M}_1$ were used to address the invariance assumptions, directly.
+The first trial of a block as well as any response repetitions were excluded from all generation task analyses.
+
+```{r 'pdl9-load-models', cache = FALSE}
+load("hierarchical_pd/pdl9_stan_summary.RData")
+
+# DIC_1vs2 <- papaja::printnum(M2$num$DIC - M1$num$DIC, digits = 2, big.mark = ",")
+# DIC_1vs2a <- papaja::printnum(M2a$num$DIC - M1$num$DIC, digits = 2, big.mark = ",")
+
+```
+
+```{r 'pdl9-load-posteriors'}
+load(file = "hierarchical_pd/pdl9/pd_Halt_cdfs.RData")
+a <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a(0)), "$") 
+c_practiced <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$c_practiced(0)), "$")
+c_nonpracticed <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$c_nonpracticed(0)), "$")
+
+# credible interval of difference
+ci.a <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$a, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
+ci.c_practiced <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$c_practiced, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
+ci.c_nonpracticed <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$c_nonpracticed, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
+```
+
+
+The model checks for model $\mathcal{M}_1$ were satisfactory,
+`r M1$fit`
+
+```{r pdl9-parameter-estimates, fig.cap = "Parameter estimates from Experiment 1, model $\\mathcal{M}_1$. Error bars represent 95% confidence intervals."}
+load("hierarchical_pd/pdl9/pd_Halt_posteriors.RData")
+
+par(mfrow = c(1, 2))
+
+apa_beeplot(
+  data = means_df[means_df$Parameter=="a", ]
+  , id = "person"
+  , dv = "Estimate"
+  , factors = c("PD instruction")
+  , ylim = c(0, 1)
+  , ylab = "Estimate"
+  , main = expression("Automatic processes"~italic(A))
+)
+
+apa_beeplot(
+  data = means_df[means_df$Parameter=="c", ]
+  , id = "person"
+  , dv = "Estimate"
+  , factors = c("transition", "PD instruction")
+  , ylim = c(0, 1)
+  , ylab = "Estimate"
+  , main = expression("Controlled processes"~italic(C))
+)
+```
+
+```{r pdl9-posterior-differences, fig.height = 5, fig.width = 8.8, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 1, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
+
+load(file = "hierarchical_pd/pdl9/posteriors_for_plot.RData")
+
+N <- sum(!is.na(delta_quantiles[1, ,1]))
+
+par(mfrow = c(1, 3))
+
+# a parameter for all transitions
+k <- "a"
+plot.default(
+  x = 1:N
+  , col = "white"
+  , xlim = c(0, N+1)
+  , ylim = c(-1, 1)
+  , xlab = "Participant"
+  , ylab = "Difference between Inclusion and Exclusion"
+  , main = bquote(italic(A[I]) -italic(A[E])~ .(paste0(", all transitions")))
+  , frame.plot = FALSE
+  , xaxt = "n"
+  , las = 1
+)
+
+tmp <- delta_quantiles[, order(delta_quantiles[3, , k]), k]
+# Credible Intervals
+segments(x0 = 1:N, x1 = 1:N, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+
+abline(h = 0, lty = "solid", col = "grey60")
+abline(h = posterior_mean_delta, lty = "dashed", col = "darkred")
+abline(h = posterior_quantiles_delta[c("2.5%", "97.5%")], lty = "dotted", col = "darkred")
+    
+# Medians: posterior_mean_delta
+points(x = 1:N, tmp[3, ], col = "grey40", pch = 21, bg = "grey40", cex = .5)
+# points(x = 1:121, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .05)
+
+## Credible Interval eye-candy
+segments(x0 = 1:N, x1 = 1:N, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N-1), x1 = 2:(N+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+
+axis(side = 1, at = c(1, N), labels = c(1, N))
+
+N2 <- sum(!is.na(practiced_quantiles[1,]))
+# c parameter
+k <- "c"
+j <- "practiced"
+tmp <- practiced_quantiles[, order(practiced_quantiles[3, ])][, 1:N2]
+
+
+plot.default(
+      x = 1:N2
+      , col = "white"
+      , xlim = c(0, N2+1)
+      , ylim = c(-1, 1)
+      , xlab = "Participant"
+      , ylab = "Difference between Inclusion and Exclusion"
+      , main = bquote(italic(C[I]) -italic(C[E])~ .(paste0(", ", j, " transitions")))
+      , frame.plot = FALSE
+      , xaxt = "n"
+      , las = 1
+    )
+
+
+# Credible Intervals
+
+segments(x0 = 1:N2, x1 = 1:N2, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+
+abline(h = 0, lty = "solid", col = "grey60")
+abline(h = posterior_mean_delta_practiced, lty = "dashed", col = "darkred")
+abline(h = posterior_quantiles_delta_practiced[c("2.5%", "97.5%")], lty = "dotted", col = "darkred")
+
+# Medians
+points(x = 1:N2, y = tmp[3, ], col = "grey40", pch = 21, bg = "grey40")
+# points(x = 1:61, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .1)
+# Credible Intervals eye-candy
+segments(x0 = 1:N2, x1 = 1:N2, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+axis(side = 1, at = c(1, N2), labels = c(1, N2))
+
+N2 <- sum(!is.na(nonpracticed_quantiles[1,]))
+# c parameter
+k <- "c"
+j <- "non-practiced"
+tmp <- nonpracticed_quantiles[, order(nonpracticed_quantiles[3, ])][, 1:N2]
+
+
+plot.default(
+  x = 1:N2
+  , col = "white"
+  , xlim = c(0, N2+1)
+  , ylim = c(-1, 1)
+  , xlab = "Participant"
+  , ylab = "Difference between Inclusion and Exclusion"
+  , main = bquote(italic(C[I]) -italic(C[E])~ .(paste0(", ", j, " transitions")))
+  , frame.plot = FALSE
+  , xaxt = "n"
+  , las = 1
+)
+
+
+# Credible Intervals
+
+segments(x0 = 1:N2, x1 = 1:N2, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+
+abline(h = 0, lty = "solid", col = "grey60")
+abline(h = posterior_mean_delta_nonpracticed, lty = "dashed", col = "darkred")
+abline(h = posterior_quantiles_delta_nonpracticed[c("2.5%", "97.5%")], lty = "dotted", col = "darkred")
+
+# Medians
+points(x = 1:N2, y = tmp[3, ], col = "grey40", pch = 21, bg = "grey40")
+# points(x = 1:61, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .1)
+# Credible Intervals eye-candy
+segments(x0 = 1:N2, x1 = 1:N2, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+segments(x0 = 0:(N2-1), x1 = 2:(N2+1), y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+axis(side = 1, at = c(1, N2), labels = c(1, N2))
+```
+
+Figure \@ref(fig:pdl9-parameter-estimates) shows the parameter estimates obtained from model $\mathcal{M}_1$; while estimates of the automatic process were only slightly above chance in both *PD instruction* conditions, estimates of the controlled process differ strongly between *PD instruction* conditions.
+
+Figure \@ref(fig:pdl9-posterior-differences) shows that the invariance assumption for automatic processes was violated with $A_I > A_E$, `r ci.a`, and Bayesian `r a`.
+For revealed and practiced transitions, the invariance assumption was violated with $C_I >  C_E$, `r ci.c_practiced` and a Bayesian `r c_practiced`.
+For revealed but non-practiced transitions, the invariance assumption was violated with $C_I >  C_E$, `r ci.c_nonpracticed` and a Bayesian `r c_nonpracticed`.
+
+## Experiment 2, model $\mathcal{M}_{1R}$
+
+To test whether our results are robust against changes in auxiliary assumptions, we fitted another model $\mathcal{M}_{1R}$ with different auxiliary assumptions.
+Specifically, we dropped the assumption that $C=0$ for nonrevealed transitions and instead estimated explicit-knowledge parameters for all transitions.
+<!-- In addition, we no longer restricted $A$ parameters to be equal across transition type (nonrevealed vs. revealed). -->
+Instead, we imposed ordinal restrictions (Knapp & Batchelder, 2004) as follows: 
+In model $\mathcal{M}_{1R}$, it is assumed that $C$ parameters are greater under inclusion than exclusion.
+We also fitted a parallel model with the reversed assumption, but estimation of this model failed to converge.
+
+The second-level equations of model $\mathcal{M}_{1R}$ are given by:
+
+$$
+  \begin{aligned}
+  C_{ij1} &= C_{ij, Inclusion} &= \Phi(\mu_{jk,Inclusion}^{(C)} + \delta_{ij, Inclusion}^{(C)})& \\
+  C_{ij2} &= C_{ij, Exclusion} &= \Phi(\mu_{jk,Exclusion}^{(C)} + \delta_{ij, Exclusion}^{(C)})& * C_{ij, Inclusion}
+  \end{aligned}
+$$
+and
+
+$$
+  A_{ijm} = \Phi(\mu_{jkm}^{(A)} + \delta_{ijm}^{(A)})
+$$
+$\mu_{jkm}^{(C)}$ is the fixed effect of material $k$ (that participant $i$ worked on during the SRTT),
+*transition type* $j$ ($j = 1$ if a transition has actually been revealed, $j=2$ if not),
+and *PD instruction* condition $m$ on controlled processes.
+$\delta_{ijm}^{(C)}$ is the $i$th participant's deviation from the respective group mean.
+For participants who did not receive explicit knowledge about a single transition, we assumed that all $\mu_{jk, Inclusion}^{(C)} = \mu_{k, Inclusion}^{(C)}$ and $\mu_{jk, Exclusion}^{(C)} = \mu_{k, Exclusion}^{(C)}$,
+i.e. we assumed that the grand mean of explicit knowledge did not vary as a function of the transition that *would* have been revealed if participants *were* in another condition.
+Accordingly, $\mu_{jkm}^{(A)}$ is the fixed effect of transition type $j$ ($j = 1$ for the transition that was or *would* have been revealed, i.e. transition $2{-}6$,
+$j=2$ for all other transitions), material $k$, and *PD instruction* condition $m$ on automatic processes, and
+$\delta_{ijm}^{(A)}$ is the $i$th participant's deviation from the corresponding mean.
+
+Note that this specification imposes two auxiliary assumptions to the model:
+First, it is assumed that $$\forall{ij}(C_{ij, \textit{Inclusion}} \geq C_{ij, \textit{Exclusion}})$$
+Second, it is assumed that automatic processes $A$ do not vary as a function of the between-subjects manipulation of explicit knowledge $l$ 
+(both assumptions were necessary so that the model was identified;
+an alternative model imposing an order constraint $C_I < C_E$ was also not identified).
+
+```{r}
+# library(PDhelper)
+library(reshape2)
+library(rstan)
+load(file = "hierarchical_pd/pdl7/fits/pd_alternative_model15a.RData")
+class(ic) <- "dic_waic"
+```
+
+
+### Results
+
+The model checks for model $\mathcal{M}_{1R}$ were satisfactory,
+`r apa_print(fit[c(2, 5), ])` and attained a DIC value of `r paste0("$", papaja::printnum(ic$DIC, big.mark = "{,}"), "$")`,
+a value comparable to our extended model $\mathcal{M}_{1}$ presented in the main text and clearly outperforming $\mathcal{M}_2$.
+This again implies that our auxiliary assumptions introduced to $\mathcal{M}_{1R}$ were much less problematic than the invariance assumption.
+
+```{r pdl7-m1r-parameter-estimates, fig.height = 10, fig.cap = "Parameter estimates from Experiment 2, model $\\mathcal{M}_{1R}$. Error bars represent 95% confidence intervals."}
+# load("hierarchical_pd/pd_alternative_model15a.RData")
+# theta <- extract(model, pars = "theta")$theta
+# save(theta, file = "hierarchical_pd/pdl7/m1r_posteriors.RData")
+load("hierarchical_pd/pdl7/m1r_posteriors.RData")
+source("hierarchical_pd/R/helper.R")
+
+
+apa_beeplot(
+  data = theta# [theta$`Transition type`=="revealed", ]
+  , id = "id"
+  , factors = c("Material", "PD instruction", "parameter", "Transition type")
+  , dv = "value"
+  , ylim = c(0, 1)
+  , las = 1
+  , ylab = "Estimate"
+  , main = matrix(
+  c(expression(paste("Automatic processes"~italic(A),", nonrevealed transitions"))
+    , expression(paste("Controlled processes"~italic(C), ", nonrevealed transitions"))
+    , expression(paste("Automatic processes"~italic(A), ", revealed transitions"))
+    , expression(paste("Controlled processes"~italic(C), ", revealed transitions"))
+  )
+  , ncol = 2)
+)
+
+# mu <- extract(model, pars = "mu")$mu
+# # Violations of invariances on C
+# theta <- extract(model, pars = "theta")$theta
+# 
+# load("pd_alternative_model15a_prior.RData")
+# theta_ <- extract(model, pars = "theta")$theta
+# 
+# delta <- theta[, , seq(1, 7, 2)] - theta[, , seq(2, 8, 2)]
+# delta_ <- theta_[, , seq(1, 7, 2)] - theta_[, , seq(2, 8, 2)]
+# 
+# mu_delta <- apply(delta, c(1, 3), mean)
+# mu_delta_ <- apply(delta_, c(1, 3), mean)
+# densities <- apply(X = mu_delta, 2, density)
+# densities_ <- apply(X = mu_delta_, 2, density)
+# 
+# max_density <- max(unlist(lapply(densities, FUN = function(dens){max(dens$y)})))
+# max_density_ <- max(unlist(lapply(densities_, FUN = function(dens){max(dens$y)})))
+# 
+# plot.new()
+# plot.window(xlim = c(-1, 1), ylim = c(0, max_density * 1.1))
+# 
+# for (i in c(1, 3)){
+#   lines(x = densities[[i]]$x, y = densities[[i]]$y, col = "black")
+#   lines(x = densities_[[i]]$x, y = densities_[[i]]$y, col = "black", lty = "dotted")
+# }
+# axis(side = 1)
+# 
+# plot.new()
+# plot.window(xlim = c(-1, 1), ylim = c(0, max_density * 1.1))
+# 
+# for (i in c(2, 4)){
+#   lines(x = densities[[i]]$x, y = densities[[i]]$y, col = "black")
+#   lines(x = densities_[[i]]$x, y = densities_[[i]]$y, col = "black", lty = "dotted")
+# }
+# axis(side = 1)
+
+# plot.new()
+# plot.window(xlim = c(-4, 4), ylim = c(0, 1))
+# 
+# lines(x = seq(-4, 4, .01), y = dnorm(seq(-4, 4, .01)), col = "grey60")
+# lines(density(mu[, 10]), col = "indianred3")
+# lines(density(mu[, 12]), col = "skyblue4")
+# lines(density(mu[, 14]), col = "green4")
+# lines(density(mu[, 16]), col = "yellow")
+```
+
+```{r pdl7-m1r-posterior-differences, fig.height = 10, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 2, model $\\mathcal{M}_{1R}$, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
+par(mfrow = c(2, 2))
+load("hierarchical_pd/pdl7/m1r_posteriors.RData")
+pars <- theta
+
+delta <- pars[, , seq(1, 7, 2)] - pars[, , seq(2, 8, 2)]
+
+delta_quantiles <- apply(X = delta, MARGIN = 2:3, FUN = quantile, probs = c(.025, .25, .5, .75, .975))
+
+delta_quantiles <- abind::abind(delta_quantiles[, , c(1, 3)], delta_quantiles[, , c(2, 4)], along = 4)
+
+dimnames(delta_quantiles)[[3]] <- c("non-revealed", "revealed")
+dimnames(delta_quantiles)[[4]] <- c("c", "a")
+delta_quantiles[, 1:60, "revealed", ] <- NA
+
+# Aggregate over participants
+pars[, 1:60, 5:6] <- NA
+
+means <- apply(X = pars, MARGIN = c(1, 3), FUN = mean, na.rm = TRUE)
+
+# Differences of means
+delta <- means[, seq(1, 7, 2)] - means[, seq(2, 8, 2)]
+
+posterior_quantiles_delta <- apply(X = delta, MARGIN = 2, FUN = quantile, prob = c(.025, .25, .5, .75, .975), na.rm = TRUE)
+
+posterior_quantiles_delta <- abind::abind(posterior_quantiles_delta[, 1:2], posterior_quantiles_delta[, 3:4], along = 3)
+dimnames(posterior_quantiles_delta)[[2]] <- c("c", "a")
+dimnames(posterior_quantiles_delta)[[3]] <- c("non-revealed", "revealed")
+posterior_mean_delta <- colMeans(delta)
+posterior_mean_delta <- matrix(posterior_mean_delta, nrow = 2, ncol = 2)
+rownames(posterior_mean_delta) <- c("c", "a")
+colnames(posterior_mean_delta) <- c("non-revealed", "revealed")
+
+
+for (k in c("a", "c")){
+  for (j in c("non-revealed", "revealed")){
+
+    if(k=="a"){
+      plot.default(x = 1:121, col = "white", ylim = c(-1, 1), ylab = ifelse(j=="revealed", "", "Difference between Inclusion and Exclusion")
+                   , main = bquote(italic(A[I]) -italic(A[E])~ .(paste0(", ", gsub(j, pattern="-", replacement = ""), " transitions")))
+                   , frame.plot = FALSE, xlab = "Participant", xlim = c(0, ifelse(j=="non-revealed", 122, 61)), xaxt = "n")
+    } else {
+            plot.default(x = 1:121, col = "white", ylim = c(-1, 1), ylab = ifelse(j=="revealed", "", "Difference between Inclusion and Exclusion")
+                   , main = bquote(italic(C[I]) -italic(C[E])~ .(paste0(", ", gsub(j, pattern="-", replacement = ""), " transitions")))
+                   , frame.plot = FALSE, xlab = "Participant", xlim = c(0, ifelse(j=="non-revealed", 122, 61)), xaxt = "n")
+    }
+    
+    tmp <- delta_quantiles[, order(delta_quantiles[3, , j, k]), j, k]
+    # Credible Intervals
+    segments(x0 = 1:121, x1 = 1:121, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+    segments(x0 = 0:120, x1 = 2:122, y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+    segments(x0 = 0:120, x1 = 2:122, y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+    
+    abline(h = 0, lty = "solid", col = "grey60")
+    abline(h = posterior_mean_delta[k, j], lty = "dashed", col = "darkred")
+    abline(h = posterior_quantiles_delta["2.5%", k, j], lty = "dotted", col = "darkred")
+    abline(h = posterior_quantiles_delta["97.5%", k, j], lty = "dotted", col = "darkred")
+        
+    # Medians: posterior_mean_delta
+    points(x = 1:121, tmp[3, ], col = "grey40", pch = 21, bg = "grey40", cex = .5)
+    # points(x = 1:121, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .05)
+    
+    ## Credible Interval eye-candy
+    segments(x0 = 1:121, x1 = 1:121, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+    segments(x0 = 0:120, x1 = 2:122, y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+    segments(x0 = 0:120, x1 = 2:122, y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+    
+    axis(side = 1, at = c(1, ifelse(j=="revealed", 60, 121)), labels = c(1, ifelse(j=="revealed", 60, 121)))
+  }
+}
+```
+
+
+Figure \@ref(fig:pdl7-m1r-parameter-estimates) shows the parameter estimates obtained from model $\mathcal{M}_{1R}$.
+The pattern of results mostly replicates the estimates from model $\mathcal{M}_1$.
+The main difference was that $C$ parameters were slightly greater than zero for nonrevealed transitions (these were set to zero for model $\mathcal{M}_1$).
+This may suggest that some explicit knowledge may have been acquired during the learning phase.
+Alternatively, it may also reflect a technical issue with the present family of models that biases estimates away from zero:
+Specifically, for nonrevealed transitions, the inclusion-exclusion difference in $C$ estimates should vary around zero,  with half below zero and half above zero; the auxiliary assumption however forces all of them to be positive, which biases the corresponding $C$ parameters.
+Either way, the effect is not substantial, as suggested by the finding that model $\mathcal{M}_1$, which assumes $C=0$, achieved an equally good fit.
+The $C>0$ estimates also have a tradeoff effect on $A$ parameters, with lower estimates under inclusion and slightly higher estimates under exclusion. 
+This biasing effect eliminated (for revealed transitions) or even inverted (for nonrevealed transitions) the invariance-violation effect found in $\mathcal{M}_1$.
+
+Figure \@ref(fig:pdl7-m1r-posterior-differences) shows the posterior differences obtained from model $\mathcal{M}_{1R}$.
+Most importantly, the pattern of results shows that the invariance violation for controlled processes $C$ for revealed transitions (i.e., whenever substantial explicit knowledge is present) is robust to the change in auxiliary assumptions. 
+
+## Experiment 3, model $\mathcal{M}_{1R}$
+
+For the data of Experiment 3, we additionally fitted model $\mathcal{M}_{1R}$ analogous to $\mathcal{M}_{1R}$ of Experiment 2.
+
+```{r}
+# library(PDhelper)
+library(reshape2)
+library(rstan)
+load(file = "hierarchical_pd/fits/pdl10/M15a_randomly_selected.RData")
+class(ic) <- "dic_waic"
+```
+
+
+### Results
+
+The model checks for model $\mathcal{M}_{1R}$ were satisfactory,
+`r apa_print(fit[c(2, 5), ])` and attained a DIC value of `r paste0("$", papaja::printnum(ic$DIC, big.mark = "{,}"), "$")`,
+a value somewhat smaller than the DIC of our extended model $\mathcal{M}_{1}$ presented in the main text and clearly outperforming $\mathcal{M}_2$.
+This again implies that our auxiliary assumptions introduced to $\mathcal{M}_{1R}$ were much less problematic than the invariance assumption.
+
+```{r pdl10-m1r-parameter-estimates, fig.height = 10, fig.cap = "Parameter estimates from Experiment 3, model $\\mathcal{M}_{1R}$. Error bars represent 95% confidence intervals."}
+# load("hierarchical_pd/model_objects/pdl10/M15a_randomly_selected.RData")
+# theta <- extract(model, pars = "theta")$theta
+# save(theta, file = "hierarchical_pd/pdl10/m1r_posteriors.RData")
+load("hierarchical_pd/pdl10/m1r_posteriors.RData")
+
+source("hierarchical_pd/R/pdl10_helper.R")
+
+# # par(font.main = 1, cex.main = 1, mar = c(2, 4, 2, 2))
+# theta$parameter <- factor(
+#   theta$parameter
+#   , levels = c("a", "c")
+#   , labels = c(
+#     "Automatic processes $\\mathit{A}$"
+#     , "Controlled processes $\\mathit{C}$"
+#   )
+# )
+
+apa_beeplot(
+  data = theta# [theta$`Transition type`=="revealed", ]
+  , id = "id"
+  , factors = c("Material", "PD instruction", "parameter", "Transition type")
+  , dv = "value"
+  , ylim = c(0, 1)
+  , las = 1
+  , ylab = "Estimate"
+  , main = matrix(
+    c(expression(paste("Automatic processes"~italic(A),", nonrevealed transitions"))
+      , expression(paste("Controlled processes"~italic(C), ", nonrevealed transitions"))
+      , expression(paste("Automatic processes"~italic(A), ", revealed transitions"))
+      , expression(paste("Controlled processes"~italic(C), ", revealed transitions"))
+    )
+    , ncol = 2)
+)
+
+# mu <- extract(model, pars = "mu")$mu
+# # Violations of invariances on C
+# theta <- extract(model, pars = "theta")$theta
+# 
+# load("pd_alternative_model15a_prior.RData")
+# theta_ <- extract(model, pars = "theta")$theta
+# 
+# delta <- theta[, , seq(1, 7, 2)] - theta[, , seq(2, 8, 2)]
+# delta_ <- theta_[, , seq(1, 7, 2)] - theta_[, , seq(2, 8, 2)]
+# 
+# mu_delta <- apply(delta, c(1, 3), mean)
+# mu_delta_ <- apply(delta_, c(1, 3), mean)
+# densities <- apply(X = mu_delta, 2, density)
+# densities_ <- apply(X = mu_delta_, 2, density)
+# 
+# max_density <- max(unlist(lapply(densities, FUN = function(dens){max(dens$y)})))
+# max_density_ <- max(unlist(lapply(densities_, FUN = function(dens){max(dens$y)})))
+# 
+# plot.new()
+# plot.window(xlim = c(-1, 1), ylim = c(0, max_density * 1.1))
+# 
+# for (i in c(1, 3)){
+#   lines(x = densities[[i]]$x, y = densities[[i]]$y, col = "black")
+#   lines(x = densities_[[i]]$x, y = densities_[[i]]$y, col = "black", lty = "dotted")
+# }
+# axis(side = 1)
+# 
+# plot.new()
+# plot.window(xlim = c(-1, 1), ylim = c(0, max_density * 1.1))
+# 
+# for (i in c(2, 4)){
+#   lines(x = densities[[i]]$x, y = densities[[i]]$y, col = "black")
+#   lines(x = densities_[[i]]$x, y = densities_[[i]]$y, col = "black", lty = "dotted")
+# }
+# axis(side = 1)
+
+# plot.new()
+# plot.window(xlim = c(-4, 4), ylim = c(0, 1))
+# 
+# lines(x = seq(-4, 4, .01), y = dnorm(seq(-4, 4, .01)), col = "grey60")
+# lines(density(mu[, 10]), col = "indianred3")
+# lines(density(mu[, 12]), col = "skyblue4")
+# lines(density(mu[, 14]), col = "green4")
+# lines(density(mu[, 16]), col = "yellow")
+```
+
+```{r pdl10-m1r-posterior-differences, fig.height = 10, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 3, model $\\mathcal{M}_{1R}$, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
+par(mfrow = c(2, 2))
+
+load("hierarchical_pd/pdl10/m1r_posteriors.RData")
+
+pars <- theta
+
+delta <- pars[, , seq(1, 7, 2)] - pars[, , seq(2, 8, 2)]
+
+delta_quantiles <- apply(X = delta, MARGIN = 2:3, FUN = quantile, probs = c(.025, .25, .5, .75, .975))
+
+delta_quantiles <- abind::abind(delta_quantiles[, , c(1, 3)], delta_quantiles[, , c(2, 4)], along = 4)
+
+dimnames(delta_quantiles)[[3]] <- c("non-revealed", "revealed")
+dimnames(delta_quantiles)[[4]] <- c("c", "a")
+delta_quantiles[, 1:89, "revealed", ] <- NA
+
+# Aggregate over participants
+pars[, 1:89, 5:6] <- NA
+
+means <- apply(X = pars, MARGIN = c(1, 3), FUN = mean, na.rm = TRUE)
+
+# Differences of means
+delta <- means[, seq(1, 7, 2)] - means[, seq(2, 8, 2)]
+
+posterior_quantiles_delta <- apply(X = delta, MARGIN = 2, FUN = quantile, prob = c(.025, .25, .5, .75, .975), na.rm = TRUE)
+
+posterior_quantiles_delta <- abind::abind(posterior_quantiles_delta[, 1:2], posterior_quantiles_delta[, 3:4], along = 3)
+dimnames(posterior_quantiles_delta)[[2]] <- c("c", "a")
+dimnames(posterior_quantiles_delta)[[3]] <- c("non-revealed", "revealed")
+posterior_mean_delta <- colMeans(delta)
+posterior_mean_delta <- matrix(posterior_mean_delta, nrow = 2, ncol = 2)
+rownames(posterior_mean_delta) <- c("c", "a")
+colnames(posterior_mean_delta) <- c("non-revealed", "revealed")
+
+
+for (k in c("a", "c")){
+  for (j in c("non-revealed", "revealed")){
+
+    if(k=="a"){
+      plot.default(x = 1:171, col = "white", ylim = c(-1, 1), ylab = ifelse(j=="revealed", "", "Difference between Inclusion and Exclusion")
+                   , main = bquote(italic(A[I]) -italic(A[E])~ .(paste0(", ", gsub(j, pattern="-", replacement = ""), " transitions")))
+                   , frame.plot = FALSE, xlab = "Participant", xlim = c(0, ifelse(j=="non-revealed", 171, 89)), xaxt = "n")
+    } else {
+            plot.default(x = 1:171, col = "white", ylim = c(-1, 1), ylab = ifelse(j=="revealed", "", "Difference between Inclusion and Exclusion")
+                   , main = bquote(italic(C[I]) -italic(C[E])~ .(paste0(", ", gsub(j, pattern="-", replacement = ""), " transitions")))
+                   , frame.plot = FALSE, xlab = "Participant", xlim = c(0, ifelse(j=="non-revealed", 171, 89)), xaxt = "n")
+    }
+    
+    tmp <- delta_quantiles[, order(delta_quantiles[3, , j, k]), j, k]
+    # Credible Intervals
+    segments(x0 = 1:171, x1 = 1:171, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+    segments(x0 = 0:170, x1 = 2:172, y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .5)
+    segments(x0 = 0:170, x1 = 2:172, y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .5)
+    
+    abline(h = 0, lty = "solid", col = "grey60")
+    abline(h = posterior_mean_delta[k, j], lty = "dashed", col = "darkred")
+    abline(h = posterior_quantiles_delta["2.5%", k, j], lty = "dotted", col = "darkred")
+    abline(h = posterior_quantiles_delta["97.5%", k, j], lty = "dotted", col = "darkred")
+        
+    # Medians: posterior_mean_delta
+    points(x = 1:171, tmp[3, ], col = "grey40", pch = 21, bg = "grey40", cex = .5)
+    # points(x = 1:121, tmp[3, ], col = "lightgrey", pch = 21, bg = "lightgrey", cex = .05)
+    
+    ## Credible Interval eye-candy
+    segments(x0 = 1:171, x1 = 1:171, y0 = tmp[1, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+    segments(x0 = 0:170, x1 = 2:172, y0 = tmp[1, ], y1 = tmp[1, ], col = "lightgrey", lwd = .1)
+    segments(x0 = 0:170, x1 = 2:172, y0 = tmp[5, ], y1 = tmp[5, ], col = "lightgrey", lwd = .1)
+    
+    axis(side = 1, at = c(1, ifelse(j=="revealed", 89, 171)), labels = c(1, ifelse(j=="revealed", 89, 171)))
+  }
+}
+```
+
+
+Figure \@ref(fig:pdl10-m1r-parameter-estimates) shows the parameter estimates obtained from model $\mathcal{M}_{1R}$.
+The pattern of results mostly replicates the estimates from model $\mathcal{M}_1$;
+with parameters for controlled processes $C$ being estimated close to zero for nonrevealed transitions.
+
+Figure \@ref(fig:pdl10-m1r-posterior-differences) shows the posterior differences obtained from model $\mathcal{M}_{1R}$.
+The pattern of results again demonstrates robustness of the invariance violation for controlled processes $C$ for revealed transitions (i.e., whenever substantial explicit knowledge was present). There was again some indication of an invariance violation for automatic processes $A$; however, the effect was very small and depended on the specific modeling assumptions.
+
+
+
+
+# Specification of priors
+
+This section provides a complete specification of the models and priors used.
+Code (\textbf{\textsf{R}}/\textbf{\textit{Stan}}) is available at [https://github.com/methexp/pdl2](https://github.com/methexp/pdl2).
+
+## Experiment 1, model $\mathcal{M}_1$
+
+Priors on fixed effects were
+
+$$
+\begin{aligned}
+\mu_{jlm}^{(C)} & \sim N(0, 1), j = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
+\mu_{mt}^{(A)} & \sim N(0, 1), t = \lbrace 1, ..., 6 \rbrace ; m = \lbrace 1, 2 \rbrace\\
+\end{aligned}
+$$
+
+where $j$ indexes *transition type* (revealed & practiced vs. revealed & non-practiced), $l$ indexes practice condition (Control, No-practice, Unspecific-practice, Practice, Transfer), $t$ indexes specific items (i.e., transitions), and $m$ indexes *PD instruction* (inclusion vs. exclusion).
+Participant effects $\delta_{imt}^{(A)}$ and $\delta_{ijm}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$.
+For participants in the *Control* group, these were modeled by
+$$
+\boldsymbol{\delta}_i \sim N_{12} (0, \Sigma_l), i = 1, ..., I
+$$
+For participants in the *No-Practice*, *Unspecific-Practice*, and *Practice* groups,
+$$
+\boldsymbol{\delta}_i \sim N_{14} (0, \Sigma_l), i = 1, ..., I
+$$
+For participants in the *Transfer* group
+$$
+\boldsymbol{\delta}_i \sim N_{16} (0, \Sigma_l), i = 1, ..., I
+$$
+The covariance matrices $\Sigma_l$ were modeled separately and independently for each between-subjects condition.
+Priors on these matrices were as described below for Experiment 2.
+
+## Experiment 2, model $\mathcal{M}_1$
 
 Priors on fixed effects were
 
@@ -12,9 +980,7 @@ $$
 \mu_{jkm}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace
 \end{aligned}
 $$
-
 where $j$ indexes transition type (revealed vs. non-revealed), $k$ indexes learning material presented during the SRTT (random vs. probabilistic), and $m$ indexes *PD instruction* condition (inclusion vs. exclusion).
-
 <!-- $$ -->
 <!-- \boldsymbol{\delta}_i = -->
 <!-- \begin{pmatrix} -->
@@ -26,10 +992,8 @@ where $j$ indexes transition type (revealed vs. non-revealed), $k$ indexes learn
 <!--   \delta_{i2k2}^{(A)}\\ -->
 <!-- \end{pmatrix} -->
 <!-- $$ -->
-
-For participants who did not receive explicit knowledge about a single transition, we assumed that all $C_{ijm} = 0$. 
-Therefore, participant effects are only required for automatic processes ($\delta_{ijm}^{(A)}$). 
-In participants who received explicit knowledge about one transition, two additional participant effects were needed to model controlled processes for revealed transitions ($\delta_{im}^{(C)}$). 
+For participants who did not receive explicit knowledge about a single transition, we assumed that all $C_{ijkm} = 0$. Therefore, participant effects are only required for automatic processes ($\delta_{ijkm}^{(A)}$). 
+In participants who received explicit knowledge about one transition, two additional participant effects were needed to model controlled processes for revealed transitions ($\delta_{ikm}^{(C)}$). 
 We thus provide the specification of participant effects for these two groups of participants separately.
 
 #### Participants who did not receive explicit knowledge about one transition
@@ -40,21 +1004,18 @@ that were modeled as draws from a multivariate normal
 $$
 \boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
 $$
-
 where $k$ indexes the learning material that was presented to participant $i$ and $l$ indexes his or her level of the explicit-knowledge factor.
 The covariance matrices $\Sigma_{kl}$ were obtained from the standard deviations of participant effects $\boldsymbol{\sigma}_{kl}$ and correlation matrices $\Omega_{kl}$
 
 $$
 \Sigma_{kl} = Diag(\boldsymbol{\sigma}_{kl})~\Omega_{kl}~Diag(\boldsymbol{\sigma}_{kl}), k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
 $$
-
 Each element $\sigma_{klp}$ of the vectors of standard deviations $\boldsymbol{\sigma}_{kl}$ was drawn from
 independent half-normal prior distributions.
 
 $$
 \sigma_{klp} \sim N (0, 1)_{\mathcal{I}(0, \infty)}, k = \lbrace 1, 2 \rbrace, l = \lbrace 1, 2 \rbrace
 $$
-
 For the correlation matrices $\Omega_{k}$, we used LKJ priors with a scaling factor of 1 (Lewandowski, Kurowicka, & Joe, 2009):
 
 $$
@@ -69,12 +1030,11 @@ For participants who received explicit knowledge about one transition, participa
 $$
 \boldsymbol{\delta}_i \sim N_6 (0, \Sigma_{kl}), i = 1, ..., I
 $$
-
 where $k$ indexes the learning material that was presented to participant $i$ and $l$ indexes his or her level of the explicit-knowledge factor.
-The covariance matrices $\Sigma_{kl}$ were specified as above, with the only exception that six instead of four parameters were required.
+The covariance matrices $\Sigma_kl$ were specified as above, with the only exception that six instead of four parameters were required.
 
 
-## Experiment 1, model $\mathcal{M}_2$
+## Experiment 2, model $\mathcal{M}_2$
 
 Priors on fixed effects were
 
@@ -84,53 +1044,38 @@ $$
 \mu_{jkl}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace\\
 \end{aligned}
 $$
-
 Participant effects $\delta_{ij}^{(A)}$ and $\delta_{ij}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$ that were modeled by
 $$
 \boldsymbol{\delta}_i \sim N_4 (0, \Sigma_{kl}), i = 1, ..., I
 $$
 Priors for the covariance matrix $\Sigma_{kl}$ were specified as above.
 
-## Experiment 2, models $\mathcal{M}_1$ and $\mathcal{M}_2$
 
-For the model-based analyses, we used models $\mathcal{M}_1$ and $\mathcal{M}_2$ analogous to those used in Experiment 1.
-
-## Experiment 3, model $\mathcal{M}_1$
+## Experiment 2, model $\mathcal{M}_{1R}$
 
 Priors on fixed effects were
 
 $$
 \begin{aligned}
-\mu_{jlm}^{(C)} & \sim N(0, 1), j = \lbrace 1, 2 \rbrace; l = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
-\mu_{mt}^{(A)} & \sim N(0, 1), t = \lbrace 1, ..., 6 \rbrace ; m = \lbrace 1, 2 \rbrace\\
+\mu_{jkm}^{(C)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace\\
+\mu_{jkm}^{(A)} \sim & N(0, 1), j = \lbrace 1, 2 \rbrace; k = \lbrace 1, 2 \rbrace; m = \lbrace 1, 2 \rbrace
 \end{aligned}
 $$
+where $j$ indexes transition type (revealed vs. non-revealed), $k$ indexes learning material presented during the SRTT (random vs. probabilistic), and $m$ indexes *PD instruction* condition (inclusion vs. exclusion).
+Participant effects $\delta_{ijm}^{(A)}$  and $\delta_{ijm}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$
+that were modeled as draws from a multivariate normal
 
-where $j$ indexes *transition type* (revealed & practiced vs. revealed & non-practiced), $l$ indexes practice condition (Control, No-practice, Unspecific-practice, Practice, Transfer), $t$ indexes specific items (i.e., transitions), and $m$ indexes *PD instruction* (inclusion vs. exclusion).
-
-Participant effects $\delta_{imt}^{(A)}$ and $\delta_{ijm}^{(C)}$ can be written as vectors $\boldsymbol{\delta}_i$.
-
-For participants in the *Control* group, these were modeled by
 $$
-\boldsymbol{\delta}_i \sim N_{12} (0, \Sigma_l), i = 1, ..., I
+\boldsymbol{\delta}_i \sim N_8 (0, \Sigma_{kl}), i = 1, ..., I
 $$
+where $k$ indexes the learning material that was presented to participant $i$ and $l$ indexes his or her level of the explicit-knowledge factor.
+Priors for the covariance matrix $\Sigma_{kl}$ were specified as above.
 
-For participants in the *No-Practice*, *Unspecific-Practice*, and *Practice* groups,
-$$
-\boldsymbol{\delta}_i \sim N_{14} (0, \Sigma_l), i = 1, ..., I
-$$
 
-For participants in the *Transfer* group
-$$
-\boldsymbol{\delta}_i \sim N_{16} (0, \Sigma_l), i = 1, ..., I
-$$
 
-The covariance matrices $\Sigma_l$ were modeled separately and independently for each between-subjects condition.
-Priors on these matrices were as described above for Experiment 1.
+## Experiment 3, models $\mathcal{M}_1$, $\mathcal{M}_2$, and $\mathcal{M}_{1R}$
 
-<!--
-## Model fitting
+For the model-based analyses, we used models $\mathcal{M}_1$, $\mathcal{M}_2$, and $\mathcal{M}_{1R}$ analogous to those used in Experiment 2.
 
-We used rstan (Carpenter et al., in press) to estimate model parameters and sampled a total of $15{,}000$ iterations in three MCMC chains for each model. 
-The chains mixed well, $\hat{R}=$, $n_{\text{eff}}$, mcmc-sd). 
--->
+
+
