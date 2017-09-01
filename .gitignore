@@ -36,5 +36,10 @@ vignettes/*.pdf
 
 # temporary files created by gedit
 *~
+# temporary files created by pandoc/texlive
+*.aux
+*.fff
+*.log
+*.synctex.gz
 
 main_files

@@ -126,6 +126,11 @@ rangeAge<-paste(c(min(tmp[["age"]]),max(tmp[["age"]])),collapse=" and ")
 Most were undergraduates from Heinrich-Heine-Universität Düsseldorf.
 Participants were randomly assigned to experimental conditions.
 They received either course credit or 3.50 Euro for their participation.
+^[
+The present research used procedures that are exempt from mandatory formal
+ethical approval under the ethical guidelines of the Deutsche Gesellschaft für Psychologie.
+]
+
 
 <!-- old version -->
 <!-- ### Materials and Procedure -->
