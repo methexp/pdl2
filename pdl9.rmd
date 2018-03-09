@@ -1,3 +1,4 @@
+
 ```{r 'pdl9-prepare'}
 # source("R/pdl9.export.raw.data.R")
 load("data/pdl9.RData")
@@ -32,48 +33,65 @@ Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
 <!-- Therefore, a critical empirical test for the ordinal PD approach is whether, and under which conditions, participants are able to use explicit knowledge to suppress generation below baseline levels under exclusion conditions.  -->
 
 
-A critical assumption of the ordinal PD is that explicit knowledge monotonically increases inclusion performance *and* monotonically decreases exclusion performance.
+A critical assumption of the ordinal-PD approach is that explicit knowledge monotonically increases inclusion performance *and* monotonically decreases exclusion performance.
 If (contrary to this assumption) explicit knowledge does not affect exclusion performance at all, the ordinal PD approach may technically still be applied;
 however, the results would be misleading if a difference in explicit (but not implicit) knowledge between two conditions led to a difference in inclusion but not in exclusion performance.
 In this case, the ordinal PD would suggest that the two conditions differ in explicit *and implicit* knowledge [@hirshman_ordinal_2004, Data Pattern I].
-For the ordinal PD approach to yield valid results, exclusion performance must even fall *below baseline* when explicit knowledge is sufficiently strong so as to counter the influence of implicit knowledge (this would yield Hirshman's Data Pattern IV, which indicates an increase in explicit knowledge).
-Therefore, a critical empirical test for the ordinal PD approach is whether (and under which conditions) participants are able to use explicit knowledge to suppress generation below baseline levels under exclusion conditions.
-Our primary goal of Experiment 1 was to test this assumption; therefore, while keeping implicit sequence constant at moderate levels across conditions, 
-we manipulated *explicit* knowledge by revealing parts of the sequence to participants *after* finishing the SRTT.
+For the ordinal PD approach to yield valid results, exclusion performance must decline with increasing explicit knowledge, and even fall *below baseline* when explicit knowledge is sufficiently strong so as to counter the influence of implicit knowledge (this would yield Hirshman's Data Pattern IV, which indicates an increase in explicit knowledge only).
+Therefore, a critical empirical test for the ordinal-PD approach is whether (and under which conditions) participants are able to use explicit knowledge to suppress generation below baseline levels under exclusion conditions.
+Our primary goal of Experiment 1 was to test this assumption;
+therefore, while keeping implicit sequence constant at moderate levels across conditions, 
+we manipulated *explicit* knowledge by revealing parts of the sequence (i.e., explicit knowledge about 0, 1, or 2 transitions) to participants *after* finishing the SRTT.
 
+A secondary goal of Experiment 1 
+was to manipulate the amount of *practice* participants had *with including and excluding their explicit knowledge*:
+<!-- Our reason for this additional test is the following: -->
+If, in a sequence learning study, participants acquired explicit knowledge about a transition during the SRTT, they are likely to encounter the same transition again during the remainder of the SRTT several times:
+These additional exposures to the transition amount to an opportunity to practice *including* the explicit knowledge (e.g., intentionally implementing it into a motor pattern).
+This practice might be essential for the validity of the subsequent PD generation task.
+Therefore, one might wonder if the explicit sequence knowledge that is acquired during learning is comparable to explicit knowledge via instruction as implemented in our studies.
+<!-- instead, participants in a typical application might have already integrated their explicit knowledge about the sequence into a specific motor pattern. -->
+To ensure that the effects of our explicit-knowledge manipulation were comparable with those of acquired knowledge, 
+we amended the generation task by short *generation-practice blocks* involving inclusion/exclusion instructions that preceded the main inclusion/exclusion blocks.
+To explore the effects of practice, we manipulated whether a transition was revealed
+*prior to* or *after* these practice blocks:
+Some transitions were revealed *prior to* practice, and participants were instructed to implement a motor pattern including (or excluding) the revealed transition.
+Other transitions were revealed only *after* practice; for these transitions there was no opportunity to practice.
 
-A secondary goal of Experiment 1 was to manipulate the amount of *practice* participants had with including and excluding their explicit knowledge.
-If participants acquired explicit knowledge about a transition while performing an SRTT, they are likely to encounter the same transition again during the same SRTT several times:
-On these additional exposures to the transition, they might be able to practice including the explicit knowledge (e.g. by intentionally implementing it into a motor pattern).
-This practice might be helpful in following the instructions of the subsequent PD generation task.
-We investigated whether this type of transition-specific practice helps in implementing the PD instructions by comparing practiced with non-practiced transitions.
+<!--
+This allowed us to compare inclusion and exclusion performace
+In order to investigate the effects of this additional transition-specific
+We investigated whether this type of transition-specific practice helps in implementing the PD instructions by
+comparing practiced with non-practiced transitions.
 We also wanted to investigate transfer of practiced to unpracticed transitions about which participants had explicit knowledge.
-We therefore manipulated the number of revealed transitions, and whether these revealed transitions were revealed prior to or after practice blocks, both between and within subject.
-<!-- A critical precondition for the expression of explicit knowledge may be the opportunity for practice with the generation task.  -->
-<!-- In Experiment 3, we investigated whether such transition-specific practice can help reduce the invariance violation by comparing practiced with non-practiced transitions. -->
-<!-- We also wanted to more directly investigate transfer of practice to unpracticed transitions about which participants had explicit knowledge. -->
-<!-- We therefore manipulated the number of revealed transitions, and whether these revealed transitions were revealed prior to or after practice blocks, both  between and within subjects. -->
+We therefore extended the generation task with short practice blocks that preceded inclusion and exclusion blocks.
+In these practices blocks, participants were also required to include/exclude their sequence knowledge.
+In order to manipulate explicit sequence knowledge and practice with including/excluding this knowledge,  we revealed parts of the sequence (i.e., single transitions)
+A critical precondition for the expression of explicit knowledge may be the opportunity for practice with the generation task.
+In Experiment 3, we investigated whether such transition-specific practice can help reduce the invariance violation by comparing practiced with non-practiced transitions.
+We also wanted to more directly investigate transfer of practice to unpracticed transitions about which participants had explicit knowledge.
+We therefore manipulated the number of revealed transitions, and whether these revealed transitions were revealed prior to or after practice blocks, both  between and within subjects.
+-->
 
-## Method
-
-We realized five between-subjects conditions:
+In five between-subjects conditions, we manipulated both the level of explicit sequence knowledge (i.e., the number of revealed transitions) and--nested within that factor--the amount of generation practice (i.e., whether a transition was revealed prior to or after practice blocks):
 
 1. In the *Control* group, no explicit knowledge was revealed to participants.
 
 <!-- 3. Explicit knowledge without practice (1 transition, non-practiced, *non-practiced*): -->
 2. In the *No-Practice* group, 
-one transition <!--(third & fourth location of the sequence)--> was revealed immediately before the first generation block,
+one transition <!--(third & fourth location of the sequence)--> was revealed immediately before the first main generation block,
 but *after* the practice blocks that preceded the first generation block. 
-To avoid carry-over of practice effects from the first generation block, a different non-practiced transition  <!--(fifth & sixth location of the sequence)--> was revealed after the second practice blocks and immediately preceding the second generation block.
+To avoid carry-over of practice effects from the first generation block, a different non-practiced transition  <!--(fifth & sixth location of the sequence)--> was revealed after the second set of practice blocks and immediately preceding the second main generation block.
 
 <!-- 5. Explicit knowledge with unspecific inhibition practice (1 transition with *unspecific* practice): -->
 3. In the *Unspecific-Practice* group,
-one transition was revealed to participants *after* practice, immediately before each generation block (as in the *No-Practice* group).
+one transition was revealed to participants *after* practice, immediately before each main generation block (as in the *No-Practice* group).
 In the third practice block before the exclusion task, participants were asked to inhibit a specific response location (i.e., they were asked *not* to use the $5^{th}$ location/$N$ key).
 
 <!-- 2. Explicit knowledge with practice (1 transition, practiced, *practiced*): -->
 4. In the *Practice* group, 
-one transition <!--(first & second location of the sequence)--> was revealed to participants immediately *before* the practice blocks. Participants were encouraged to include (exclude) the revealed transition during practice and in the generation block.
+one transition <!--(first & second location of the sequence)--> was revealed to participants immediately *before* the practice blocks.
+Participants were encouraged to include (exclude) the revealed transition during generation-practice and in the main generation block.
 
 <!-- 4. Explicit knowledge with & without practice (1 transition practiced + 1 transition non-practiced, *practiced & non-practiced*): -->
 5. In the *Transfer* group, information about two transitions was revealed; one of them was non-practiced (as in the No-Practice group), the other one practiced (as in the Practice group).
@@ -82,31 +100,32 @@ After these practice blocks, the second (non-practiced) transition  <!--(third &
 The practiced transition was again named before participants worked on the practice blocks of the second generation phase.
 After these practice blocks, a second non-practiced transition  <!--(fifth & sixth location of the sequence)--> was revealed immediately before the second generation block.
 
-This allowed us to assess generation performance for different levels of explicit knowledge.
-Inclusion performance should increase with increasing explicit knowledge, and exclusion performance should decrease with increasing explicit knowledge.
+This design allowed us to assess overall generation performance for different levels of explicit knowledge.
+The monotonicity assumption states that with increasing levels of explicit knowledge, the proportion of regular transitions generated under inclusion should increase, while under exclusion it should decrease.
 
-Moreover, we more specifically addressed the hypothesis that explicit knowledge may not be exhaustively expressed during the generation task (and, in particular, under exclusion instructions), and that the level of its expression may depend on practice.
-This design allowed us to assess generation performance for three main transition types; (1) *non-revealed* transitions, (2) transitions that were revealed but remained *non-practiced*, and (3) transitions that were revealed and *practiced* in the practice blocks.
+Beyond overall performance, we also analyzed data from specific transitions to test whether explicit knowledge may not be exhaustively expressed during the generation task (and, in particular, under exclusion instructions), and whether the level of its expression depends on generation practice.
+Our design allowed us to assess generation performance for three main transition types; (1) *non-revealed* transitions, (2) transitions that were revealed but remained *non-practiced*, and (3) transitions that were revealed and *practiced*.
 ^[In the second generation block of the No-Practice, Unspecific-Practice, and Transfer groups, a fourth transition type can be distinguished: Transitions that were revealed but non-practiced before the first generation block. Because participants included (or excluded) these transitions in the previous (i.e., the first) generation block, performance on these transitions should be more similar to practiced than to non-practiced transitions in the second block.]
 
-A comparison of *non-revealed* with (revealed but) *non-practiced* transitions allows us to assess the degree to which participants can spontaneously make use of their explicit knowledge in the generation task.
-Comparing *non-practiced* with *practiced* transitions allowed us to assess whether specific inclusion/exclusion practice could increase the use of explicit knowledge.
+A comparison of *non-revealed* with (revealed but) *non-practiced* transitions allows us to assess the degree to which participants can spontaneously (i.e., without practice) make use of their explicit knowledge in the generation task.
+Comparing *non-practiced* with *practiced* transitions allowed us to assess whether transition-specific generation practice could increase the use of explicit knowledge.
 We also compared whether performance for revealed but *non-practiced* transitions differs between the No-Practice and Transfer groups, as would be expected if the effect of specific practice transfers to non-practiced explicit knowledge.
 Finally, we explored whether unspecific inhibition practice affects performance for both revealed but *non-practiced* and/or *non-revealed* transitions.
 
 In sum, we hypothesized that possessing explicit knowledge may not be sufficient for its expression in the generation task.
-Specifically, (a) explicit knowledge without practice (*No-Practice* group) may fail to lead to below-chance exclusion performance, 
+Specifically, (a) explicit knowledge without practice (*No-Practice* group) may fail to lead to below-baseline exclusion performance, 
 and (b) this may also hold for non-practiced transitions for participants who practiced another transition (*Transfer* group).
-If the exclusion task is not at all sensitive to explicit knowledge, this would lead to erroneous conclusions if the ordinal PD is applied;
-moreover, this would also suggest that the invariance assumption for explicit knowledge of the parametric PD might also be violated.
+If the exclusion task is not sensitive to manipulations of explicit knowledge, the ordinal PD would yield erroneous conclusions;
+it would also suggest that the invariance assumption for explicit knowledge of the parametric PD might also be violated.
 We had no clear hypothesis regarding the unspecific response-inhibition practice,
 but wanted to explore whether it would be as effective as transition-specific exclusion practice in improving the validity of the generation task as a measure of explicit knowledge.
 
+## Method
 
 ### Design
 
-The study realized a 5 (*Condition*: Control, No-Practice, Unspecific-Practice, Practice, Transfer)
-$\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
+The study realized a 5 (*Explicit-knowledge-and-Practice*: Control, No-Practice, Unspecific-Practice, Practice, Transfer)
+$\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*Block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
 
 ### Participants
 
@@ -131,7 +150,6 @@ The present research used procedures that are exempt from mandatory formal
 ethical approval under the ethical guidelines of the Deutsche Gesellschaft für Psychologie.
 ]
 
-
 <!-- old version -->
 <!-- ### Materials and Procedure -->
 
@@ -153,10 +171,10 @@ There were no direct repetitions of response locations.
 ### Procedure
 
 The experiment consisted of three consecutive parts:
-Participants first worked on a SRTT (the *acquisition task*), followed by a *generation task* and, finally, a debriefing phase. 
-In the acquisition task, participants performed a SRTT consisting of 8 blocks with 144 trials each (for a total of 1,152 responses).
+Participants first worked on an SRTT (the *acquisition task*), followed by a *generation task* and, finally, a debriefing phase. 
+In the acquisition task, all participants performed an SRTT consisting of eight blocks with 144 trials each (for a total of 1,152 responses).
 SRTT and generation task were run on 17" CRT monitors (with a screen resolution of $1{,}024~\text{px} \times 768~\text{px}$).
-The viewing distance was approximately 60cm. 
+The viewing distance was approximately $60~\text{cm}$. 
 A horizontal sequence of six white squares ($56~\text{px}$) was presented on a gray screen. The distance between squares was $112~\text{px}$.
 Each screen location corresponded to a key on a QWERTZ keyboard (from left to right Y, X, C, B, N, M).
 Participants had to respond whenever a square's color changed from white to red by pressing the corresponding key. 
@@ -170,21 +188,44 @@ there were no pauses within a single learning block.
 Following the SRTT phase, participants were told that stimulus locations during the SRTT followed an underlying sequential structure (but were not informed about the exact sequence). 
 They were then asked to try to generate a short sequence of six locations that followed this structure.
 
-Before working on practice blocks, one transition was revealed to participants in the *Practice* and *Transfer* groups.
+The generation task followed,
+consisting of two *main generation blocks* of 120 responses that were each preceded by three *generation-practice blocks* of twelve responses.
+Before entering practice blocks, one transition was revealed to participants in the *Practice* and *Transfer* groups.
 After practice blocks, another transition was revealed to participants in the *No-Practice*, *Unspecific-Practice*, and *Transfer* groups.
-Participants were told to memorize those transitions and to use their knowledge in the following tasks.
+Participants were told to memorize those transitions and to use their knowledge in all following tasks.
 
-The generation task contained a counterbalanced order of inclusion versus exclusion blocks.
-Under inclusion (exclusion) instructions, participants were told to generate a sequence as similar (dissimilar) as possible to the sequence from the acquisition task.
-For both tasks, participants were instructed to follow their intuition if they had no explicit knowledge about the underlying sequence.
+<!-- Main generation blocks were presented with a counterbalanced order of inclusion/exclusion instructions. -->
+<!-- Instructions in the preceding generation-practice blocks depended on the instruction in the subsequent main block: -->
+The main inclusion block was preceded by three practice blocks that were all performed under inclusion instructions.
+The main exclusion block was preceded by two practice blocks that were performed under inclusion instructions and a third practice block that was performed under exclusion instructions.
+The first two practice blocks (those that always involved inclusion instructions) were aimed at allowing participants to integrate their acquired sequence knowledge with just-revealed sequence information. The third block (that involved either inclusion or exclusion instructions, depending on the instructions of the subsequent main generation block) was aimed at allowing participants to familiarize with inclusion/exclusion instructions.
+^[
+In Experiment 1, we held constant the number of generation-practice blocks involving inclusion/exclusion instructions.
+We based the number of presented practice blocks on our observations in Experiment 2 (that was conducted earlier):
+In Experiment 2, participants worked on practice blocks until they had consistently included/excluded a revealed transition.
+Prior to main inclusion blocks, participants in Experiment 2 needed $M = 2.98, \mathit{Md} = 2$ inclusion practice blocks.
+Prior to main exclusion blocks, participants in Experiment 2 needed $M = 1.26, \mathit{Md} = 1$ exclusion and $M = 1.52, \mathit{Md} = 1$ inclusion practice blocks.
+This suggests that the choice of 3 practice blocks --- 3 under inclusion instructions (for the inclusion block), or 2 under inclusion and 1 under exclusion instructions (for the exclusion block) --- should be sufficient for the majority of participants.
+]
+
+In both main generation and generation-practice blocks, 
+under inclusion (exclusion) instructions, participants were told to generate a sequence as similar (dissimilar) as possible to the sequence from the acquisition task.
+Participants were instructed to follow their intuition if they had no explicit knowledge about the underlying sequence.
 Participants who had received information about transitions were instructed to include (exclude) the revealed transitions.
-
-To familiarize participants with both inclusion and exclusion instructions, they worked on short practice blocks of twelve consecutive responses.
-Prior to the inclusion task, three practice blocks involved inclusion instructions;
-prior to the exclusion task, the first and second practice blocks were performed under inclusion instructions and the third practice block was performed under exclusion instructions.
-In the main block of the generation task, participants freely generated 120 consecutive response locations. 
 Question marks appeared at all locations and participants' key presses were reflected by the corresponding square's color changing to red.
 Direct repetitions were explicitly discouraged and were followed by a warning beep.
+
+<!-- We based the respective number of practice blocks involving inclusion/exclusion instructions -->
+<!-- In Experiment 2,  -->
+<!-- prior to main exclusion blocks, $80.32\%$ of participants successfully excluded the revealed transition in their first exclusion practice block and -->
+<!-- $85.25\%$ successfully included the revealed transistion after two inclusion practice blocks. -->
+<!-- Prior to main inclusion blocks, $73.77\%$ of participants successfully included the revealed transition after three inclusion practice blocks. -->
+<!-- **oder:** -->
+
+<!-- prior to inclusion blocks, participants needed $M = 2.98$ inclusion practice blocks until they successfully included the revealed transtion. -->
+<!-- Prior to exclusion blocks, they needed $M = 1.52$ inclusion and $M = 1.26$ exclusion practice blocks to reach perfect inclusion/exclusion of the revealed transition. -->
+<!-- In Experiment 2, the median number of required practice blocks was $\mathit{Md} = 4$ for inclusion and $\mathit{Md} = 1$ for exclusion practice blocks. -->
+<!-- We based our decision on how many practice blocks to use in Experiment 1 on these median numbers. -->
 
 Upon completing the computerized task, participants were asked to complete a questionnaire containing the following items (translated from German): 
 (1) "One of the tasks mentioned a sequence in which the squares lit up during the first part of the study.
@@ -217,45 +258,48 @@ Still, other types of dependencies may yet turn out to be more problematic, and 
 <!-- Given knowledge about only a sixth of the sequence, his performance (scored this way) would suggest knowledge about half of the sequence. -->
 <!-- However, this is the canonical way of scoring data from the free-generation task, it is therefore important to use the same scoring procedure in the present study, too. -->
 <!-- We thank K.C. Klauer for pointing out in a review of this manuscript that this scoring is negligent to the number of transitions that could have been produced, but were not (i.e., how often the first location of a transition was produced but was *not* followed by the second location of a transition). Moreover, it could also be problematic that two consecute transitions overlap by one response and thus also overlap with regard to the error-term attached to this shared response. -->
-Response repetitions were excluded form analyses, as these were explicitly discouraged in the instructions.
-We analyzed generation performance using an ordinal-PD approach (Appendix B reports an additional model-based analysis).
+Response repetitions were excluded from analyses, as these were explicitly discouraged in the instructions.
+<!-- We analyzed generation performance using an ordinal-PD approach (Appendix B reports an additional model-based analysis). -->
+For repeated-measures ANOVAs, Greenhouse-Geisser-corrected degrees of freedom are reported.
 
-<!-- Given that model  $\mathcal{M}_2$  failed to fit the data from both Experiments 1 and 2 and model, we fitted only model $\mathcal{M}_1$ and used posterior analyses to evaluate the invariance assumption. -->
-<!-- For the model-based analyses, we adapted the equations from Experiment 1 to the design of Experiment 3 (which did not contain experimental groups with random material). -->
+<!--
+Given that model  $\mathcal{M}_2$  failed to fit the data from both Experiments 1 and 2 and model, we fitted only model $\mathcal{M}_1$ and used posterior analyses to evaluate the invariance assumption.
+For the model-based analyses, we adapted the equations from Experiment 1 to the design of Experiment 3 (which did not contain experimental groups with random material).
 
-<!-- In order to accommodate for the more complex design, we used a model specification that allowed for participant and item (i.e., transition) effects and their interactions by estimating fixed effects for each transition type plus individual participants' deviations from these effects. -->
-<!-- The model equations of model $\mathcal{M}_1$ are given by: -->
+In order to accommodate for the more complex design, we used a model specification that allowed for participant and item (i.e., transition) effects and their interactions by estimating fixed effects for each transition type plus individual participants' deviations from these effects.
+The model equations of model $\mathcal{M}_1$ are given by:
 
-<!-- $$ -->
-<!--   C_{ijm} = \begin{cases} -->
-<!--     \Phi(\mu_{jlm}^{(C)} + \delta_{ijm}^{(C)}) & \text{if } j \epsilon 1, 2 \text{ (item has been revealed \& practiced, revealed \& non-practiced)}\\ -->
-<!--                                               0 & \text{if }j=3 \text{ (item has not been revealed)}\\ -->
-<!--     \end{cases} -->
-<!-- $$ -->
-<!-- and -->
-<!-- $$ -->
-<!--   A_{imt} = \Phi(\mu_{mt}^{(A)} + \delta_{imt}^{(A)}) -->
-<!-- $$ -->
+$$
+  C_{ijm} = \begin{cases}
+    \Phi(\mu_{jlm}^{(C)} + \delta_{ijm}^{(C)}) & \text{if } j \epsilon 1, 2 \text{ (item has been revealed \& practiced, revealed \& non-practiced)}\\
+                                              0 & \text{if }j=3 \text{ (item has not been revealed)}\\
+    \end{cases}
+$$
+and
+$$
+  A_{imt} = \Phi(\mu_{mt}^{(A)} + \delta_{imt}^{(A)})
+$$
 
-<!-- where $\mu_{jlm}^{(C)}$ -->
-<!-- is the fixed effect of transition type $j$ (non-revealed, revealed & practiced, revealed & non-practiced) in condition $l$ and *PD instruction* condition $m$ on controlled processes, and -->
-<!-- $\delta_{ijm}^{(C)}$ is the $i$th participant's deviation from the corresponding mean. -->
-<!-- Accordingly, $\mu_{mt}^{(A)}$ is the fixed effect of *PD instruction* condition $m$ and transition $t$ on automatic processes, and -->
-<!-- $\delta_{imt}^{(A)}$ is the $i$th participant's deviation from the corresponding mean. -->
+where $\mu_{jlm}^{(C)}$
+is the fixed effect of transition type $j$ (non-revealed, revealed & practiced, revealed & non-practiced) in condition $l$ and *PD instruction* condition $m$ on controlled processes, and
+$\delta_{ijm}^{(C)}$ is the $i$th participant's deviation from the corresponding mean.
+Accordingly, $\mu_{mt}^{(A)}$ is the fixed effect of *PD instruction* condition $m$ and transition $t$ on automatic processes, and
+$\delta_{imt}^{(A)}$ is the $i$th participant's deviation from the corresponding mean.
 
-<!-- Model $\mathcal{M}_1$ imposes two auxiliary assumptions: -->
-<!-- First, it assumed that no explicit knowledge has been acquired during the SRT phase (i.e., $C=0$ for non-revealed transitions). -->
-<!-- Second, it assumed that revealing sequence knowledge did not affect automatic processes (i.e., $A$ does not vary as a function of the between-subjects manipulation of explicit knowledge, index $l$). -->
-<!-- Both auxiliary assumptions were tested by posterior predictive checks. -->
-<!-- In addition to reporting $T_{A1}$ and $T_{B1}$ as in the previous studies, we calculated additional model check statistics $T_{A2}$, which summarizes how well the model describes the item-wise category counts (aggregated over participants), and $T_{A3}$, which summarizes how well the model describes the category counts per participant-item combination; finally, the additional statistic $T_{B2}$ summarizes how well the model describes the variances and covariances introduced by items. -->
-<!-- We also calculated the posterior differences $C_I - C_E$ and $A_I - A_E$ to more directly test the invariance assumption. -->
-
+Model $\mathcal{M}_1$ imposes two auxiliary assumptions:
+First, it assumed that no explicit knowledge has been acquired during the SRT phase (i.e., $C=0$ for non-revealed transitions).
+Second, it assumed that revealing sequence knowledge did not affect automatic processes (i.e., $A$ does not vary as a function of the between-subjects manipulation of explicit knowledge, index $l$).
+Both auxiliary assumptions were tested by posterior predictive checks.
+In addition to reporting $T_{A1}$ and $T_{B1}$ as in the previous studies, we calculated additional model check statistics $T_{A2}$, which summarizes how well the model describes the item-wise category counts (aggregated over participants), and $T_{A3}$, which summarizes how well the model describes the category counts per participant-item combination; finally, the additional statistic $T_{B2}$ summarizes how well the model describes the variances and covariances introduced by items.
+We also calculated the posterior differences $C_I - C_E$ and $A_I - A_E$ to more directly test the invariance assumption.
+-->
 
 
 ## Results
 
-We first analyzed the performance data from the SRT task to determine whether sequence knowledge had been acquired during the task.
-Next, we analyzed generation task performance using an ordinal PD approach.
+We first analyzed the performance data from the SRTT to determine whether sequence knowledge had been acquired during the task.
+Next, we analyzed generation task performance using an ordinal-PD approach
+(full descriptive statistics and additional model-based analyses are reported in Appendices A and C).
 Finally, to test our predictions regarding the different effects of practice, we analyzed generation performance for transitions about which explicit knowledge had been revealed.
 
 
@@ -290,15 +334,14 @@ pdl9_acquisition_rt.anova <- apa.glm(
 
 ```
 
-
 Figure \@ref(fig:pdl9-acquisition-rt) shows reaction times during acquisition.
-We conducted a `r pdl9_acquisition_rt.anova$name` repeated-measures ANOVA.
+We conducted an `r pdl9_acquisition_rt.anova$name` repeated-measures ANOVA.
 There was a main effect of *block number*,
 `r pdl9_acquisition_rt.anova[["Block_number"]]`, with RT decreasing over blocks. 
 There also was a main effect of *FOC transitions status*,
 `r pdl9_acquisition_rt.anova[["FOC_transition_status"]]`,
 reflecting faster responses to regular than to irregular transitions.
-The interaction of *block* and *FOC transition status* was also significant,
+The interaction of *block number* and *FOC transition status* was also significant,
 `r pdl9_acquisition_rt.anova[["Block_number_FOC_transition_status"]]`, reflecting the finding that the RT advantage for regular transitions increased over blocks, which indicated successful sequence learning.
 
 #### Error rates
@@ -344,6 +387,8 @@ reflecting an increase of the accuracy advantage for regular (as compared to irr
 
 ```{r pdl9-generation, fig.cap = "Generation performance in Experiment 1, excluding repetitions. Error bars represent 95% confidence intervals. Horizontal lines represent chance baseline.", results='hide'}
 
+
+
 pdl9_generation <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0,]
 
 pdl9_generation$Condition <- factor(pdl9_generation$Condition, levels = as.character(c(1, 2, 5, 3, 4)), labels = c(
@@ -353,6 +398,8 @@ pdl9_generation$Condition <- factor(pdl9_generation$Condition, levels = as.chara
   , "Practice"
   , "Transfer")
 )
+
+variable_label(pdl9_generation) <- c("Condition" = "Explicit-knowledge-and-Practice")
 
 # Overall ANOVA
 pdl9_generation.anova <- apa.glm(
@@ -474,49 +521,53 @@ bf_restriction_against_null = bf_restriction_against_full * bf_full_against_null
 We first analyzed generation performance by applying standard ANOVA techniques to the proportions of regular transitions generated in inclusion and exclusion blocks.
 We then analyzed generation performance for those transitions that were revealed to participants, testing our hypotheses about the effects of practice on generation performance.
 
-### Overall generation performance
+#### Overall generation performance
 
 Figure \@ref(fig:pdl9-generation) shows the overall generation performance.
 We conducted a `r pdl9_generation.anova$name` ANOVA that revealed a main effect of *PD instruction*,
 `r pdl9_generation.anova$PD_instruction`,
 participants generated more regular transitions in inclusion than exclusion blocks;
-and a main effect of *Condition*,
+and a main effect of *Explicit-knowledge-and-Practice*,
 `r pdl9_generation.anova$Condition`,
-indicating a clear influence of the explicit knowledge manipulation on generation performance.
-Moreover, the interaction of *Condition* and *PD instruction* reached significance,
+indicating a clear influence of our manipulation of explicit knowledge and on generation performance.
+Moreover, the interaction of *Explicit-knowledge-and-Practice* and *PD instruction* reached significance,
 `r pdl9_generation.anova$Condition_PD_instruction`,
-indicating that the effect of *Condition* is qualified by *PD instruction*.
-The interaction of *PD instruction* and *Block order* also reached significance,
+indicating that the effect of *Explicit-knowledge-and-Practice* is qualified by *PD instruction*.
+The interaction of *PD instruction* and *block order* also reached significance,
 `r pdl9_generation.anova$Order_PD_instruction`.
 To disentangle these interactions, we analyzed inclusion and exclusion performance, separately.
 
 
-#### Inclusion
+<!-- ##### Inclusion -->
 
-Analyzing the number of regular transitions generated in inclusion blocks,
-a `r inclusion$name` ANOVA revealed a significant main effect of *Condition*,
+<!-- Analyzing the number of regular transitions generated in-->
+Analyzing inclusion blocks,
+a `r inclusion$name` ANOVA revealed a significant main effect of *Explicit-knowledge-and-Practice*,
 `r inclusion$Condition`, `r # paste0("$\\mathrm{BF}_{10} = ", printnum(exp(incl_b@bayesFactor[1, 1])), "$")`
-indicating that our manipulation of explicit knowledge influenced inclusion performance;
-and a main effect of *Block order*,
+indicating that inclusion performance increased with the number of revealed transitions;
+and a main effect of *block order*,
 <!-- Bayesian and frequentist analysis lead to diverging conclusions-->
 `r inclusion$Order`:
 <!-- `r # paste0("$\\mathrm{BF}_{10} = ", printnum(exp(incl_b@bayesFactor[2, 1])), "$")` -->
 participants generated  more regular transitions if inclusion followed exclusion;
-the interaction of *Condition* and *Block order* did not reach significance,
+the interaction of *Explicit-knowledge-and-Practice* and *block order* did not reach significance,
 `r inclusion$Condition_Order`.
 <!-- `r # paste0("$\\mathrm{BF}_{01} = ", printnum(1/exp(incl_b@bayesFactor[3, 1])), "$")`. -->
 
-#### Exclusion
+<!-- ##### Exclusion -->
 
-Analyzing the number of regular transitions generated in exclusion blocks,
+<!-- Analyzing the number of regular transitions generated in exclusion blocks, -->
+Analyzing exclusion blocks,
 a `r exclusion$name` ANOVA revealed *no* significant effects on exclusion performance (all $p\mathrm{s} \geq .143$).
+Specifically, increasing levels of explicit knowledge did *not* reduce the level of regular transitions generated under exclusion instructions.
 
-<!-- - To test our hypothesis that exclusion performance is not a monotonic function of explicit knowledge,  -->
-<!-- we conducted a Bayesian ANOVA: -->
-<!-- - BF against main effect of condition `r # paste0("$\\mathrm{BF}_{01} = ", printnum(exp(excl_b@bayesFactor[3, 1])), "$")` -->
-<!-- - BF against adding Condition (+ interaction) to nuisance model = 70 -->
-<!-- - BF that compares model PD_o that assumes P(regular|Control)>P(regular|Experimental) against baseline model (no main effect of condition): BF_null_pd = 76 -->
-
+<!--
+- To test our hypothesis that exclusion performance is not a monotonic function of explicit knowledge,
+we conducted a Bayesian ANOVA:
+- BF against main effect of condition `r # paste0("$\\mathrm{BF}_{01} = ", printnum(exp(excl_b@bayesFactor[3, 1])), "$")`
+- BF against adding Condition (+ interaction) to nuisance model = 70
+- BF that compares model PD_o that assumes P(regular|Control)>P(regular|Experimental) against baseline model (no main effect of condition): BF_null_pd = 76
+-->
 
 ```{r 'pdl9-outcome-space', fig.cap = 'Generation performance for revealed transitions, Experiment 1', eval = FALSE}
 tmp <- Generation[Generation[["Trial"]]>1 & Generation[["repetition"]]==0,]
@@ -542,8 +593,6 @@ text(
 )
 
 ```
-
-
 
 ```{r 'pdl9-generation-block1'}
 pdl9_generation_block1 <- Generation[Generation[["Trial"]]> 1 & Generation[["repetition"]]==0 & Generation[["Block.Nr"]]=="first" & Generation[["excluded.id"]]==0,]
@@ -573,9 +622,7 @@ t.out <- lapply(X = split(pdl9_generation_block1, f = pdl9_generation_block1$Con
 ```
 
 
-### Generation performance for revealed transitions
-
-To test our predictions regarding the different effects of practice, we analyzed raw generation frequencies for only those transitions about which explicit knowledge was revealed.
+#### Generation performance for revealed transitions
 
 ```{r 'pdl9-generation-revealed', fig.cap = "Generation performance for revealed transitions in Experiment 1. Error bars represent 95% confidence intervals. Horizontal lines represent chance baseline."}
 
@@ -586,7 +633,7 @@ Generation$Condition <- factor(
 )
 
 pdl9_generation_rev <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0 & Generation[["vR.revealed"]]!="not", ]
-
+variable_label(pdl9_generation_rev) <- c("Condition" = "Explicit-knowledge-and-Practice")
 pdl9_generation_rev.out <- apa.glm(
   data = pdl9_generation_rev
   , id = "id"
@@ -612,14 +659,13 @@ fun.tmp <- function(x) {
 }
 
 t.out <- lapply(X = split(pdl9_generation_rev, f = pdl9_generation_rev$Condition)[-1], FUN = fun.tmp)
-
-
-
 ```
 
-Figure \@ref(fig:pdl9-generation-revealed) shows generation performance for revealed transitions.
+To explore effects of practice, we analyzed generation performance for only those transitions about which explicit knowledge was revealed
+(see Figure \@ref(fig:pdl9-generation-revealed)).
+<!-- Figure \@ref(fig:pdl9-generation-revealed) shows generation performance for revealed transitions. -->
 A `r pdl9_generation_rev.out$name` ANOVA revealed 
-a nonsignificant main effect of *Condition*, `r pdl9_generation_rev.out[["Condition"]]`, 
+a nonsignificant main effect of *Explicit-knowledge-and-Practice*, `r pdl9_generation_rev.out[["Condition"]]`, 
 but a significant main effect of *PD instruction*, `r pdl9_generation_rev.out[["PD_instruction"]]`,
 and their significant interaction, `r pdl9_generation_rev.out[["Condition_PD_instruction"]]`.
 The main effect of *PD instruction* reflects the clear influence of the PD instruction on the expression of explicit knowledge depicted in Figure \@ref(fig:pdl9-generation-revealed).
@@ -629,10 +675,11 @@ somewhat smaller in the *Practice* group, `r t.out[["Practice"]][["stat"]]`;
 it was still smaller and comparable in the *No-practice* group, `r t.out[["No-Practice"]][["stat"]]`, and the *Unspecific-practice* group, `r t.out[["Unspecific-Practice"]][["stat"]]`.
 
 We investigated this issue more closely in two sets of follow-up analyses.
-Whereas the above findings support the hypothesis that practice improves the degree to which explicit knowledge is expressed in the generation task, it does not elucidate the mechanism by which this occurs. 
-One mechanism by which practice may improve performance is by boosting the proportion of regular transitions in inclusion blocks. 
+Whereas the above findings suggest that practice improves the degree to which explicit knowledge is expressed in the generation task,
+it does not elucidate the mechanism by which this occurs.
+One mechanism by which practice may improve performance is by boosting the proportion of regular transitions in inclusion blocks.
 
-#### Inclusion
+<!-- ##### Inclusion -->
 
 ```{r 'pdl9-generation-revealed-inclusion', fig.cap = "Inclusion performance for revealed transitions in Experiment 1. Left: Between-subjects comparison between *No-Practice* and *Practice* groups. Right: Within-subjects comparison in *Transfer* group. Horizontal lines represent chance baseline."}
 
@@ -693,10 +740,14 @@ within <- apa.glm(data = tmp, dv = "FOC.correct", id = "id", within = c("transit
 
 ```
 
-Inclusion performance for revealed transitions in the *No-Practice* and *Practice* groups was analyzed as a function of practice (practiced vs. non-practiced)<!--, as depicted in Figure \@ref(fig:pdl9-generation-revealed-inclusion)-->.
+Inclusion performance for revealed transitions in the *No-Practice* and *Practice* groups was analyzed as a function of practice (practiced vs. non-practiced)
+<!--, as depicted in Figure \@ref(fig:pdl9-generation-revealed-inclusion)-->.
 Results showed no effect of practice on inclusion performance, `r between[["InstrExpl"]]`.
-Similarly, when we compared inclusion performance for practiced vs. non-practiced transitions in the *Transfer* group, there was no effect of practice, `r within[["transition"]]`.
+Similarly, when we compared inclusion performance for practiced vs. non-practiced transitions in the *Transfer* group,
+there was no effect of practice, `r within[["transition"]]`.
 We conclude that practice did not affect inclusion performance for revealed transitions.
+
+<!-- ##### Exclusion -->
 
 ```{r 'pdl9-generation-revealed-exclusion', fig.cap = "Exclusion performance for revealed transitions in Experiment 1. Left: Between-subjects comparison between *Practice* and *No-Practice* groups. Right: Within-subjects comparison in *Transfer* group. Horizontal lines represent chance baseline."}
 
@@ -789,11 +840,10 @@ apa.barplot(
 par(mfrow = c(1, 1))
 ```
 
-
-```{r 'pdl9-generation-revealed-exusion-2'}
+```{r 'pdl9-generation-revealed-exclusion-2'}
 tmp <- Generation[Generation[["Trial"]]>1 & Generation[["repetition"]]==0 & Generation[["InstrExpl"]]=="Expl.OneOne" & Generation[["Block.Nr"]]=="first" & Generation[["vR.revealed"]]=="preT" & Generation[["PD instruction"]]=="Exclusion" & Generation[["excluded.id"]]==0,]
 
-library(BayesFactor)
+# library(BayesFactor)
 
 agg <- aggregate(formula = FOC.correct~id, data = tmp, FUN = mean)
 ws.practiced.1 <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "less"), nrow(agg))
@@ -810,30 +860,27 @@ ws.nonpracticed.1 <- apa.t(t.test(x = agg$FOC.correct, mu = 20, alternative = "l
 
 ```
 
-
-
-#### Exclusion
-
 Next, we analyzed whether practice improves suppressing the regular transition in the exclusion task.
-We hypothesized that, without training, participants might not be able to suppress their generation of regular transitions below the chance level in the exclusion task. 
-To test this hypothesis, we compared generation performance for the revealed transitions between the *No-Practice* and *Practice* groups<!--, as depicted in the left panel of Figure \@ref(fig:pdl9-generation-revealed-exclusion)-->.
-The expected below-chance performance was not found in the data from both blocks: 
+We speculated that, without training, participants might not be able to suppress their generation of regular transitions below baseline level in the exclusion task. 
+We compared generation performance for the revealed transitions between the *No-Practice* and *Practice* groups (see Figure \@ref(fig:pdl9-generation-revealed-exclusion), left panel).
+The expected below-baseline performance was not found when aggregating across both blocks:
 Whereas the direction of effects was as expected, there was no deviation from chance, neither for the practice condition, `r bs.practiced`, nor for the no-practice condition, `r bs.nonpracticed`.
-However, the expected pattern was found when only the first block was analyzed: Below-chance performance was found for the practice condition, `r bs.practiced1`, but not for the no-practice condition, `r bs.nonpracticed1`.
+However, the pattern was present in the first block: Below-chance performance was found for the practice condition, `r bs.practiced1`, but not for the no-practice condition, `r bs.nonpracticed1`.
 
 To more directly establish a practice effect, we next turned to the data from the *Transfer* group for a within-subjects comparison of practiced and non-practiced transitions.
-In doing so, we also addressed the transfer hypothesis: 
-If specific training is required for each single transition, the finding of at-chance exclusion performance should replicate for non-practiced transitions in participants who practiced another transition.
-In contrast, if training on one transition transfers to other transitions, we should find below-chance performance for non-practiced transitions in a parallel within-participants comparison in the *Transfer* group.
-<!--As can be seen from the right panel of Figure \@ref(fig:pdl9-generation-revealed-exclusion), -->
-Generation performance was below chance for practiced, `r ws.practiced`, as well as for non-practiced transitions, `r ws.nonpracticed`, indicating transfer of exclusion practice from practiced to non-practiced transitions. 
-^[Analyzing only the first block revealed the same pattern of results: Generation performance was below chance for practiced, `r ws.practiced.1`, as well as for non-practiced transitions, `r ws.nonpracticed.1`.]
-
+In doing so, we also addressed the transfer hypothesis:
+If training on one transition transfers to other transitions, we should find below-chance performance also for non-practiced transitions in the *Transfer* group.
+This was confirmed: Generation performance was below baseline both for practiced, `r ws.practiced` and non-practiced transitions, `r ws.nonpracticed`,
+indicating transfer of exclusion practice from practiced to non-practiced transitions (see Figure \@ref(fig:pdl9-generation-revealed-exclusion), right panel).
+^[
+Analyzing only the first block revealed the same pattern of results: Generation performance was below chance for practiced, `r ws.practiced.1`,
+as well as for non-practiced transitions, `r ws.nonpracticed.1`.
+]
 
 ```{pdl9-aggregate-pd, child = "pdl9_aggregate_pd.rmd", eval = FALSE}
 ```
 
-```{r 'pdl9-generation-nonrevealed', fig.cap = "Proportions of correctly generated non-revealed transitions during PD generation task, excluding repetitions", eval=FALSE}
+```{r 'pdl9-generation-nonrevealed', fig.cap = "Proportions of correctly generated non-revealed transitions during PD generation task, excluding repetitions", eval = FALSE}
 pdl9_generation_non <- Generation[Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["excluded.id"]]==0 & Generation[["vR.revealed"]]=="not", ]
 
 pdl9_generation_non.out <- apa.glm(
@@ -866,19 +913,16 @@ fit <- aov_ez(data = pdl9_generation_non_block1, dv = "FOC.correct", id = "id", 
 
 ```
 
-
 ## Discussion
 
-The experimental manipulations had the expected effects on SRTT performance:
+<!-- The experimental manipulations had the expected effects on SRTT performance: -->
 Participants in Experiment 1 acquired knowledge about the sequence, as expressed in RT and accuracy advantages for regular transitions that increased over SRTT blocks.
-Participants received different amounts of instructed explicit knowledge, and they were able to express this knowledge in the inclusion task, as revealed by a main effect of *Condition* on inclusion performance.
+Participants received different amounts of instructed explicit knowledge, and they were able to express this knowledge in the inclusion task, as revealed by a main effect of *Explicit-knowledge-and-Practice* on inclusion performance.
 Conversely, participants were not able to express their knowledge in the exclusion task, as there was no effect of our explicit knowledge manipulation on exclusion performance.
 This finding violates the monotonicity assumption.
 
-
 <!-- This pattern of results indicates that revealing explicit knowledge was sufficient to increase inclusion performace, but was not sufficient to reliably decrease the number of regular transitions in the exclusion tasks. -->
 <!-- Our manipulation of explicit knowledge robustly affected inclusion performance in the predicted manner; however, participants did not reach ceiling performance for revealed transitions.  -->
-
 
 Analyzing exclusion performance of only revealed transitions, 
 performance differed across groups (i.e., practice conditions),
@@ -886,7 +930,11 @@ suggesting that explicit knowledge was indeed expressed under exclusion instruct
 and that specific exclusion practice was beneficial to implementing these instructions.
 However, even with practice, inclusion performance did not reach ceiling and exclusion performance did not reach floor levels,
 indicating that participants were not able to exhaustively express their explicit knowledge of these transitions in the generation task.
-This pattern of results is also in line with  Wilkinson and Shanks's [-@wilkinson_intentional_2004] speculation that participants adopt perseverative response strategies especially under exclusion instructions; these might be mildly informed by strong explicit knowledge (e.g., in our *transfer* group).
+This pattern of results is also in line with  Wilkinson and Shanks's [-@wilkinson_intentional_2004] speculation that participants adopt perseverative response strategies especially under exclusion instructions; these might be mildly informed by strong explicit knowledge (e.g., in our *Transfer* group).
+
+Importantly, the results showed no effect of practice on inclusion performance of revealed transitions.
+Such an effect would be expected if explicit knowledge revealed to participants after the end of the SRTT differed from explicit knowledge acquired by participants during the SRTT (e.g., because in the latter case, during the remainder of the SRTT participants would have repeated opportunities to practice including their explicit knowledge by intentionally implementing it into a motor pattern).
+The absence of this effect corroborates the validity of the present explicit-knowledge manipulation.
 
 Furthermore, even if (after repeated opportunity to practice) participants were able to refrain from generating some of the revealed transitions, this was not consistently reflected in below-baseline overall generation performance. 
 It can thus be concluded that increasing amounts of explicit knowledge do not necessarily lead to fewer regular transitions being generated;

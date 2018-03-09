@@ -1,4 +1,4 @@
-```{r 'exp3_prepare'}
+```{r 'pdl10-prepare'}
 # source("R/pdl10.export.raw.data.R")
 load("data/pdl10.RData")
 
@@ -26,7 +26,7 @@ A *mixed SOC* material that incorporated both second-order and first-order types
 
 ### Design
 
-The study realized a 3 (*material*: random, mixed SOC, pure SOC) $\times$ 2 (*explicit knowledge*: no transition revealed vs. two transitions revealed) $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
+The study realized a 3 (*Material*: random, mixed SOC, pure SOC) $\times$ 2 (*Explicit knowledge*: no transition revealed vs. two transitions revealed) $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*Block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
 
 
 ### Participants
@@ -71,13 +71,13 @@ To compute the dependent variable in the generation task (i.e., the number of ru
 ### Procedure
 
 The experimental procedure closely followed that of Experiment 1:
-In the acquisition task, participants performed a SRTT consisting of 8 blocks with 180 trials each (for a total of 1,440 responses).
+In the acquisition task, participants performed a SRTT consisting of eight blocks with 180 trials each (for a total of 1,440 responses).
 The response-stimulus interval (RSI) was $0~\text{ms}$.
 Following the SRTT phase, participants were told that stimulus locations during the SRTT followed some underlying sequential structure. 
 They were then asked to try to generate a short sequence of thirty locations that followed this structure.
 
 The generation task followed, with inclusion versus exclusion block order counterbalanced.
-We fixed the number of practice blocks that preceded both inclusion and exclusion task:
+We fixed the number of generation-practice blocks that preceded both inclusion and exclusion task:
 Prior to the inclusion task, three practice blocks involved inclusion instructions;
 prior to the exclusion task, the first and second practice block involved inclusion instructions, and the third involved exclusion instructions.
 Before working on practice blocks, two transitions were revealed to one half of the participants.
@@ -97,22 +97,23 @@ For analyses of reaction times during the acquisition task, we excluded the firs
 For analyses of error rates during the acquisition task, we excluded the first two trials of each block.
 
 Generation task analyses were conducted with the first two trials of a block as well as any response repetitions and reversals excluded.
-Model-based analyses were conducted with models $\mathcal{M}_1$ and $\mathcal{M}_2$ analogous to those used in Experiment 2 (see Appendix for details).
+Model-based analyses were conducted with models $\mathcal{M}_1$ and $\mathcal{M}_2$ analogous to those used in Experiment 2 (see Appendix D for details).
 
 ## Results
 
-We first analyzed reaction times and error rates during the SRT task to determine whether sequence knowledge had been acquired during the task.
+We first analyzed reaction times and error rates during the SRTT to determine whether sequence knowledge had been acquired during the task.
 Next, we analyzed generation task performance using hierarchical PD models
-(descriptive statistics are reported in Appendix C).
+(descriptive statistics and ordinal-PD analyses are reported in Appendices A and B).
 
 
 ### Acquisition task
 
-If participants acquired sequence knowledge from probabilistic materials, we expect a performance advantage for regular over irregular transitions, reflected in reduced RT and/or error rate.
+If participants acquired sequence knowledge from probabilistic materials, 
+we expect a performance advantage for regular over irregular transitions, reflected in reduced RT and/or error rate.
 If this advantage is due to learning, it is expected to increase over SRTT blocks.
-If participants are able to learn lower-order information that is only present in *mixed SOC* material, the advantage is expected to be greater in *mixed SOC* material compared to *pure SOC*.
+If participants are able to learn lower-order information that is only present in *mixed SOC* material,
+the advantage is expected to be greater in *mixed SOC* material compared to *pure SOC*.
 If participants are able to learn second-order information, a performance advantage is to be expected not only in *mixed SOC* but also in *pure SOC* material.
-
 
 #### Reaction times
 
@@ -408,189 +409,12 @@ Deviating from the RT result pattern, this advantage did not reliably increase a
 
 ### Generation task
 
-
-```{r pdl10-generation-1, fig.cap="Mean proportion of regular SOCs during generation task of Experiment 3, excluding repetitions"}
-# SOCs, repetitions excluded
-exp3gen <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["excluded.id"]]==0,]
-
-# ANOVA
-exp3gen.out <- apa.glm(data = exp3gen
-                       , id = "id"
-                       , dv = "SOC.correct"
-                       , between = c("Material", "Condition", "Order")
-                       , within = "PD instruction")
-
-# between <- c("Material","Condition","Order")
-# 
-# tmp2 <- apa.aggregate(data=tmp,factors=c("id",between,"Instruktion"), fun=mean, dv="SOC.correct")
-# tmp2$id <- as.factor(tmp2$id)
-# 
-# # Bayes Factor models
-# # Full model
-# M1 <- lmBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
-# # w/o interaction
-# M2 <- lmBF(formula=SOC.correct~Material+Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
-# # w/o complete 'material' term
-# M3 <- lmBF(formula=SOC.correct~Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
-# 
-# out.BF <- anovaBF(formula = SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom = "id", data = tmp2)
-# topdown1 <- anovaBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2, whichModel="top")
-
-# plots
-# apa_barplot(data=exp3gen,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),ylim=c(0,1),intercept=.2)
-
-# t tests against a baseline
-fun.tmp <- function(x){
-  y <- apa.t(t.test(x,mu=.20),n=sum(!is.na(x)))
-  return(y)
-}
-
-agg<-.aggregate(data=exp3gen,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
-exp3gen.t.out<-tapply(agg[["SOC.correct"]], list(agg[["PD instruction"]], agg[["Condition"]]), FUN = fun.tmp)
-
+```{r 'exp3_load_ic_fit', cache = FALSE}
+load(file = "hierarchical_pd/exp3_stan_summary.RData")
 ```
 
-
-
-```{r pdl10-generation-2, fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions and reversals", eval=FALSE, results='hide'}
-# SOCs, repetitions and reversals excluded
-exp3gen2 <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]] > 2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0,]
-
-# ANOVA
-exp3gen2.out <- apa.glm(
-              data = exp3gen2
-              , id = "id"
-              , dv = "SOC.correct"
-              , between = c("Material", "Condition", "Order")
-              , within = c("PD instruction")
-)
-
-tmp <- exp3gen2[exp3gen2$Instruktion=="Exklusion", ]
-agg <- aggregate(formula = SOC.correct ~ Material + Condition + Order + id, FUN = mean, data = tmp)
-
-# BF <- anovaBF(formula = SOC.correct ~ Material * Condition + Order, data = agg, whichModels = "top")
-
-# BF_rand <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="rand", ], whichModels = "top")
-# BF_fsoc <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="fsoc", ], whichModels = "top")
-# BF_psoc <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="psoc", ], whichModels = "top")
-
-full <- lmBF(formula = SOC.correct ~ Material * Condition * Order, data = agg, iterations = 3e6)
-null <- lmBF(formula = SOC.correct ~ Material * Order + Condition:Material + Condition:Order + Material:Condition:Order, data = agg)
-null <- lmBF(formula = SOC.correct ~ Material * Order, data = agg)
-
-# two possible orderings, so prior odds 1/2
-prior_odds <- 1/2
-bf_restricted_against_full <- mean(posterior(full, iter = 1e5)[, "Condition-No transition revealed"]>0) / prior_odds
-# This is the bayes factor for delta>=0 against delta<0 (prediction of ordinal pd)
-bf_restricted_against_null <- bf_restricted_against_full * as.vector(full)/as.vector(null)
-1/bf_restricted_against_null
-
-apa_beeplot(data = agg, id = "id", dv = "SOC.correct", factors = c("Material", "Condition", "Order"))
-aov_ez(data = agg, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"))
-
-# between <- c("Material","Condition","Order")
-#
-# tmp2 <- apa.aggregate(data=tmp,factors=c("id",between,"Instruktion"), fun=mean, dv="SOC.correct")
-# tmp2$id <- as.factor(tmp2$id)
-#
-# tmp <- exp3gen2[exp3gen2[["revealed"]]==1, ]
-# agg <- apa.aggregate(data = tmp, factors = c("id", "Material", "PD instruction"), dv = "SOC.correct", fun = mean)
-# ## paarweise ausschlie?en
-# for (i in unique(agg$id)) {
-#   agg[agg$id==i, "full"] <-ifelse(sum(agg$id==i)==2, 1, 0)
-# }
-# agg <- agg[agg$full==1, 1:4]
-#
-#
-#
-# plot(x = c(0, 1), y = c(0, 1), type="n", main = "revealed", xlab="p(korrekt|Inklusion)",ylab="p(korrekt|Exklusion)")
-# text(
-#   x = agg[agg$`PD instruction`=="Inclusion", "SOC.correct"]
-#   , y = agg[agg$`PD instruction`=="Exclusion", "SOC.correct"]
-#   , labels = agg[agg$`PD instruction`=="Exclusion", "id"]
-#   , cex = 1
-# )
-# lines(x=c(0,1), y = c(0,1))
-
-# agg[agg$id %in% c(153, 58, 122, 84, 37), ]
-
-
-# # Bayes Factor models
-# topdown1 <- anovaBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2, whichModel="top")
-#
-# # Full model
-# M1 <- lmBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
-# # w/o interactions
-# M2 <- lmBF(formula=SOC.correct~Material+Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
-# # w/o complete 'material' term
-# M3 <- lmBF(formula=SOC.correct~Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
-# # M3/M1
-# # w/o complete 'PD instruction' term
-# M4 <- lmBF(formula=SOC.correct~Material*Order+id, whichRandom="id", data=tmp2)
-# # M1/M4
-
-
-# separate analyses for *condition*
-exp3gen2.out.nt <- apa.glm(data=subset(exp3gen2, Condition=="No transition revealed")
-                  ,id="id"
-                  ,dv="SOC.correct"
-                  ,between=c("Material","Order")
-                  ,within=c("PD instruction"))
-exp3gen2.out.tt <- apa.glm(data=subset(exp3gen2, Condition=="Two transitions revealed")
-                  ,id="id"
-                  ,dv="SOC.correct"
-                  ,between=c("Material","Order")
-                  ,within=c("PD instruction"))
-
-exp3gen2.out.ex <- apa.glm(data=exp3gen2[exp3gen2[["PD instruction"]]=="Exclusion",]
-                  ,id="id"
-                  ,dv="SOC.correct"
-                  ,between=c("Material","Condition","Order"))
-
-# plots
-# apa_barplot(data=exp3gen2,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),intercept=.25,ylim=c(0,1))
-
-# t tests against a baseline
-fun.tmp <- function(x){
-  y <- apa.t(t.test(x,mu=.25),n=sum(!is.na(x)))
-  return(y)
-}
-
-agg<-.aggregate(data=exp3gen2,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
-exp3gen2.t.out<-tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Condition"]]),fun.tmp)
-
-# 
-# We conducted a `r exp3gen2.out$name` ANOVA with repeated measures on the last factor;
-# it revealed
-# a main effect of *condition*, `r exp3gen2.out[["Condition"]]` (more regular transitions were generated if sequence knowledge had been revealed);
-# a main effect of *PD instruction*, `r exp3gen2.out[["PD_instruction"]]` (more regular transitions were generated in *inclusion* than in exclusion blocks);
-# and an interaction of *condition* and *PD instruction*, `r exp3gen2.out[["Condition_PD_instruction"]]`, reflecting the finding that the *PD instruction* effect was much greater if explicit sequence knowledge had been revealed, `r exp3gen2.out.tt[["PD_instruction"]]`;
-# as compared to when no explicit knowledge was revealed, `r exp3gen2.out.nt[["PD_instruction"]]`.
-# The effect of *material* was again not significant, `r exp3gen2.out[["Material"]]`, suggesting that implicit knowledge acquired during the SRT was not expressed in the generation task.
-# 
-# To establish the relative performance patterns across inclusion (I), exclusion (E), and baseline (B) conditions, we computed a set of pairwise comparisons: *t* tests against a fixed baseline of $B = .25$ revealed that inclusion performance was above chance for both the *no-transition-revealed* group, `r exp3gen2.t.out["Inclusion","No transition revealed"]`,
-# and the *two-transitions-revealed* group, `r exp3gen2.t.out["Inclusion","Two transitions revealed"]`.
-# Exclusion performance was at chance in the the *no-transition-revealed* group, `r exp3gen2.t.out["Exclusion","No transition revealed"]`,
-# but above chance in the *two-transitions-revealed* group, `r exp3gen2.t.out["Exclusion","Two transitions revealed"]`.
-# 
-# Taken together, for the control condition in which no transitions were revealed, results showed $I > E$, $I > B$ and $E = B$ -- a pattern implicating the presence of explicit but the *absence* of implicit knowledge.
-# That is, excluding reversals eliminated the pattern suggesting the presence of implicit knowledge -- which would have been plausible at least for the *mixed SOC* and psoc groups -- but left a pattern that suggested the presence of explicit knowledge -- an interpretation unlikely to be correct, given that explicit knowledge was not conveyed to these participants.
-# For the condition in which two transitions were revealed, we obtained $I > E$, $I > B$ and $E > B$ -- a pattern typically taken to indicate the presence of both explicit *and implicit* knowledge.
-# In other words, in contrast to the control condition, revealing *explicit* knowledge about two transitions elicited the PD signature of evidence for *implicit* knowledge.
-# Note that this is precisely what one would expect if explicit knowledge is not exhaustively excluded, as suggested by our previous results.
-
-
-```
-
-
-
-
-```{r 'pdl10_load_ic_fit', cache = FALSE}
-load(file = "hierarchical_pd/pdl10_stan_summary.RData")
-```
-
-```{r 'pdl10_load_posteriors', cache = FALSE}
-load(file = "hierarchical_pd/pdl10/pd_Halt_cdfs.RData")
+```{r 'exp3_load_posteriors', cache = FALSE}
+load(file = "hierarchical_pd/exp3/pd_Halt_cdfs.RData")
 
 a_non <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
 a_rev <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_rev(0)), "$")
@@ -601,7 +425,7 @@ ci.a_non <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_o
 ci.a_rev <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$a_rev, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
 ci.c_rev <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$c_rev, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
 
-save(a_non, a_rev, c_rev, ci.a_non, ci.a_rev, ci.c_rev, file = "pdl10_CIs_ps.RData")
+save(a_non, a_rev, c_rev, ci.a_non, ci.a_rev, ci.c_rev, file = "exp2_CIs_ps.RData")
 DIC_1vs2 <- paste0("$\\Delta \\textrm{DIC}_{\\mathcal{M}_1 - \\mathcal{M}_2} = ", papaja::printnum(M1$num$DIC - M2$num$DIC, digits = 2, big.mark = "{,}"), "$")
 
 ```
@@ -618,13 +442,13 @@ In contrast, the model checks for model $\mathcal{M}_2$ revealed significant dev
 `r M2$fit`
 
 Model $\mathcal{M}_1$ attained a DIC value of `r M1$ic$DIC` and outperformed model $\mathcal{M}_2$ that attained a DIC value of `r M2$ic$DIC`, `r DIC_1vs2`.
-This implies that our auxiliary assumptions that we introduced to make model $\mathcal{M}_1$ identifiable (i.e., that participants did not acquire explicit knowledge during training, and that revealing explicit knowledge about a transition did not affect implicit knowledge) were less problematic than the invariance assumption.
+This implies that our auxiliary assumptions
+<!-- that we introduced to make model $\mathcal{M}_1$ identifiable (i.e., that participants did not acquire explicit knowledge during training, and that revealing explicit knowledge about a transition did not affect implicit knowledge) -->
+were less problematic than the invariance assumption.
 Moreover, the standard PD model enforcing the invariance assumption was not able to account for the data.
 
-
-
 ```{r pdl10-parameter-estimates, fig.width = 8.8, fig.height = 5, fig.cap = "Parameter estimates from Experiment 3. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/pdl10/pd_Halt_posteriors.RData")
+load("hierarchical_pd/exp3/pd_Halt_posteriors.RData")
 par(mfrow = c(1, 2))
 apa_beeplot(
   data = means_df[means_df$Parameter=="a",]
@@ -647,9 +471,8 @@ apa_beeplot(
 )
 ```
 
-
 ```{r pdl10-posterior-differences, fig.height = 5, fig.width = 8.8, fig.cap = "Posterior differences $A_I - A_E$ and $C_I - C_E$ in Experiment 3, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
-load(file = "hierarchical_pd/pdl10/posteriors_for_plot.RData")
+load(file = "hierarchical_pd/exp3/posteriors_for_plot.RData")
 N <- 171
 N2 <- 82
 par(mfrow = c(1, 3))
@@ -735,11 +558,8 @@ par(mfrow = c(1, 1))
 
 Figure \@ref(fig:pdl10-parameter-estimates) shows the parameter estimates obtained from model $\mathcal{M}_1$.
 Figure \@ref(fig:pdl10-posterior-differences) shows that the invariance assumption for controlled processes was again violated with $C_I > C_E$, `r ci.c_rev`, Bayesian `r c_rev`.
-The invariance violation was also obtained with model $\mathcal{M}_{1R}$, showing that it is robust to the specific modeling assumptions (see Appendix A).
+The invariance violation was also obtained with model $\mathcal{M}_{1R}$, showing that it is robust to the specific modeling assumptions (see Appendix C).
 In contrast to the results of Experiment 2, the invariance assumption for automatic processes was not violated but could be upheld, `r ci.a_non`, Bayesian `r a_non` for non-revealed transitions and `r ci.a_rev`, `r a_rev` for revealed transitions.
-
-
-
 
 ```{r 'exp3_model_frequency_files', eval = FALSE}
 # make model frequency files
@@ -912,10 +732,6 @@ inv_c_two_trans_rev <- apa.g2(f.b_two_trans_rev_i, f.b_two_trans_rev)
 # Taken together, we have again obtained strong evidence for a violation of the invariance assumption for controlled/explicit knowledge.
 # Invariance of implicit parameters was violated in the overall analysis, but could be upheld if only the data from the first block, or only the data from the no-transitions-revealed condition, were considered.
 ```
-
-
-
-
 
 ```{r 'exp3_nonrevealed_1', fig.cap="Mean proportion of correct SOCs during generation task of Experiment 3, excluding repetitions, only non-revealed transitions", eval=FALSE}
 ## SOCs, repetitions and reversals excluded, only non-revealed transitions
@@ -1136,16 +952,16 @@ exp3gen_rev.t.out <- tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],ag
 
 ## Discussion
 
-The experimental manipulations had the expected results:
+<!-- The experimental manipulations had the expected results: -->
 Based on the SRTT results, we can conclude that participants acquired some (albeit weak) sequence knowledge during learning.
 In addition, generation performance was clearly affected by instructed explicit knowledge, as revealed by the clearly above-zero estimates of the $C$ parameters for revealed transitions.
 
 An extended process-dissociation model $\mathcal{M}_1$ revealed a violation of the invariance assumption for controlled processes with $C_I > C_E$.
 The invariance assumption for automatic processes could be upheld.
 Model $\mathcal{M}_1$ rested on two auxiliary assumptions:
-It was assumed that controlled processes were not affected by learning material, and that automatic processes were not affected by the manipulation of explicit knowledge (i.e., revealing a transition).
+It was assumed that controlled processes were not affected by learning material, and that automatic processes were not affected by the manipulation of explicit knowledge.
 Both assumptions found support in the current data as they did not harm model fit.
-Importantly, when comparing model $\mathcal{M}_1$ to a standard process-dissociation model $\mathcal{M}_2$ that did not impose these assumptions but left the invariance assumption intact, model $\mathcal{M}_1$ was strongly favored by the DIC.
+Moreover, model selection strongly favored model $\mathcal{M}_1$ over a standard process-dissociation model $\mathcal{M}_2$ that did not impose these assumptions.
 
 Regarding our secondary goal to explore whether different amounts of sequence knowledge are acquired from mixed versus pure second-order conditional material,
 we did not find evidence for a difference between these two types of material in the SRTT.

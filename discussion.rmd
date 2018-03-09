@@ -46,7 +46,7 @@ We believe these findings of an inclusion-exclusion difference in estimates of t
 First, the finding was inconsistent across studies, and there are multiple possible causes of this inconsistency:
 The lack of a violation in Experiment 3 may be due to specific properties of the material, or it may be due to the fact that sequence knowledge levels in that study were too low for differences in its expression to be measurable.
 
-Second, the violation was relatively small (i.e., the $A_{I}-A_{E}$ difference ranged between .01 and .03 in Exp.2; and between .00 and .03 in Exp.1, see Appendix B).
+Second, the violation was relatively small (i.e., the $A_{I}-A_{E}$ difference ranged between .01 and .03 in Exp.2; and between .00 and .03 in Exp.1, see Appendix C).
 In the absence of controlled influences, this would be equivalent to a difference between inclusion and exclusion performance of approximately 2 percentage points --- an effect barely noticeable under typical conditions.
 
 Third, it is unclear whether the observed invariance violation of parameter $A$ reflects implicit knowledge at all.
@@ -64,7 +64,7 @@ However, we cannot exclude the possibility that small amounts of explicit knowle
 This interpretation could also account for the lack of such an effect in Experiment 3 given that explicit knowledge was less likely to be learned from the more complex second-order conditional material used in that study.
 If this were true, then any differences between inclusion and exclusion that were attributed by the model to an invariance violation of the implicit process may in fact have been a consequence of residual explicit knowledge that was not reflected in our debriefing questionnaire (perhaps due to participants' conservative reporting criteria).
 
-To further address this possibility, we conducted additional model analyses for Experiments 2 and 3 (reported in Appendix B) that aimed at estimating the amount of this residual explicit knowledge;
+To further address this possibility, we conducted additional model analyses for Experiments 2 and 3 (reported in Appendix C) that aimed at estimating the amount of this residual explicit knowledge;
 we still found a violation of invariance for the automatic process, but of different direction --- a finding that we consider to be an artifact of the auxiliary modeling assumptions.
 This limitation is another reason for caution in interpreting the above finding as evidence for a violation of invariance of the automatic process.
 Note that it does not limit the interpretation of our main finding of the invariance violation of the controlled process, which was robust against changes in auxiliary assumptions.
@@ -94,6 +94,48 @@ Indeed, it is likely that strong implicit knowledge is a precondition for acquir
 Instructed and acquired explicit knowledge are therefore likely to differ in the degree to which they are correlated with implicit knowledge.
 If participants are better able to control acquired than instructed explicit knowledge, this would then be due, paradoxically, to the presence of acquired implicit knowledge.
 Finally, even if that was the case, note that this would not salvage the PD method because a strong correlation between explicit and implicit knowledge would violate the independence assumption, thereby posing another problem for its validity.
+
+### Boundary conditions of the process-dissociation approach may be violated
+
+Jacoby and colleagues [@jacoby_separating_1993; @toth_toward_1994; @jacoby_defense_1997] emphasized the importance of
+avoiding floor effects when applying the process-dissociation approach.
+<!-- In our Experiments 1 and 2 that used first-order conditional material, we found below-chance exclusion performance for a subset of revealed transitions. -->
+In the present studies, floor effects may be present if participants succeed in avoiding to generating any regular transitions under exclusion instructions.
+In such cases, parameter estimates of controlled and automatic processes may be biased
+<!-- Considering that baseline was at $20\%$ in Experiments 1 and 2, one might wonder if floor effects in exclusion conditions could have biased our parameter estimates--> 
+and might have artifactually produced an invariance violation for controlled processes (i.e., $C_I > C_E$).
+We would argue this is not the case in our data for the following reasons:
+<!-- 1. there at all? -->
+First, generation performance in the present studies fails to show evidence for floor effects (i.e., both low overall levels as well as reduced variability):
+Regarding overall levels, mean performance in most conditions deviated no more than $\pm 1 \mathit{SD}$ from chance baseline (i.e., $20\%$ in Experiments 1 and 2, and $25\%$ in Exp.3). 
+Regarding variability, the cells with the lowest overall performance (i.e., with the greatest risk of floor effects) showed variability comparable to that exhibited by the other conditions.
+While we found below-chance exclusion performance for revealed transitions in some conditions of our experiments (i.e., successful exclusion of the revealed transitions), the invariance violation for controlled processes was replicated not only in these conditions, but across all conditions that involved non-zero explicit knowledge.
+Importantly, it also replicated in Experiment 3 that realized a higher baseline level of $25\%$:
+In that study, revealed transitions were generated at rates of 25-30% <!--$24.59$ to $29.92 \%$--> under exclusion conditions, 
+rates that are clearly unconspicuous of reflecting floor effects.
+
+<!-- 2. Mechanism of estimation bias: pooling as a solution -->
+Second, while Jacoby and colleagues warned about floor effects, they also described the mechanism by which zero counts pose a threat to the validity of the estimation procedure, and proposed means to deal with this problem:
+If individual participants' data are analyzed separately,
+floor effects might be accompanied by inflated levels of zero counts in the exclusion condition (i.e., perfect exclusion) for some participants.
+The original PD equations would then lead to an estimate of $A=0$ for this participant;
+therefore, averaging over individual $A$ parameters would lead to an underestimation of the *automatic* parameter.
+As a means to circumvent this estimation problem, @toth_toward_1994 proposed complete pooling (i.e., aggregate analysis) of data.
+In our studies, we followed and extended this recommendation by utilizing a Bayesian hierarchical multinomial model for estimating parameters;
+while allowing for individual differences between parameter estimates,
+a participant's parameter estimate is not only affected by the data that are directly linked to this estimate, but also by the higher-level distribution for this parameter; the influence of outlier values (such as zero counts provided by some individuals) on the parameter estimates is thus minimized.
+<!-- 3. Direction of a possible estimation bias -->
+Another type of estimation bias may arise if our data contained otherwise inflated levels of zero counts;
+this would suggest higher levels of control ability and lead to an *over*estimation of $C$ parameters for exclusion conditions.
+Such inflated levels of zero counts would therefore work against our main invariance-violation finding that explicit knowledge remains underutilized under exclusion conditions (i.e., $C_I > C_E$).
+<!-- Third, the finding of $C_I > C_E$ consistently replicated across three experiments that realized different levels of baseline exclusion performance -->
+<!-- (In Experiment 3, the revealed transitions were generated at rates of $24.59$ to $29.92 \%$ under exclusion conditions). -->
+<!-- It also replicated across a multitude of experimental conditions (with the only exception of those conditions where the absence of explicit sequence knowledge was intended). -->
+
+<!-- 4. Monotonicity assumption is also violated -->
+Finally, our conclusion that explicit knowledge remains underutilized under exclusion is not only based on analyses of the parametric PD model (which are susceptible to biased parameter estimates due to floor effects) but was consistently corroborated by the results from ordinal-PD analyses that did not depend on estimates based on the parametric PD equations:
+Across all three studies, we consistently found a violation of the monotonicity assumption in the sense that explicit knowledge does not reliably decrease the proportion of regular transitions in exclusion conditions (see Appendices A and B).
+
 
 ## Implications
 

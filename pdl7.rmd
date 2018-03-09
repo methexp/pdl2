@@ -3,13 +3,44 @@
 #source("R/pdl7.export.raw.data.R")
 load("data/pdl7.RData")
 
-
 Acquisition$error <- 100 * Acquisition$error
 Generation$FOC.correct <- 100 * Generation$FOC.correct
 
 excludes <- c()
 Acquisition[["excluded.id"]] <- as.integer(Acquisition[["id"]] %in% excludes)
 Generation[["excluded.id"]] <- as.integer(Generation[["id"]] %in% excludes)
+
+```
+
+```{r pdl7-required-practiced, eval = FALSE}
+# ------------------------------------------------------------------------------
+# This gives the median number of practice blocks required:
+
+pass <- aggregate(formula = (Reaktion!=0)/12 ~ InstrExpl + Instruktion + id, data = Daten.PW, FUN = sum)
+colnames(pass)[4] <- "n"
+out <- papaja::apa_beeplot(data = pass[pass$InstrExpl=="Expl.One", ], factors = c("Instruktion"), id = "id", dv = "n", tendency = median)
+# out$y
+
+# Instruktion is instruction for the specific practice block
+Daten.PW$Instruktion_main_block <- NA
+Daten.PW$Instruktion_main_block[Daten.PW$Reihenfolge=="InEx" & Daten.PW$Block.Nr%in%c(1, 2)] <- "Inclusion"
+Daten.PW$Instruktion_main_block[Daten.PW$Reihenfolge=="ExIn" & Daten.PW$Block.Nr%in%c(1, 2)] <- "Exclusion"
+Daten.PW$Instruktion_main_block[Daten.PW$Reihenfolge=="InEx" & Daten.PW$Block.Nr%in%c(3, 4)] <- "Exclusion"
+Daten.PW$Instruktion_main_block[Daten.PW$Reihenfolge=="ExIn" & Daten.PW$Block.Nr%in%c(3, 4)] <- "Inclusion"
+
+Daten.PW$vR[2:nrow(Daten.PW)] <- Daten.PW$Reaktion[1:(nrow(Daten.PW)-1)]
+Daten.PW$vR[Daten.PW$Trial.Nr==1] <- NA
+
+pass <- aggregate(formula = (Reaktion!=0)/12 ~ InstrExpl + Instruktion + Instruktion_main_block + id, data = Daten.PW, FUN = sum)
+pass <- pass[pass$InstrExpl=="Expl.One", ]
+# cbind(pass$n[pass$Instruktion=="Inklusion"&pass$Instruktion_main_block=="Exclusion"], pass$n[pass$Instruktion=="Exklusion"&pass$Instruktion_main_block=="Exclusion"])
+colnames(pass)[5] <- "n"
+# out <- papaja::apa_beeplot(data = pass[pass$InstrExpl=="Expl.One", ], factors = c("Instruktion_main_block", "Instruktion"), id = "id", dv = "n", tendency = mean)
+# out$y
+# 
+# mean(pass$n[pass$Instruktion=="Inklusion"&pass$Instruktion_main_block=="Exclusion"]<3)
+# mean(pass$n[pass$Instruktion=="Exklusion"&pass$Instruktion_main_block=="Exclusion"]<2)
+# mean(pass$n[pass$Instruktion=="Inklusion"&pass$Instruktion_main_block=="Inclusion"]<4)
 ```
 
 Experiment 2 applied the parametric PD model and tested the invariance assumption for automatic and controlled processes using materials with first-order conditional regularities.
@@ -21,7 +52,7 @@ After the SRTT, we informed one half of participants about one of the six transi
 
 ### Design
 
-The study realized a 2 (*material*: random vs. probabilistic) $\times$ 2 (*explicit knowledge*: no transition revealed vs. one transition revealed) $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
+The study realized a 2 (*Material*: random vs. probabilistic) $\times$ 2 (*Explicit knowledge*: no transition revealed vs. one transition revealed) $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*Block order*: inclusion first vs. exclusion first) design with repeated measures on the *PD instruction* factor.
 
 ### Participants
 
@@ -62,14 +93,15 @@ For the group that was instructed about a regular transition, the *criterion seq
 
 ### Procedure
 
-During an SRTT consisting of 8 blocks with 144 trials each (for a total of 1,152 responses), participants were trained on either random or probabilistic sequences.
+During an SRTT consisting of eight blocks with 144 trials each (for a total of 1,152 responses), participants were trained on either random or probabilistic sequences.
 After the SRTT, participants were informed about the underlying sequential structure of stimulus locations and asked to generate a short sequence of six key presses that followed this (unspecified) structure.
 
 The generation task followed, with counterbalanced order of inclusion versus exclusion blocks.
-Prior to the inclusion task, two practice blocks involved inclusion instructions;
-prior to the exclusion task, the first practice block was performed under inclusion instructions and the second practice block was performed under exclusion instructions.
+Prior to the inclusion task, two generation-practice blocks involved inclusion instructions;
+prior to the exclusion task, the first generation-practice block was performed under inclusion instructions and the second generation-practice block was performed under exclusion instructions.
 If participants who were explicitly informed about one transition failed to include (exclude) the revealed transition in practice blocks, they were informed that they did something wrong;
-the already revealed transition was again presented and two additional practice blocks had to be performed.
+the already revealed transition was again presented and two additional practice blocks had to be performed
+(if a participant failed to include the transition during the first practice block, they were immediately presented with the sequence knowledge, again).
 This procedure was repeated until the revealed transition was successfully included (excluded) in two consecutive practice blocks (in contrast to Experiment 1, where the number of practice blocks was held constant).
 Upon completing the computerized task, participants answered the same questionnaire as in Experiment 1.
 
@@ -122,8 +154,7 @@ For analyses of reaction times during the acquisition task,
 we excluded the first trial of each block as well as trials with errors, trials succeeding an error, reactions faster than 50 ms and those slower than 1,000 ms.
 For analyses of error rates during the acquisition task, we excluded the first trial of each block.
 
-Generation task analyses were conducted with the first trial of a block as well as any response repetitions excluded
-(descriptive statistics are reported in Appendix C).
+Generation task analyses were conducted with the first trial of a block as well as any response repetitions excluded.
 For the model-based analyses, we used hierarchical Bayesian extensions of the process-dissociation model [@rouder_introduction_2005; @rouder_hierarchical_2008; @klauer_hierarchical_2010].
 We estimated model $\mathcal{M}_1$ that extended the traditional process-dissociation model by allowing for a violation of the invariance assumption:
 Controlled and automatic processes were allowed to vary as a function of instruction (inclusion vs. exclusion).
@@ -162,7 +193,7 @@ $\delta_{im}^{(C)}$ is the $i$th participant's deviation from his or her group's
 
 Accordingly, $\mu_{jkm}^{(A)}$ is the fixed effect of transition type $j$, material $k$, and *PD instruction* condition $m$ on automatic processes, and
 $\delta_{ijm}^{(A)}$ is the $i$th participant's deviation from the corresponding mean.
-Priors on parameters are given in the Appendix B.
+Priors on parameters are given in the Appendix D.
 
 This specification imposes two auxiliary assumptions to the model:
 First, it is assumed that controlled processes $C$ are set to zero for nonrevealed transitions (i.e., $C=0$ for $j=2$), in other words, we assumed that no explicit knowledge has been acquired during the SRT phase.
@@ -212,8 +243,9 @@ if the posterior does not contain zero, it can be concluded that the respective 
 
 ## Results
 
-We first analyzed the performance data from the SRT task to determine whether sequence knowledge had been acquired during the task.
-Next, we analyzed generation task performance using hierarchical PD models.
+We first analyzed the performance data from the SRTT to determine whether sequence knowledge had been acquired during the task.
+Next, we analyzed generation task performance using hierarchical PD models
+(descriptive statistics and ordinal-PD analyses are reported in Appendices A and B).
 
 ### Acquisition task
 
@@ -222,7 +254,7 @@ If this advantage is due to learning, it is expected to increase over SRTT block
 
 #### Reaction times
 
-```{r 'pdl7-acquisition-rt', fig.cap="RTs during acquisition phase of Experiment 2, split by *material* and *FOC transition status*. Error bars represent 95% within-subjects confidence intervals."}
+```{r 'pdl7-acquisition-rt', fig.cap = "RTs during acquisition phase of Experiment 2, split by *material* and *FOC transition status*. Error bars represent 95% within-subjects confidence intervals."}
 
 
 exp1_acq_RT <- Acquisition[Acquisition[["excluded.id"]]==0&Acquisition[["Trial"]] > 1 & Acquisition[["error"]]==0 & Acquisition[["vR.error"]]==0
@@ -278,7 +310,7 @@ showing that the RT difference between regular and irregular transitions increas
 
 #### Error rates
 
-```{r pdl7-acquisition-error, fig.cap="Error rates during acquisition phase of Experiment 2, split by *material* and *FOC transition status*. Error bars represent 95% within-subjects confidence intervals."}
+```{r pdl7-acquisition-error, fig.cap = "Error rates during acquisition phase of Experiment 2, split by *material* and *FOC transition status*. Error bars represent 95% within-subjects confidence intervals."}
 
 ## Error rates
 exp1_acq_err <- Acquisition[Acquisition[["Trial"]]>1 & Acquisition[["excluded.id"]]==0, ]
@@ -325,9 +357,7 @@ Importantly, the interaction of *block number* and *FOC transition status* was s
 
 ### Generation task
 
-<!-- #### Hierarchical model analyses -->
-
-In a second step, we investigated how learned knowledge was expressed in the generation task (descriptive statistics are reported in Appendix C).
+In a second step, we investigated how learned knowledge was expressed in the generation task.
 We analyzed generation performance by fitting two hierarchical models, $\mathcal{M}_1$ and $\mathcal{M}_2$.
 $\mathcal{M}_1$ allows the automatic and controlled processes to vary between inclusion and exclusion, but it assumes that participants acquired only implicit knowledge during the SRTT, and that revealing explicit knowledge after the SRTT did not affect implicit knowledge.
 $\mathcal{M}_2$ is a hierarchical extension of the classical PD model that enforces the invariance assumption.
@@ -337,7 +367,7 @@ Parameter estimates from model $\mathcal{M}_1$ were used to address the invarian
 
 
 ```{r 'pdl7_load_ic_fit', cache = FALSE}
-load("hierarchical_pd/pdl7_stan_summary.RData")
+load("hierarchical_pd/exp1_stan_summary.RData")
 
 DIC_1vs2 <- paste0("$\\Delta \\textrm{DIC}_{\\mathcal{M}_1 - \\mathcal{M}_2} = ", papaja::printnum(M1$num$DIC - M2$num$DIC, digits = 2, big.mark = "{,}"), "$")
 # DIC_1vs2a <- papaja::printnum(M2a$num$DIC - M1$num$DIC, digits = 2, big.mark = ",")
@@ -346,7 +376,7 @@ DIC_1vs2 <- paste0("$\\Delta \\textrm{DIC}_{\\mathcal{M}_1 - \\mathcal{M}_2} = "
 ```
 
 ```{r 'pdl7_load_posteriors', cache = FALSE}
-load(file = "hierarchical_pd/pdl7/pd_Halt_cdfs.RData")
+load(file = "hierarchical_pd/exp1/pd_Halt_cdfs.RData")
 
 a_non <- paste0("$p ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
 a_rev <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_rev(0)), "$")
@@ -357,7 +387,7 @@ ci.a_non <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_o
 ci.a_rev <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$a_rev, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
 ci.c_rev <- paste0("95% CI [", paste(papaja::printnum(quantile(cdfs$difference_of_means$c_rev, c(.025, .975)), gt1 = FALSE), collapse = ", "), "]")
 
-save(a_non, a_rev, c_rev, ci.a_non, ci.a_rev, ci.c_rev, file = "pdl7_CIs_ps.RData")
+save(a_non, a_rev, c_rev, ci.a_non, ci.a_rev, ci.c_rev, file = "exp1_CIs_ps.RData")
 ```
 
 The model checks for model $\mathcal{M}_1$ were satisfactory,
@@ -369,10 +399,8 @@ Model $\mathcal{M}_1$ attained a DIC value of `r M1$ic$DIC` and clearly outperfo
 This implies that the auxiliary assumptions we introduced to $\mathcal{M}_1$ were much less problematic than the invariance assumption.
 Moreover, the standard PD model enforcing the invariance assumption was not able to account for the data.
 
-
-
-```{r pdl7-parameter-estimates, fig.width = 8.8, fig.height = 5, fig.cap = "Parameter estimates from Experiment 2. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/pdl7/pd_Halt_posteriors.RData")
+```{r pdl7-parameter-estimates, fig.cap = "Parameter estimates from Experiment 2. Error bars represent 95% confidence intervals."}
+load("hierarchical_pd/exp1/pd_Halt_posteriors.RData")
 
 par(mfrow = c(1, 2))
 apa_beeplot(
@@ -396,14 +424,10 @@ apa_beeplot(
 )
 ```
 
+```{r pdl7-posterior-differences, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 2, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 
 
-
-
-```{r pdl7-posterior-differences, fig.height = 5, fig.width = 8.8, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 2, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
-
-
-load(file = "hierarchical_pd/pdl7/posteriors_for_plot.RData")
+load(file = "hierarchical_pd/exp1/posteriors_for_plot.RData")
 library(papaja)
 
 par(mfrow = c(1, 3))
@@ -497,403 +521,7 @@ $A_I >  A_E$, `r ci.a_non`, and a Bayesian `r a_non` (`r a_rev` for revealed tra
 The invariance assumption for the controlled process was also violated with
 $C_I >  C_E$, `r ci.c_rev`, and a Bayesian `r c_rev`.
 
-```{r pdl7-generation, results='hide'}
-exp1gen <- Generation[Generation[["excluded.id"]]==0 & Generation[["repetition"]]==0 & Generation[["Trial"]]>1, ]
 
-exp1gen.out <- apa.glm(id = "id", dv = "FOC.correct", data = exp1gen, between = c("Material", "Condition", "Order"), within = c("PD instruction"))
-#knitr::kable(exp1gen.out$table, caption = "Exp.1, Generation performance (full dataset)")
-
-# # BF analysis
-library(BayesFactor)
-par(mfrow = c(1, 1))
-
-#############
-##
-## Exclusion
-##
-#############
-agg <- papaja:::fast_aggregate(data = exp1gen[exp1gen$Instruktion=="Exklusion", ], dv = "FOC.correct", factors = c("id", "Condition", "Order", "Material"), fun = mean)
-
-# apa_beeplot(data = agg, id = "id", factors = c("Material", "Condition", "Order"), dv = "FOC.correct", ylim = c(0, 100))
-# apa_beeplot(data = agg, id = "id", factors = c("Material", "Condition"), dv = "FOC.correct", ylim = c(0, 100))
-
-# BF <- anovaBF(formula = FOC.correct ~ Material * Condition * Order, data = agg, whichModels = "all", iterations = 1e4)
-# sort(BF)
-full <- lmBF(formula = FOC.correct ~ Material * Condition * Order, data = agg)
-null <- lmBF(formula = FOC.correct ~ Material * Order + Condition:Order + Condition:Material + Condition:Material:Order, data = agg)
-
-# full <- lmBF(formula = FOC.correct ~ Material + Condition + Material:Condition:Order, data = agg)
-# null <- lmBF(formula = FOC.correct ~ Material + Material:Condition:Order, data = agg)
-
-# prior odds are 1/2, as there are two possible orderings
-bf_restriction_against_full <- mean(posterior(full, index = 1, iter = 1e4)[, "Condition-No transition revealed" ]>0) / (1/2)
-## Convert bf1 to a number so that we can multiply it
-bf_full_against_null = as.vector(full/null)
-## Use transitivity to compute desired Bayes factor
-bf_restriction_against_null = bf_restriction_against_full * bf_full_against_null
-
-1/bf_restriction_against_null
-
-
-# no_cond <- lmBF(formula = FOC.correct ~ Material * Order + Material:Condition:Order, data = agg)
-# no_cond_plus <- lmBF(formula = FOC.correct ~ Material * Order * Material:Condition:Order + Condition, data = agg)
-# no_cond/no_cond_plus
-
-# playing some games with item effects
-#
-# agg <- papaja:::fast_aggregate(data = exp1gen[exp1gen$Instruktion=="Exklusion", ], dv = "FOC.correct", factors = c("id", "Condition", "Order", "Material", "vR"), fun = mean)
-# agg$vR <- as.factor(agg$vR)
-# excl_b <- generalTestBF(formula = FOC.correct ~ Condition * Order * vR, whichRandom = "vR", data = agg, whichModels = "top", iterations = 1e5)
-
-
-
-## group-wise t-tests
-
-# special <- agg[agg$Material=="Random" & agg$Order=="Inclusion first", ]
-# ttestBF(formula = FOC.correct ~ Condition, data = special, nullInterval = c(-Inf, 0))
-# t.test(formula = FOC.correct ~ Condition, data = special, alternative = "greater")
-# 
-# 
-# special <- agg[agg$Material=="Probabilistic" & agg$Order=="Inclusion first", ]
-# ttestBF(x = special$FOC.correct[special$Condition=="No transition revealed"], y = special$FOC.correct[special$Condition=="One transition revealed"], nullInterval = c(-Inf, 0))
-# t.test(formula = FOC.correct ~ Condition, data = special, alternative = "greater")
-# 
-# special <- agg[agg$Material=="Random" & agg$Order=="Exclusion first", ]
-# ttestBF(x = special$FOC.correct[special$Condition=="No transition revealed"], y = special$FOC.correct[special$Condition=="One transition revealed"], nullInterval = c(-Inf, 0))
-# t.test(formula = FOC.correct ~ Condition, data = special, alternative = "greater")
-# 
-# special <- agg[agg$Material=="Probabilistic" & agg$Order=="Exclusion first", ]
-# ttestBF(x = special$FOC.correct[special$Condition=="No transition revealed"], y = special$FOC.correct[special$Condition=="One transition revealed"], nullInterval = c(-Inf, 0))
-# t.test(formula = FOC.correct ~ Condition, data = special, alternative = "greater")
-
-```
-
-
-<!-- Exclusion performance was below baseline only in one cell our design, when exclusion followed inclusion, and participants worked on random material, (i.e., they only had knowledge about one single transition of the sequence and had maximum practice in including this transition), $\mathrm{BF}_{10} = 3.72$. -->
-
-<!-- BF for null model against monotonicity model = 1.57 -->
-
-
-```{r 'pdl7-generation-no-transition-revealed', eval=FALSE}
-
-## no-transition-revealed condition
-
-exp1gen.no <- subset(exp1gen, Condition=="No transition revealed")
-exp1gen.out.no <- apa.glm(data=exp1gen.no
-                  , dv="FOC.correct"
-                  , id="id"
-                  , between=c("Material","Order")
-                  , within=c("PD instruction"))
-
-
-
-#knitr::kable(exp1gen.out.no$table, caption = "Exp.1, Generation performance (no-transitions-revealed group only)")
-
-## apa.barplot(data = exp1gen.no,id = "id", dv = "FOC.correct", factors=c("Material", "PD instruction", "Block number"), ylim = c(0,1), ylab = "Proportion regular [%]")
-
-
-# separate analyses for each generation block, turning the 'PD instruction' factor a between-subjects factor:
-exp1gen.no.1 <- exp1gen.no[exp1gen.no[["Block number"]]==1, ]
-exp1gen.no.2 <- exp1gen.no[exp1gen.no[["Block number"]]==2, ]
-#exp1gen.no.ie <- subset(exp1gen.no, Order=="Inclusion first")
-#exp1gen.no.ei <- subset(exp1gen.no, Order=="Exclusion first")
-
-# first block:
-exp1gen.out.no.1 <- apa.glm(data = exp1gen.no.1
-                , dv = "FOC.correct"
-                , id = "id"
-                , between = c("Material", "PD instruction"))
-# main effect of 'material'
-#knitr::kable(exp1gen.out.no.1$table, caption = "Exp.1, Generation performance (no-transitions-revealed group only, Genration block 1)")
-
-# second block:
-exp1gen.out.no.2 <- apa.glm(data = exp1gen.no.2
-                , dv = "FOC.correct"
-                , id = "id"
-                , between = c("Material", "PD instruction"))
-#knitr::kable(exp1gen.out.no.2$table, caption = "Exp.1, Generation performance (no-transitions-revealed group only, Generation block 2)")
-# NoFX
-
-
-# exp1gen.out.no.ie <- apa.glm(data = exp1gen.no.ie
-#                 , dv = "FOC.correct"
-#                 , id = "id"
-#                 , between = c("Material")
-#                 , within=c("PD instruction"))
-# # main effect of 'material'
-# knitr::kable(exp1gen.out.no.ie$table, caption = "Exp.1, Generation performance (no-transitions-revealed group only, inclusion first)")
-# 
-# exp1gen.out.no.ei <- apa.glm(data = exp1gen.no.ei
-#                 , dv = "FOC.correct"
-#                 , id = "id"
-#                 , between = c("Material")
-#                 , within=c("PD instruction"))
-# # main effect of 'material'
-# knitr::kable(exp1gen.out.no.ei$table, caption = "Exp.1, Generation performance (no-transitions-revealed group only, exclusion first)")
-
-# t tests against a baseline
-agg <- apa.aggregate(data = exp1gen.no, dv = "FOC.correct", factors = c("id", "Material", "Order", "PD instruction"), fun = mean)
-
-
-fun.tmp <- function(x){
-  y <- apa.t(t.test(x, mu = .20), n = sum(!is.na(x)))
-  return(y)
-}
-
-out.t <- tapply(agg$FOC.correct,list(agg$Material, agg$Order, agg[["PD instruction"]]), FUN = fun.tmp)
-# tapply(agg$FOC.correct,list(agg$Material, agg$Order, agg[["PD instruction"]]), FUN = mean)
-
-
-
-#### No transitions revealed
-# 
-# To further dissect these findings, we first focused on the condition that did not receive explicit knowledge about the sequence (and was therefore likely to have acquired only implicit knowledge). 
-# A 2 (*material*: random vs. probabilistic) x 2 (*PD instruction*: inclusion vs. exclusion) x 2 (*block order*: inclusion first vs. exclusion first) ANOVA revealed
-# a main effect of *material*, `r exp1gen.out.no[["Material"]]`,
-# more correct transitions were generated if participants received probabilistic material during learning phase,
-# and a significant three-way interaction between Material, order, and PD instruction, 
-# `r exp1gen.out.no[["Material_Order_PD_instruction"]]`,
-# __all other *p*s > .05 (*F*s <= 1.02).__ 
-# 
-# This three-way interaction shows that participants generated more regular transitions when trained on probabilistic material,
-# but that this effect differs between blocks of the generation task
-# (i.e., an interaction between PD instruction and order of instruction blocks represents a main effect of block position). 
-# To further explore this interaction, we therefore analyzed the first and second generation blocks separately, thereby effectively turning *PD instruction* into a between-subjects factor.
-# An ANOVA for the first generation block revealed again the main effect of *material*,
-# `r exp1gen.out.no.1[["Material"]]` (all other *F*s < 1).
-# In contrast, an ANOVA for the second generation block revealed no significant effects (all *F*s < 1).
-# 
-# Taken together, these findings suggest first that, in the probabilistic group, implicit knowledge was acquired during learning. 
-# The four-way interaction __(sure?)__ revealed that, in the group that did not receive any information about regular transitions, this implicit knowledge either decayed, or was interfered with, during the first generation block; it no longer affected generation performance in the second block.
-# For this group we obtained a finding of $I=E>B$ in the first block, suggesting the presence of implicit but not explicit knowledge, but a finding of $I=E=B$ in the second block, suggesting the absence of both types of knowledge.
-
-
-```
-
-```{r 'pdl7-generation-one-transition-revealed', eval=FALSE}
-
-## one-transition-revealed condition
-
-exp1gen.one <- Generation[Generation[["excluded.id"]]==0 & Generation[["Trial"]] > 1&Generation[["repetition"]]==0 & Generation[["Condition"]]=="One transition revealed",]
-exp1gen.out.one <- apa.glm(data=exp1gen.one
-                           , dv="FOC.correct"
-                           , id="id"
-                           , between=c("Material","Order")
-                           , within=c("PD instruction"))
-#knitr::kable(exp1gen.out.one$table)
-
-## apa_barplot(data = tmp, dv = "FOC.correct", id = "id", factors = c("Material", "PD instruction", "Block number"), ylim = c(0, 1))
-
-# apa_barplot(data = tmp, dv = "FOC.correct", id = "id", factors = c("PD instruction", "Block number"), ylim = c(0, 1))
-# apa_lineplot(data = tmp, dv = "FOC.correct", id = "id", factors = c("PD instruction", "Order"), ylim = c(0, 1), jit = 0)
-# apa_lineplot(data = tmp, dv = "FOC.correct", id = "id", factors = c("Order", "PD instruction"), ylim = c(0, 1), jit = 0)
-
-# # separate analyses for each generation block, turning the 'PD instruction' factor a between-subjects factor:
-# tmp1 <- tmp[tmp[["Block number"]]==1, ]
-# tmp2 <- tmp[tmp[["Block number"]]==2, ]
-# 
-# # first block:
-# out1 <- apa.glm(data = tmp1, dv = "FOC.correct", id = "id", between = c("Material", "PD instruction"))
-# # main effect of 'material', main effect of 'PD instruction'
-# 
-# # second block:
-# out2 <- apa.glm(data = tmp2, dv = "FOC.correct", id = "id", between = c("Material", "PD instruction"))
-# # main effect of 'material', main effect of 'PD instruction'
-
-
-#### One transition revealed
-
-# In a next step, we analyzed data of participants who had received explicit knowledge about one transition.
-# A 2 (*material*: random vs. probabilistic) $\times$ 2 (*PD instruction*: inclusion vs. exclusion) $\times$ 2 (*block order*: inclusion first vs. exclusion first) repeated-measures ANOVA revealed
-# a main effect of *material*,
-# `r exp1gen.out.one[["Material"]]`: 
-# More correct responses were generated if participants worked on probabilistic material during learning, which indicates the presence of knowledge about the regularity.
-# The predicted main effect of *PD instruction* was also obtained, `r exp1gen.out.one[["PD_instruction"]]`,
-# showing that more correct responses were generated in inclusion than in exclusion blocks, a pattern reflecting the presence of (instructed) explicit sequence knowledge.
-# 
-# An additional main effect of *block order*, `r exp1gen.out.one[["Order"]]`,
-# indicated that a higher proportion of regular transitions were generated if exclusion preceded inclusion.
-# To interpret this effect, note that generating a higher proportion of regular transitions implies better performance in inclusion blocks, but worse performance in exclusion blocks.
-# Inclusion performance was therefore observed to be higher when inclusion was performed in the second block (i.e., in the group that first performed exclusion).
-# The above finding implies that participants were also better able to follow exclusion instructions (i.e., generate fewer regular transitions) when exclusion was performed in the second block (i.e., in the group that first performed inclusion).
-# This additional finding suggests that participants who had explicit knowledge were better able to express that knowledge during the second generation block than during the first block, that is, after they had some experience with the task.
-# __All other *p*s > .05.__
-
-
-
-```
-
-```{r 'pdl7-generation-excluded', eval=FALSE}
-exp1gen <- Generation[Generation[["excluded.id"]]==0 & Generation[["repetition"]]==0 & Generation[["Trial"]]>1 & Generation[["SR.frei.3C"]]!="korrekt", ]
-
-Generation$SR.correct <- as.integer(Generation$SR.frei.3C=="korrekt")
-p1 <- apa.aggregate(data = Generation, dv = "SR.correct", factors = c("id"), fun = mean)
-prop1 <- mean(p1[,2])
-
-p1c <- apa.aggregate(data = Generation, dv = "SR.correct", factors = c("id","Instruktion"), fun = mean)
-p1cm <- apa.aggregate(data = p1c, factors = c("Instruktion"), fun=mean, dv = "SR.correct")
-## self-reported transitions more often generated in Inclusion than in Exclusion
-
-p1d <- apa.aggregate(data = Generation, dv = "FOC.correct", factors = c("id","SR.correct"), fun = mean)
-p1dm <- apa.aggregate(data = p1d, factors = c("SR.correct"), fun=mean, dv = "FOC.correct")
-## self-reported transitions more often associated with correct response (.39) than nonreported transitions (.22)
-
-p1e <- apa.aggregate(data = Generation, dv = "FOC.correct", factors = c("id","Instruktion","SR.correct"), fun = mean)
-p1em <- apa.aggregate(data = p1e, factors = c("SR.correct","Instruktion"), fun=mean, dv = "FOC.correct")
-## self-reported: show more implicit knowledge (exclusion=.28) than nonreported (exclusion=.19), but also more explicit (inclusion=.41 vs. .27)
-
-p2a <- apa.aggregate(data = SelfReport, factors = c("id"), fun = sum, dv = "Hit.free")
-p2 <- apa.aggregate(data = Daten.SR, factors = c("Vp.Nr"), fun = sum, dv = "SR.frei.korrekt")
-
-prop2 <- mean(p2[,2])
-
-p2c <- apa.aggregate(data = Daten.SR, factors = c("Vp.Nr","Condition"), fun=sum, dv = "SR.frei.korrekt")
-p2cm <- apa.aggregate(data = p2c, factors = c("Condition"), fun=mean, dv = "SR.frei.korrekt")
-
-exp1gen.out <- apa.glm(id = "id", dv = "FOC.correct", data = exp1gen, between = c("Material", "Condition", "Order"), within = c("PD instruction"))
-
-## only "korrekt":
-## material X condition p=.027
-## condition X PD instruction p=.056
-
-exp1gen.one <- exp1gen[exp1gen[["Condition"]]=="One transition revealed",]
-exp1gen.out.one <- apa.glm(data=exp1gen.one
-                           , dv="FOC.correct"
-                           , id="id"
-                           , between=c("Material","Order")
-                           , within=c("PD instruction"))
-exp1gen.no <- exp1gen[exp1gen[["Condition"]]=="No transition revealed",]
-exp1gen.out.no <- apa.glm(data=exp1gen.no
-                           , dv="FOC.correct"
-                           , id="id"
-                           , between=c("Material","Order")
-                           , within=c("PD instruction"))
-exp1gen.no.1 <- exp1gen.no[exp1gen.no[["Block number"]]==1, ]
-exp1gen.no.2 <- exp1gen.no[exp1gen.no[["Block number"]]==2, ]
-exp1gen.out.no.1 <- apa.glm(data = exp1gen.no.1
-                , dv = "FOC.correct"
-                , id = "id"
-                , between = c("Material", "PD instruction"))
-exp1gen.out.no.2 <- apa.glm(data = exp1gen.no.2
-                , dv = "FOC.correct"
-                , id = "id"
-                , between = c("Material", "PD instruction"))
-
-# Pairwise t-tests showed in addition that $I_{one}>B_{no}$ and $E_{one}>=B_{no}$
-tmp <- apa.aggregate(data = exp1gen, factors = c("id", "Material", "Condition", "PD instruction"), dv = "FOC.correct", fun = mean)
-
-# I_One vs B_no
-g1 <- tmp[tmp[["Material"]]=="Probabilistic"&tmp[["PD instruction"]]=="Inclusion"&tmp[["Condition"]]=="One transition revealed", "FOC.correct"]
-g2 <- tmp[tmp[["Material"]]=="Random"&tmp[["PD instruction"]]=="Inclusion"&tmp[["Condition"]]=="No transition revealed", "FOC.correct"]
-
-I.vs.B <- apa.t(t.test(x = g1, y = g2), n = c(length(g1), length(g2)))
-
-# E_one vs. B_no
-g1 <- tmp[tmp[["Material"]]=="Probabilistic"&tmp[["PD instruction"]]=="Exclusion"&tmp[["Condition"]]=="One transition revealed", "FOC.correct"]
-g2 <- tmp[tmp[["Material"]]=="Random"&tmp[["PD instruction"]]=="Exclusion"&tmp[["Condition"]]=="No transition revealed", "FOC.correct"]
-
-E.vs.B <- apa.t(t.test(x = g1, y = g2), n = c(length(g1), length(g2)))
-
-
-```
-
-
-```{r 'pdl7-generation-nonrevealed-transitions', fig.cap = "Proportions of correctly generated nonrevealed transitions during generation task of Experiment 2, excluding repetitions", eval=FALSE}
-
-
-exp1gen_non <- Generation[Generation[["excluded.id"]]==0 & Generation[["Trial"]]>1 & Generation[["repetition"]]==0 & Generation[["revealed"]]=="nonrevealed",]
-
-exp1gen_non.out <- apa.glm(data = exp1gen_non
-                           , id="id"
-                           , dv = "FOC.correct"
-                           , between = c("Material", "Condition", "Order")
-                           , within=c("PD instruction"))
-#knitr::kable(exp1gen_non.out$table)
-
-#apa_barplot(data = exp1gen_non, id = "id", dv = "FOC.correct", factors = c("Material", "PD instruction", "Condition", "Block number"), ylim = c(0, 1), ylab = "Proportion regular [%]")
-#apa_barplot(data = exp1gen_non, id = "id", dv = "FOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim = c(0, 1), ylab = "Proportion regular [%]")
-
-
-# separate analyses for each generation block
-exp1gen_non.1 <- exp1gen_non[exp1gen_non[["Block number"]]==1,]
-exp1gen_non.2 <- exp1gen_non[exp1gen_non[["Block number"]]==2,]
-
-## ANOVAs:
-exp1gen_non.out.1 <- apa.glm(data = exp1gen_non.1
-  , id = "id"
-  , dv = "FOC.correct"
-  , between = c("Material","Condition","PD instruction"))
-
-exp1gen_non.out.2 <- apa.glm(data = exp1gen_non.2
-  , id = "id"
-  , dv = "FOC.correct"
-  , between = c("Material","Condition","PD instruction"))
-
-## t tests against a baseline:
-agg <- apa.aggregate(data = exp1gen_non, dv = "FOC.correct", factors = c("id", "Material", "Block number", "PD instruction"), fun = mean)
-
-## interaction plots for second block:
-# apa_lineplot(data = tmp2, dv = "FOC.correct", id = "id", factors = c("Material", "Condition"), jit = 0)
-# apa_lineplot(data = tmp2, dv = "FOC.correct", id = "id", factors = c("Condition", "Material"), jit = 0)
-# -> hybrid interaction, HE 'material' globally interpretable
-
-# apa_lineplot(data = tmp2, dv = "FOC.correct", id = "id", factors = c("PD instruction", "Condition"), jit = 0)
-# apa_lineplot(data = tmp2, dv = "FOC.correct", id = "id", factors = c("Condition", "PD instruction"), jit = 0)
-# -> disordinale Interaktion
-
-exp1gen_non.out.2no <- apa.glm(data = subset(exp1gen_non.2, Condition=="No transition revealed")
-                               , dv = "FOC.correct"
-                               , id = "id"
-                               , between = c("Material", "PD instruction"))
-exp1gen_non.out.2one <- apa.glm(data = subset(exp1gen_non.2, Condition=="One transition revealed")
-                               , dv = "FOC.correct"
-                               , id = "id"
-                               , between = c("Material", "PD instruction"))
-
-# apa_barplot(data = subset(exp1gen_non, Material = "Probabilistic"), id = "id", dv = "FOC.correct", factors = c("Block number", "PD instruction", "Condition"), ylim = c(0, 1))
-```
-
-
-```{r 'pdl7-generation-revealed-transitions', fig.cap = "Proportions of correctly generated revealed transitions during generation task of Experiment 2, excluding repetitions", eval=FALSE}
-exp1gen_rev <- Generation[Generation[["excluded.id"]]==0 & Generation[["Trial"]] > 1 & Generation[["repetition"]]==0 & Generation[["Condition"]]=="One transition revealed" & Generation[["revealed"]]=="revealed",]
-exp1gen_rev.out <- apa.glm(
-    data = exp1gen_rev
-    , dv = "FOC.correct"
-    , id = "id"
-    , between = c("Material","Order")
-    , within = c("PD instruction")
-)
-
-# apa_barplot(
-#   data = exp1gen_rev
-#   , id = "id"
-#   , dv = "FOC.correct"
-#   , factors = c("Block number", "PD instruction", "Material")
-#   , ylim = c(0,1)
-#   , ylab = "Proportion regular [%]"
-#   , args_legend = list(adj = 0, x = "center", bg = rgb(r = 1, g = 1, b = 1, alpha = 1), bty = "o", box.lwd = 0)
-# )
-
-exp1gen_rev[["Proportion regular [%]"]] <- exp1gen_rev[["FOC.correct"]]
-
-agg <- apa.aggregate(data = exp1gen_rev, dv = "correct", factors = c("id", "Material", "Order", "PD instruction"), fun = mean)
-
-fun.tmp <- function(x){
-  apa_print(t.test(x = x, mu = 0))$full
-}
-
-out.0 <- tapply(agg$FOC.correct, list(agg$Order, agg$`PD instruction`), FUN = fun.tmp)
-
-fun.tmp <- function(x){
-  apa_print(t.test(x = x, mu = 1))$full
-}
-
-out.1 <- tapply(agg$FOC.correct, list(agg$Order, agg$`PD instruction`), FUN = fun.tmp)
-
-out.t <- cbind(out.1[,1],out.0[,2])
-colnames(out.t) <- colnames(out.1)
-
-```
 
 
 <!-- This section deals with possible distortions arising from residual explicit knowledge -->
@@ -906,13 +534,13 @@ percentage_reported <- round(mean(tmp$SR.frei.3C!="nicht.genannt") * 100, digits
 tmp <- SelfReport[SelfReport$vR!=2, ]
 percentage_hits <- round(sum(tmp$Hit.free)/sum(tmp$Hit.free + tmp$FA.free) * 100, digits = 2)
 
-load("hierarchical_pd/pdl7/stan_M1_excluded_all_freely_reported_cdfs.RData")
+load("hierarchical_pd/exp1/stan_M1_excluded_all_freely_reported_cdfs.RData")
 bayes_p <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
 ```
 
 ### Robustness checks
 
-Next we assessed whether these findings were sensitive to the assumptions of our models.  
+Next we assessed whether these findings were sensitive to the assumptions of our models.
 Despite the fact that the auxiliary assumptions could be upheld in model comparison, and that the incorporating model was well able to account for the data,
 it may nevertheless still be the case that violations have biased parameter estimates.
 Specifically, if participants had in fact acquired explicit knowledge about nonrevealed transitions during learning,
@@ -928,15 +556,15 @@ To the contrary, excluding all correctly reported transitions (`r percentage_cor
 After excluding *all* reported transitions regardless of whether they reflect correct knowledge or not (`r percentage_reported`% of cases),
 the invariance violation was descriptively unchanged but no longer statistically significant, Bayesian `r bayes_p`.]
 
-We also tested the invariance assumption using a different model $\mathcal{M}_{1R}$ that extended $\mathcal{M}_1$ by relaxing the assumption that $C = 0$ for nonrevealed transitions (see Appendix A for details).
-The invariance violation for the controlled process, $C_I > C_E$, was reproduced in the absence of the assumption $C=0$, demonstrating its robustness. 
+We also tested the invariance assumption using a different model $\mathcal{M}_{1R}$ that extended $\mathcal{M}_1$ by relaxing the assumption that $C = 0$ for nonrevealed transitions (see Appendix C for details).
+The invariance violation for the controlled process, $C_I > C_E$, replicated in the absence of the assumption $C=0$, demonstrating its robustness. 
 However, the small invariance violation for the automatic process was no longer evident in $\mathcal{M}_{1R}$.
 
 
 
 ## Discussion
 
-The experimental manipulations had the expected results:
+<!-- The experimental manipulations had the expected results: -->
 Based on the SRTT results, we can conclude that participants acquired sequence knowledge during learning.
 In addition, explicit knowledge about one of the six transitions had a clear effect on generation performance for that transition.
 
@@ -947,7 +575,7 @@ and that automatic processes were not affected by the manipulation of explicit k
 Both assumptions found support in the current data as they did not harm model fit.
 Moreover, model comparison by the DIC showed that model $\mathcal{M}_1$ was a better account of the data than the standard process-dissociation model $\mathcal{M}_2$ that did not impose these assumptions but instead imposed the invariance assumption.
 
-Invariance of the automatic process was significantly violated, but the magnitude of the violation was small, and it disappeared entirely under a relaxed model ($\mathcal{M}_{1R}$; see Appendix A).
+Invariance of the automatic process was significantly violated, but the magnitude of the violation was small, and it disappeared entirely under a relaxed model ($\mathcal{M}_{1R}$; see Appendix C).
 Given the small magnitude, and its lack of robustness to the modeling assumptions, the invariance violation of $A$ appears to be no serious threat to the validity of the PD at this point.
 
 <!-- for nonrevealed but not for revealed transitions. -->

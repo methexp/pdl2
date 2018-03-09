@@ -18,7 +18,7 @@ Critically, on a subsequent task, participants are often not able to express exp
 There has been a long-lasting debate whether or not this effect is evidence for implicit learning,
 a question entwined with methodological considerations of how to properly measure and separate
 the contributions of supposedly implicit and/or explicit learning systems to this task [for a recent review, see @timmermans_how_2015].
-One of the most promising methods has been the process-dissociation approach as applied to the free generation task [@destrebecqz_can_2001];
+One of the most promising methods has been the process-dissociation (PD) approach as applied to the free generation task [@destrebecqz_can_2001];
 yet, its validity rests on a set of previously untested assumptions.
 The present study assesses two of the crucial assumptions on which this method is based.
 
@@ -51,7 +51,7 @@ leading them to conclude that there was no conclusive evidence for implicit lear
 
 <!--# more focused problem: PD measurement procedure-->
 
-Given the interpretative problems of the recognition task, @destrebecqz_can_2001 introduced the PD approach to the free-generation task,
+Given the interpretative problems of the recognition task, @destrebecqz_can_2001 introduced the process-dissociation approach to the free-generation task,
 a measure that was considered to be the most sensitive to sequence learning [@perruchet_conscious_1992].
 Participants were instructed, after finishing the SRTT, to generate a sequence that is either similar (in the inclusion condition) or dissimilar (in the exclusion condition) to that encountered during the SRTT.
 If participants can generate a similar sequence under the inclusion instruction, they can be said to have acquired knowledge about the sequence; yet, this knowledge may reflect both implicit and explicit knowledge because both may be used to re-generate the learned sequence.
@@ -149,24 +149,21 @@ Overview of literature:
 <!--# narrow problem: violated assumptions?-->
 
 
-### Ordinal PD approach
+### The ordinal PD approach
 
 Analyzing their data by comparing inclusion and exclusion performance with a baseline,
 @destrebecqz_can_2001 adopted an analysis strategy that has been later formalized --- with modifications --- by @hirshman_ordinal_2004 as the *ordinal-PD* approach.
 Instead of providing quantitative estimates of implicit and explicit knowledge, the ordinal-PD approach identified specific patterns of results that allow for ordinal comparisons between two experimental conditions (i.e., conclusions about increasing or decreasing amounts of explicit and/or implicit knowledge).
 In the light of the then-ongoing controversy about the PD method, this has been critically acclaimed as a way around the strong assumptions underlying the original (parametric) PD [@curran_implicit_2001].
 
-However, even this approach is based on assumptions that might be violated in a specific application.
+However, even this approach is based on assumptions that might be violated in a specific application:
 First, it is assumed that baseline performance is the same under both inclusion and exclusion instructions -- an assumption that may be violated in sequence learning [@stahl_distorted_2015].
-
 <!--
 ***
 that aims at generating an apparently non-random sequence (?). 
 If the choice of any individual's specific sequence is not informed by explicit knowledge, this strategy will lead to baseline performance (i.e, $E = B$) even in the presence of implicit knowledge.
 ***
---->
-<!-- Furthermore, a difference in baseline performance between inclusion and exclusion may result if participants adopt a different strategy under inclusion conditions. -->
-
+Furthermore, a difference in baseline performance between inclusion and exclusion may result if participants adopt a different strategy under inclusion conditions. -->
 Perhaps more critically, the second basic assumption of the ordinal-PD approach holds that both inclusion and exclusion performance are a monotonically increasing function of implicit knowledge;
 and that inclusion performance monotonically increases but *exclusion performance monotonically decreases as a function of explicit knowledge*.
 The exclusion strategies suggested by @wilkinson_intentional_2004 would, however, imply that explicit knowledge does not necessarily inform exclusion performance:
@@ -268,7 +265,7 @@ It is therefore important to test both the monotonicity and the invariance assum
 
 ## Overview of the present studies
 
-The present study aimed at testing, in the free generation task, the assumptions underlying both the ordinal- and the parametric-PD methods.
+The present study aimed at testing, in the free-generation task, the assumptions underlying both the ordinal- and the parametric-PD methods.
 For this purpose, it was necessary to extend the traditional PD design by manipulating both explicit knowledge (in Experiments 1-3) and implicit knowledge (in Experiments 2 & 3).
 
 We manipulated *explicit* knowledge by explicitly informing participants, after the SRTT training phase,
@@ -277,7 +274,9 @@ By presenting information about the transitions *after training* we ensured that
 We manipulated *implicit* knowledge by varying the amount of regularity present in the SRTT training sequence.
 For this purpose, we used materials with a mere probabilistic regularity; such materials are typically assumed to produce robust implicit knowledge but no explicit knowledge [@jimenez_comparing_1996; @jimenez_which_1999].
 
-Experiment 1 tested the speculation that explicit knowledge remains underutilized in exclusion, and its relevance for the monotonicity assumption (we found that the monotonicity assumption is violated, suggesting that this is because invariance of the controlled process is violated).
+In a test of the monotonicity assumption underlying the ordinal PD approach, Experiment 1 explored the speculation that explicit knowledge remains underutilized in exclusion. 
+To foreshadow, we found that this was indeed the case and that the monotonicity assumption was violated.
+Results suggested that this is because invariance of the controlled process is violated.
 
 In Experiments 2 and 3, we directly tested the invariance assumptions of the parametric PD model, closely following the methodology used by @klauer_invariance_2015:
 We fit an extended process-dissociation model $\mathcal{M}_1$ that allowed for testing the invariance assumption of both the controlled and the automatic process. 
@@ -287,7 +286,7 @@ This model relies on the auxiliary assumptions that each experimental manipulati
 Moreover, in order to justify the auxiliary assumptions, we specified a standard process-dissociation model $\mathcal{M}_2$ that does not enforce the auxiliary assumptions but enforces the invariance assumption;
 model comparison techniques [DIC; @spiegelhalter_bayesian_2002] were then used to compare model $\mathcal{M}_1$ and model $\mathcal{M}_2$.
 If model $\mathcal{M}_1$ is favored over model $\mathcal{M}_2$, this can be taken as evidence in favor of our auxiliary assumptions over the invariance assumption.
-Finally, instead of aggregating data, we used hierarchical Bayesian extensions of all models [cf., @klauer_hierarchical_2010; @rouder_hierarchical_2008; @rouder_introduction_2005].^[This modeling approach controls for interindividual differences.]
+Finally, instead of aggregating data, we used hierarchical Bayesian extensions of all models [cf., @klauer_hierarchical_2010; @rouder_hierarchical_2008; @rouder_introduction_2005].^[This modeling approach controls for interindividual differences and circumvents aggregation artifacts.]
 
 <!-- motivation for material chosen, move to indi. experiments:-->
 <!-- - FOC: implicit learning seems to be restricted to first-order materials [see @tubau_modes_2007] -->

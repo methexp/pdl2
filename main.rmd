@@ -16,10 +16,10 @@ affiliation:
     institution: University of Cologne
 
 abstract: |
-  In implicit sequence learning, a process-dissociation (PD) approach has been proposed to dissociate implicit and explicit learning processes. Applied to the popular generation task, participants perform two different task versions: *inclusion* instructions require generating the transitions that form the learned sequence; *exclusion* instructions require generating transitions other than those of the learned sequence. Whereas accurate performance under inclusion may be based on either implicit or explicit knowledge, avoiding to generate learned transitions requires controllable explicit sequence knowledge. The PD approach yields separate estimates of explicit and implicit knowledge that are derived from the same task; it therefore avoids many problems of previous measurement approaches. However, the PD approach rests on the critical assumption that the implicit and explicit processes are invariant across inclusion and exclusion conditions. We tested whether the invariance assumption holds for the PD generation task. Across three studies using first-order as well as second-order regularities, invariance of the controlled process was found to be violated. In particular, despite extensive amounts of practice, explicit knowledge was not exhaustively expressed in the exclusion condition. We discuss the implications of these findings for the use of process-dissociation in assessing implicit knowledge.
+  In implicit sequence learning, a process-dissociation (PD) approach has been proposed to dissociate implicit and explicit learning processes. Applied to the popular generation task, participants perform two different task versions: *inclusion* instructions require generating the transitions that form the learned sequence; *exclusion* instructions require generating transitions other than those of the learned sequence. Whereas accurate performance under inclusion may be based on either implicit or explicit knowledge, avoiding to generate learned transitions requires controllable explicit sequence knowledge. The PD approach yields separate estimates of explicit and implicit knowledge that are derived from the same task; it therefore avoids many problems of previous measurement approaches. However, the PD approach rests on the critical assumption that the implicit and explicit processes are invariant across inclusion and exclusion conditions. We tested whether the invariance assumptions hold for the PD generation task. Across three studies using first-order as well as second-order regularities, invariance of the controlled process was found to be violated. In particular, despite extensive amounts of practice, explicit knowledge was not exhaustively expressed in the exclusion condition. We discuss the implications of these findings for the use of process-dissociation in assessing implicit knowledge.
 
 note: |
-  *(Unpublished manuscript, 2017-08-24)*.
+  *(Unpublished manuscript, `r format(Sys.time(), "%Y-%m-%d")`)*.
 
 author_note: |  
   Marius Barth, Christoph Stahl, Hilde Haider, Department of Psychology, University of Cologne. 
@@ -32,11 +32,11 @@ author_note: |
   
 keywords: "sequence learning, process-dissociation procedure, invariance assumption"
 
-wordcount: "15,777"
+wordcount: "14,936"
 
 class: man
 figsintext: no
-lineno: no
+lineno: yes
 keep_tex: yes
 bibliography:
   - additional_references.bib
@@ -63,7 +63,16 @@ library("afex")
 library("rstan")
 
 # Set chunk defaults
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8.8, fig.height = 5, dev = "pdf", cache = FALSE, par = TRUE)
+knitr::opts_chunk$set(
+  echo = FALSE
+  , warning = FALSE
+  , message = FALSE
+  , fig.width = 8.8
+  , fig.height = 5
+  , dev = "pdf"
+  , cache = FALSE
+  , par = TRUE
+)
 
 # Set global defaults for plotting
 knitr::knit_hooks$set(par = function(before, options, envir){
@@ -80,6 +89,10 @@ source("R/barplot.R")
 source("R/t.test.R")
 source("R/PudelHelper.R")
 source("R/PDhelper.R")
+
+# fitting using mptinr
+# source("R/mptinr_tools.R")
+# library("ibdreg")
 ```
 
 

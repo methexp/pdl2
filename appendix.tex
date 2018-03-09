@@ -1,5 +1,14 @@
+\clearpage
+\makeatletter
+\efloat@restorefloats
+\makeatother
+
+
 \begin{appendix}
 \section{Generation performance}\label{generation-performance}
+
+\setlength{\parindent}{0.5in} \setlength{\leftskip}{0in}
+\setlength{\parskip}{2pt}
 
 This appendix provides the raw generation performance for all
 experiments in tables A1, A2, and A3.
@@ -37,11 +46,11 @@ Transfer & 79.51 (21.81) & 7.50 (7.13)\\
 \end{center}
 \end{table}
 
-\begin{table}
-\begin{center}
-\begin{threeparttable}
-\caption{\label{tab:appendix-pdl7-generation}Mean percentage of regular transitions generated in Experiment 2, excluding repetions. Standard deviations are given in parentheses.}
-\begin{tabular}{lllll}
+\clearpage
+
+\begin{lltable}
+\begin{longtable}{lllll}\noalign{\getlongtablewidth\global\LTcapwidth=\longtablewidth}
+\caption{\label{tab:appendix-pdl7-generation}Mean percentage of regular transitions generated in Experiment 2, excluding repetions. Standard deviations are given in parentheses.}\\
 \toprule
  & \multicolumn{2}{c}{Random} & \multicolumn{2}{c}{Probabilistic} \\
 \cmidrule(r){2-3} \cmidrule(r){4-5}
@@ -56,16 +65,12 @@ One transition revealed & 18.46 (17.67) & 16.80 (11.47) & 31.29 (17.49) & 25.82 
 $\textit{Revealed transitions}$ &  &  &  & \\
 One transition revealed & 79.37 (24.65) & 8.74 (11.51) & 86.75 (20.28) & 6.77 (12.20)\\
 \bottomrule
-\end{tabular}
-\end{threeparttable}
-\end{center}
-\end{table}
+\end{longtable}
+\end{lltable}
 
-\begin{table}
-\begin{center}
-\begin{threeparttable}
-\caption{\label{tab:appendix-pdl10-generation}Mean percentage of regular transitions generated in Experiment 3, excluding repetions and reversals. Standard deviations are given in parentheses.}
-\begin{tabular}{lllllll}
+\begin{lltable}
+\begin{longtable}{lllllll}\noalign{\getlongtablewidth\global\LTcapwidth=\longtablewidth}
+\caption{\label{tab:appendix-pdl10-generation}Mean percentage of regular transitions generated in Experiment 3, excluding repetions and reversals. Standard deviations are given in parentheses.}\\
 \toprule
  & \multicolumn{2}{c}{Random} & \multicolumn{2}{c}{Mixed SOC} & \multicolumn{2}{c}{Pure SOC} \\
 \cmidrule(r){2-3} \cmidrule(r){4-5} \cmidrule(r){6-7}
@@ -80,10 +85,174 @@ Two transitions revealed & 19.54 (8.86) & 24.46 (7.59) & 27.05 (11.64) & 27.19 (
 $\textit{Revealed transitions}$ &  &  &  &  &  & \\
 Two transitions revealed & 78.73 (28.18) & 28.90 (31.97) & 80.02 (21.62) & 24.59 (27.24) & 78.64 (26.53) & 29.92 (31.57)\\
 \bottomrule
-\end{tabular}
-\end{threeparttable}
-\end{center}
-\end{table}
+\end{longtable}
+\end{lltable}
+
+\section{Additional ordinal-PD
+analyses}\label{additional-ordinal-pd-analyses}
+
+This appendix provides results of additional ordinal-PD analyses for
+Experiments 2 and 3.
+
+\subsection{Experiment 2}\label{experiment-2}
+
+\begin{figure}
+\centering
+\includegraphics{main_files/figure-latex/pdl7-generation-1.pdf}
+\caption{(\#fig:pdl7-generation)Mean proportion of correct FOCs during
+the generation task of Experiment 2, excluding repetitions. Error bars
+represent 95\% confidence intervals.}
+\end{figure}
+
+Figure @ref(fig:pdl7-generation) shows the overall generation
+performance. We conducted a 2 (\emph{Material}: Random
+vs.~Probabilistic) \(\times\) 2 (\emph{Explicit knowledge}: No
+transition revealed vs.~One transition revealed) \(\times\) 2
+(\emph{Block order}: Inclusion first vs.~Exclusion first) \(\times\) 2
+(\emph{PD instruction}: Inclusion vs.~Exclusion) ANOVA that revealed a
+main effect of \emph{PD instruction}, \(F(1, 113) = 28.43\),
+\(\mathit{MSE} = 156.22\), \(p < .001\), \(\hat{\eta}^2_G = .109\),
+participants generated more regular transitions in inclusion than
+exclusion blocks; and a main effect of \emph{explicit knowledge},
+\(F(1, 113) = 13.00\), \(\mathit{MSE} = 164.96\), \(p < .001\),
+\(\hat{\eta}^2_G = .056\), indicating a clear influence of the explicit
+knowledge manipulation on generation performance. Moreover, we found a
+main effect of \emph{material}, \(F(1, 113) = 22.95\),
+\(\mathit{MSE} = 164.96\), \(p < .001\), \(\hat{\eta}^2_G = .094\),
+participants generated more regular transitions if they had worked on
+regular material during the SRTT; the effect of \emph{block order} also
+trended to be significant, \(F(1, 113) = 3.57\),
+\(\mathit{MSE} = 164.96\), \(p = .062\), \(\hat{\eta}^2_G = .016\),
+participants generated slightly more regular transitions if inclusion
+followed exclusion. These main effects were qualified by two-way
+interactions of \emph{explicit knowledge} and \emph{block order},
+\(F(1, 113) = 10.31\), \(\mathit{MSE} = 164.96\), \(p = .002\),
+\(\hat{\eta}^2_G = .045\); and of \emph{explicit knowledge} and \emph{PD
+instruction}, \(F(1, 113) = 26.64\), \(\mathit{MSE} = 156.22\),
+\(p < .001\), \(\hat{\eta}^2_G = .103\); moreover, the four-way
+interaction of \emph{material}, \emph{explicit knowledge}, \emph{block
+order}, and \emph{PD instruction} was also found to be significant,
+\(F(1, 113) = 5.42\), \(\mathit{MSE} = 156.22\), \(p = .022\),
+\(\hat{\eta}^2_G = .023\). To disentangle these interactions, we
+analyzed inclusion and exclusion performance, separately.
+
+\paragraph{Inclusion}\label{inclusion}
+
+Analyzing the number of regular transitions generated in inclusion
+blocks, a 2 (\emph{Material}: Random vs.~Probabilistic) \(\times\) 2
+(\emph{Explicit knowledge}: No transition revealed vs.~One transition
+revealed) \(\times\) 2 (\emph{Block order}: Inclusion first
+vs.~Exclusion first) ANOVA revealed a main effect of \emph{material},
+\(F(1, 113) = 14.72\), \(\mathit{MSE} = 207.66\), \(p < .001\),
+\(\hat{\eta}^2_G = .115\), participants generated more regular
+transitions if they had worked on probabilistic materials; and a main
+effect of \emph{explicit knowledge}, \(F(1, 113) = 29.57\),
+\(\mathit{MSE} = 207.66\), \(p < .001\), \(\hat{\eta}^2_G = .207\),
+indicating a clear influence of our explicit-knowledge manipulation on
+inclusion performance. This effect was qualified by a significant
+interaction of \emph{explicit knowledge} and \emph{block order},
+\(F(1, 113) = 9.64\), \(\mathit{MSE} = 207.66\), \(p = .002\),
+\(\hat{\eta}^2_G = .079\), indicating that participants used their
+explicit sequence knowledge more extensively if inclusion followed
+exclusion (i.e., after we had represented the transition a second time).
+
+\paragraph{Exclusion}\label{exclusion}
+
+Analyzing the number of regular transitions generated in exclusion
+blocks, a 2 (\emph{Material}: Random vs.~Probabilistic) \(\times\) 2
+(\emph{Explicit knowledge}: No transition revealed vs.~One transition
+revealed) \(\times\) 2 (\emph{Block order}: Inclusion first
+vs.~Exclusion first) ANOVA revealed a main effect of \emph{material}
+\(F(1, 113) = 8.87\), \(\mathit{MSE} = 113.52\), \(p = .004\),
+\(\hat{\eta}^2_G = .073\), participants generated more regular
+transitions if they had worked on probabilistic materials during the
+SRTT. We also found a significant three-way interaction of
+\emph{material}, \emph{explicit knowledge}, and \emph{block order},
+\(F(1, 113) = 4.21\), \(\mathit{MSE} = 113.52\), \(p = .042\),
+\(\hat{\eta}^2_G = .036\): Exclusion performance was below baseline only
+if exclusion followed inclusion \emph{and} participants had worked on
+random material during the SRTT (i.e., they only had knowledge about one
+single transition of the sequence and had maximum practice in
+including/excluding this transition) -- that is, if participants had no
+sequence knowledge but the single transition that we had revealed to
+them and they had already used this knowledge during the inclusion
+block, they were able to generate less regular transitions than baseline
+during the following exclusion block. The monotonicity assumption of the
+ordinal-PD approach is thus not violated in this single cell of the
+design. It is, hoewever, violated if exclusion preceded inclusion, or if
+participants had worked on probabilistic materials.
+
+\subsection{Experiment 3}\label{experiment-3}
+
+\begin{figure}
+\centering
+\includegraphics{main_files/figure-latex/pdl10-generation-1.pdf}
+\caption{(\#fig:pdl10-generation)Mean proportion of correct SOCs during
+the generation task of Experiment 3, excluding repetitions and
+reversals. Error bars represent 95\% confidence intervals.}
+\end{figure}
+
+Figure @ref(fig:pdl10-generation) shows the overall generation
+performance. A 3 (\emph{Material}: Random vs.~mixed SOC vs.~pure SOC)
+\(\times\) 2 (\emph{Explicit knowledge}: No transition revealed vs.~Two
+transitions revealed) \(\times\) 2 (\emph{Block Order}: Inclusion first
+vs.~Exclusion first) \(\times\) 2 (\emph{PD instruction}: Inclusion
+vs.~Exclusion) ANOVA revealed a main effect of \emph{PD instruction},
+\(F(1, 159) = 30.61\), \(\mathit{MSE} = 94.53\), \(p < .001\),
+\(\hat{\eta}^2_G = .087\), participants generated more regular
+transitions in inclusion than exclusion blocks; and a main effect of
+\emph{explicit knowledge}, \(F(1, 159) = 25.01\),
+\(\mathit{MSE} = 97.20\), \(p < .001\), \(\hat{\eta}^2_G = .074\),
+indicating a clear influence of the explicit knowledge manipulation on
+generation performance. Moreover, the interaction of \emph{explicit
+knowledge} and \emph{PD instruction} reached significance,
+\(F(1, 159) = 6.18\), \(\mathit{MSE} = 94.53\), \(p = .014\),
+\(\hat{\eta}^2_G = .019\), indicating that the effect of \emph{explicit
+knowledge} is qualified by \emph{PD instruction}. The interaction of
+\emph{PD instruction} and \emph{block order} almost reached
+significance, \(F(1, 159) = 3.04\), \(\mathit{MSE} = 94.53\),
+\(p = .083\), \(\hat{\eta}^2_G = .009\). To disentangle these
+interactions, we analyzed inclusion and exclusion performance,
+separately.
+
+\paragraph{Inclusion}\label{inclusion-1}
+
+Analyzing the number of regular transitions generated in inclusion
+blocks, a 3 (\emph{Material}: Random vs.~mixed SOC vs.~pure SOC)
+\(\times\) 2 (\emph{Explicit knowledge}: No transition revealed vs.~Two
+transitions revealed) \(\times\) 2 (\emph{Block Order}: Inclusion first
+vs.~Exclusion first) ANOVA revealed a significant main effect of
+\emph{explicit knowledge}, \(F(1, 159) = 25.27\),
+\(\mathit{MSE} = 106.81\), \(p < .001\), \(\hat{\eta}^2_G = .137\),
+indicating that our manipulation of explicit knowledge influenced
+inclusion performance. The main effect of \emph{block order} trended to
+be significant, \(F(1, 159) = 2.84\), \(\mathit{MSE} = 106.81\),
+\(p = .094\), \(\hat{\eta}^2_G = .018\), which was qualified by an
+almost significant interaction of \emph{explicit knowledge} and
+\emph{block order}, \(F(1, 159) = 3.70\), \(\mathit{MSE} = 106.81\),
+\(p = .056\), \(\hat{\eta}^2_G = .023\). This pattern indicated that
+more regular transitions were generated if participants had received
+explicit knowledge about two transitions and inclusion followed
+exclusion, i.e.~the explicit knowledge had been presented a second time
+(once prior to exclusion, once prior to inclusion).
+
+\paragraph{Exclusion}\label{exclusion-1}
+
+Analyzing the number of regular transitions generated in exclusion
+blocks, a 3 (\emph{Material}: Random vs.~mixed SOC vs.~pure SOC)
+\(\times\) 2 (\emph{Explicit knowledge}: No transition revealed vs.~Two
+transitions revealed) \(\times\) 2 (\emph{Block Order}: Inclusion first
+vs.~Exclusion first) ANOVA revealed only an almost significant main
+effect of \emph{explicit knowledge}, \(F(1, 159) = 3.72\),
+\(\mathit{MSE} = 84.92\), \(p = .056\), \(\hat{\eta}^2_G = .023\);
+revealing explicit knowledge about the sequence slightly
+\emph{increased} the proportion of regular transitions generated. This
+pattern, again, violates the core assumption of the ordinal-PD approach
+that increasing amounts of explicit knowledge monotonically decrease the
+proportion of regular transitions in exclusion blocks. Moreover, it also
+shows that increasing explicit knowledge might produce a data pattern
+that is typically interpreted as evidence for increasing amounts of
+implicit knowldge.
 
 \section{Additional model analyses}\label{additional-model-analyses}
 

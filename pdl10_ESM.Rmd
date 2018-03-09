@@ -1,0 +1,428 @@
+```{r 'pdl10-prepare-esm'}
+library(papaja)
+library(afex)
+# source("R/pdl10.export.raw.data.R")
+load("data/pdl10.RData")
+source("R/anova.R")
+
+Acquisition$error <- 100 * Acquisition$error
+Acquisition$Material <- factor(Acquisition$Material, levels = c("rand", "fsoc", "psoc"), labels = c("Random", "mixed SOC", "pure SOC"))
+
+Generation$Material <- factor(
+  Generation$Material
+  , levels = c("rand", "fsoc", "psoc")
+  , labels = c("Random", "mixed SOC", "pure SOC")
+)
+
+Generation$SOC.correct <- 100 * Generation$SOC.correct
+```
+
+<!-- ### Overall generation performance -->
+
+```{r pdl10-generation-1, fig.cap="Mean proportion of regular SOCs during generation task of Experiment 3, excluding repetitions. Error bars represent 95% confidence intervals.", eval = FALSE}
+# SOCs, repetitions excluded
+pdl10_generation <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["excluded.id"]]==0,]
+
+# ANOVA
+exp3gen.out <- apa.glm(data = exp3gen
+                       , id = "id"
+                       , dv = "SOC.correct"
+                       , between = c("Material", "Condition", "Order")
+                       , within = "PD instruction")
+
+# between <- c("Material","Condition","Order")
+# 
+# tmp2 <- apa.aggregate(data=tmp,factors=c("id",between,"Instruktion"), fun=mean, dv="SOC.correct")
+# tmp2$id <- as.factor(tmp2$id)
+# 
+# # Bayes Factor models
+# # Full model
+# M1 <- lmBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o interaction
+# M2 <- lmBF(formula=SOC.correct~Material+Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o complete 'material' term
+# M3 <- lmBF(formula=SOC.correct~Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# 
+# out.BF <- anovaBF(formula = SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom = "id", data = tmp2)
+# topdown1 <- anovaBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2, whichModel="top")
+
+# plots
+# apa_barplot(data=exp3gen,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),ylim=c(0,1),intercept=.2)
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.20),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg<-.aggregate(data=exp3gen,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
+exp3gen.t.out<-tapply(agg[["SOC.correct"]], list(agg[["PD instruction"]], agg[["Condition"]]), FUN = fun.tmp)
+
+```
+
+
+```{r pdl10-generation, fig.cap="Mean proportion of correct SOCs during the generation task of Experiment 3, excluding repetitions and reversals. Error bars represent 95% confidence intervals."}
+# SOCs, repetitions and reversals excluded
+pdl10_generation <- Generation[Generation[["repetition"]]==0&Generation[["vR.repetition"]]==0&Generation[["Trial"]] > 2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0,]
+
+variable_label(pdl10_generation) <- c(
+  Condition = "Explicit knowledge"
+  , Order = "Block Order"
+)
+
+
+# ANOVA
+pdl10_generation.anova <- apa.glm(
+  data = pdl10_generation
+  , id = "id"
+  , dv = "SOC.correct"
+  , between = c("Material", "Condition", "Order")
+  , within = c("PD instruction")
+)
+
+apa_barplot(
+  data = pdl10_generation
+  , id = "id"
+  , dv = "SOC.correct"
+  , factors = c("Condition", "PD instruction", "Order")
+  # , intercept = 25
+  , las = 1
+  , ylim = c(0, 100)
+  , ylab = "Proportion regular [%]"
+  , main = c("Inclusion first", "Exclusion first")
+  , args_x_axis = list(cex.axis = .85)
+)
+# apa_beeplot(
+#   data = pdl10_generation
+#   , id = "id"
+#   , dv = "SOC.correct"
+#   , factors = c("Condition", "PD instruction", "Order")
+#   , intercept = 25
+#   , las = 1
+#   , ylim = c(0, 100)
+#   , ylab = "Proportion regular [%]"
+# )
+
+# ------------------------------------------------------------------------------
+# Follow-up analyses to disentangle interactions
+pdl10_inclusion <- apa.glm(
+  data = pdl10_generation[pdl10_generation$`PD instruction`=="Inclusion", ]
+  , id = "id"
+  , dv = "SOC.correct"
+  , between = c("Material", "Condition", "Order")
+)
+
+pdl10_exclusion <- apa.glm(
+  data = pdl10_generation[pdl10_generation$`PD instruction`=="Exclusion", ]
+  , id = "id"
+  , dv = "SOC.correct"
+  , between = c("Material", "Condition", "Order")
+)
+```
+
+Figure \@ref(fig:pdl10-generation) shows the overall generation performance.
+A `r pdl10_generation.anova$name` ANOVA revealed
+a main effect of *PD instruction*,
+`r pdl10_generation.anova$PD_instruction`,
+participants generated more regular transitions in inclusion than exclusion blocks;
+and a main effect of *explicit knowledge*,
+`r pdl10_generation.anova$Condition`,
+indicating a clear influence of the explicit knowledge manipulation on generation performance.
+Moreover, the interaction of *explicit knowledge* and *PD instruction* reached significance,
+`r pdl10_generation.anova$Condition_PD_instruction`,
+indicating that the effect of *explicit knowledge* is qualified by *PD instruction*.
+The interaction of *PD instruction* and *block order* almost reached significance,
+`r pdl10_generation.anova$Order_PD_instruction`.
+To disentangle these interactions, we analyzed inclusion and exclusion performance, separately.
+
+```{r pdl10-generation-bayes, eval = FALSE}
+tmp <- exp3gen2[exp3gen2$Instruktion=="Exklusion", ]
+agg <- aggregate(formula = SOC.correct ~ Material + Condition + Order + id, FUN = mean, data = tmp)
+
+# BF <- anovaBF(formula = SOC.correct ~ Material * Condition + Order, data = agg, whichModels = "top")
+
+# BF_rand <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="rand", ], whichModels = "top")
+# BF_fsoc <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="fsoc", ], whichModels = "top")
+# BF_psoc <- anovaBF(formula = SOC.correct ~ Condition + Order, data = agg[agg$Material=="psoc", ], whichModels = "top")
+
+full <- lmBF(formula = SOC.correct ~ Material * Condition * Order, data = agg, iterations = 3e6)
+null <- lmBF(formula = SOC.correct ~ Material * Order + Condition:Material + Condition:Order + Material:Condition:Order, data = agg)
+null <- lmBF(formula = SOC.correct ~ Material * Order, data = agg)
+
+# two possible orderings, so prior odds 1/2
+prior_odds <- 1/2
+bf_restricted_against_full <- mean(posterior(full, iter = 1e5)[, "Condition-No transition revealed"]>0) / prior_odds
+# This is the bayes factor for delta>=0 against delta<0 (prediction of ordinal pd)
+bf_restricted_against_null <- bf_restricted_against_full * as.vector(full)/as.vector(null)
+1/bf_restricted_against_null
+
+apa_beeplot(data = agg, id = "id", dv = "SOC.correct", factors = c("Material", "Condition", "Order"))
+aov_ez(data = agg, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"))
+
+# between <- c("Material","Condition","Order")
+#
+# tmp2 <- apa.aggregate(data=tmp,factors=c("id",between,"Instruktion"), fun=mean, dv="SOC.correct")
+# tmp2$id <- as.factor(tmp2$id)
+#
+# tmp <- exp3gen2[exp3gen2[["revealed"]]==1, ]
+# agg <- apa.aggregate(data = tmp, factors = c("id", "Material", "PD instruction"), dv = "SOC.correct", fun = mean)
+# ## paarweise ausschlie?en
+# for (i in unique(agg$id)) {
+#   agg[agg$id==i, "full"] <-ifelse(sum(agg$id==i)==2, 1, 0)
+# }
+# agg <- agg[agg$full==1, 1:4]
+#
+#
+#
+# plot(x = c(0, 1), y = c(0, 1), type="n", main = "revealed", xlab="p(korrekt|Inklusion)",ylab="p(korrekt|Exklusion)")
+# text(
+#   x = agg[agg$`PD instruction`=="Inclusion", "SOC.correct"]
+#   , y = agg[agg$`PD instruction`=="Exclusion", "SOC.correct"]
+#   , labels = agg[agg$`PD instruction`=="Exclusion", "id"]
+#   , cex = 1
+# )
+# lines(x=c(0,1), y = c(0,1))
+
+# agg[agg$id %in% c(153, 58, 122, 84, 37), ]
+
+
+# # Bayes Factor models
+# topdown1 <- anovaBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2, whichModel="top")
+#
+# # Full model
+# M1 <- lmBF(formula=SOC.correct~Material*Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o interactions
+# M2 <- lmBF(formula=SOC.correct~Material+Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # w/o complete 'material' term
+# M3 <- lmBF(formula=SOC.correct~Condition*Order*Instruktion+id, whichRandom="id", data=tmp2)
+# # M3/M1
+# # w/o complete 'PD instruction' term
+# M4 <- lmBF(formula=SOC.correct~Material*Order+id, whichRandom="id", data=tmp2)
+# # M1/M4
+```
+
+#### Inclusion
+
+Analyzing the number of regular transitions generated in inclusion blocks,
+a `r pdl10_inclusion$name` ANOVA revealed a significant main effect of *explicit knowledge*,
+`r pdl10_inclusion$Condition`,
+indicating that our manipulation of explicit knowledge influenced inclusion performance.
+The main effect of *block order* trended to be significant,
+`r pdl10_inclusion$Order`,
+which was qualified by an almost significant interaction of *explicit knowledge* and *block order*,
+`r pdl10_inclusion$Condition_Order`.
+This pattern indicated that more regular transitions were generated if participants
+had received explicit knowledge about two transitions and inclusion followed
+exclusion, i.e. the explicit knowledge had been presented a second time (once prior to exclusion, once prior to inclusion).
+
+#### Exclusion
+
+Analyzing the number of regular transitions generated in exclusion blocks,
+a `r pdl10_exclusion$name` ANOVA revealed only an almost significant main effect of *explicit knowledge*,
+`r pdl10_exclusion$Condition`;
+revealing explicit knowledge about the sequence slightly *increased* the proportion of regular transitions
+generated. This pattern, again, violates the core assumption of the ordinal-PD approach that increasing amounts of explicit knowledge
+monotonically decrease the proportion of regular transitions in exclusion blocks.
+Moreover, it also shows that increasing explicit knowledge might produce a data pattern that is typically interpreted
+as evidence for increasing amounts of implicit knowldge.
+
+```{r eval = FALSE}
+# separate analyses for *condition*
+exp3gen2.out.nt <- apa.glm(data=subset(exp3gen2, Condition=="No transition revealed")
+                  ,id="id"
+                  ,dv="SOC.correct"
+                  ,between=c("Material","Order")
+                  ,within=c("PD instruction"))
+exp3gen2.out.tt <- apa.glm(data=subset(exp3gen2, Condition=="Two transitions revealed")
+                  ,id="id"
+                  ,dv="SOC.correct"
+                  ,between=c("Material","Order")
+                  ,within=c("PD instruction"))
+
+exp3gen2.out.ex <- apa.glm(data=exp3gen2[exp3gen2[["PD instruction"]]=="Exclusion",]
+                  ,id="id"
+                  ,dv="SOC.correct"
+                  ,between=c("Material","Condition","Order"))
+
+# plots
+# apa_barplot(data=exp3gen2,id="id",dv="SOC.correct",factors=c("Material","PD instruction","Condition"),intercept=.25,ylim=c(0,1))
+
+# t tests against a baseline
+fun.tmp <- function(x){
+  y <- apa.t(t.test(x,mu=.25),n=sum(!is.na(x)))
+  return(y)
+}
+
+agg<-.aggregate(data=exp3gen2,factors=c("id","PD instruction","Condition"),fun=mean,dv="SOC.correct")
+exp3gen2.t.out<-tapply(agg[["SOC.correct"]],list(agg[["PD instruction"]],agg[["Condition"]]),fun.tmp)
+
+# 
+# We conducted a `r exp3gen2.out$name` ANOVA with repeated measures on the last factor;
+# it revealed
+# a main effect of *condition*, `r exp3gen2.out[["Condition"]]` (more regular transitions were generated if sequence knowledge had been revealed);
+# a main effect of *PD instruction*, `r exp3gen2.out[["PD_instruction"]]` (more regular transitions were generated in *inclusion* than in exclusion blocks);
+# and an interaction of *condition* and *PD instruction*, `r exp3gen2.out[["Condition_PD_instruction"]]`, reflecting the finding that the *PD instruction* effect was much greater if explicit sequence knowledge had been revealed, `r exp3gen2.out.tt[["PD_instruction"]]`;
+# as compared to when no explicit knowledge was revealed, `r exp3gen2.out.nt[["PD_instruction"]]`.
+# The effect of *material* was again not significant, `r exp3gen2.out[["Material"]]`, suggesting that implicit knowledge acquired during the SRT was not expressed in the generation task.
+# 
+# To establish the relative performance patterns across inclusion (I), exclusion (E), and baseline (B) conditions, we computed a set of pairwise comparisons: *t* tests against a fixed baseline of $B = .25$ revealed that inclusion performance was above chance for both the *no-transition-revealed* group, `r exp3gen2.t.out["Inclusion","No transition revealed"]`,
+# and the *two-transitions-revealed* group, `r exp3gen2.t.out["Inclusion","Two transitions revealed"]`.
+# Exclusion performance was at chance in the the *no-transition-revealed* group, `r exp3gen2.t.out["Exclusion","No transition revealed"]`,
+# but above chance in the *two-transitions-revealed* group, `r exp3gen2.t.out["Exclusion","Two transitions revealed"]`.
+# 
+# Taken together, for the control condition in which no transitions were revealed, results showed $I > E$, $I > B$ and $E = B$ -- a pattern implicating the presence of explicit but the *absence* of implicit knowledge.
+# That is, excluding reversals eliminated the pattern suggesting the presence of implicit knowledge -- which would have been plausible at least for the *mixed SOC* and psoc groups -- but left a pattern that suggested the presence of explicit knowledge -- an interpretation unlikely to be correct, given that explicit knowledge was not conveyed to these participants.
+# For the condition in which two transitions were revealed, we obtained $I > E$, $I > B$ and $E > B$ -- a pattern typically taken to indicate the presence of both explicit *and implicit* knowledge.
+# In other words, in contrast to the control condition, revealing *explicit* knowledge about two transitions elicited the PD signature of evidence for *implicit* knowledge.
+# Note that this is precisely what one would expect if explicit knowledge is not exhaustively excluded, as suggested by our previous results.
+```
+
+```{r fig.cap="Trials ausgeschlossen, die Teil eines verratenen Übergangs sind", eval = FALSE}
+#
+# SOCs, repetitions and reversals excluded, only non-revealed transitions
+#
+load("data/pdl10.RData")
+
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0,]
+
+tmp$nonpoit <- as.integer(tmp$poit!=1)
+tmp$nonpoid <- as.integer(tmp$poid!=1)
+agg3 <- apa.aggregate(data = tmp, factors =c("id", "Material", "Condition", "PD instruction"), dv = "nonpoit", fun = sum)
+agg4 <- apa.aggregate(data = tmp, factors =c("id", "Material", "Condition", "PD instruction"), dv = "nonpoid", fun = sum)
+
+too.few.obs.1 <- sort(unique(agg3[agg3$nonpoit<30,"id"]))
+too.few.obs.2 <- sort(unique(c(agg4[agg4$nonpoid<30,"id"])))
+# length(too.few.obs.2)
+
+# trialweiser Ausschluss
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0 & Generation[["poid"]]==0,]
+
+apa_beeplot(data = tmp, id = "id", dv = "SOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim=c(0,1), intercept=.25, jit = .5, xlim = c(.7, 3.3))
+out <- apa.glm(data = tmp, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"), within = c("PD instruction"))
+```
+
+```{r results='asis', eval = FALSE}
+apa_table(out$table, caption = "Trials ausgeschlossen, die Teil eines verratenen Übergangs sind")
+```
+
+
+```{r fig.cap="trialweise (wie oben) ausgeschlossen, zusätzlich fliegen Vpn mit weniger als 30 verbleibendne Beobachtungen raus (das sind 25 Vpn)", eval = FALSE}
+# trial- und vp-weise ausgeschlossen
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0 & Generation[["poid"]]==0 & Generation[["id"]] %in% setdiff(Generation$id, too.few.obs.2),]
+
+# apa.aggregate(data = tmp, dv = "SOC.correct", factors = c("id", "Material", "PD instruction", "Condition"), fun = mean)
+
+apa_beeplot(data = tmp, id = "id", dv = "SOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim=c(0,1), intercept=.25, jit = .5, xlim = c(.7, 3.3))
+
+
+# po <- apa_beeplot(data = tmp, id = "Exp.Name", dv = "SOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim=c(0,1), intercept=.25, jit = .5, xlim = c(.7, 3.3))
+
+#dat <- po$data
+#dat[order(dat$SOC.correct),]
+out <- apa.glm(data = tmp, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"), within = c("PD instruction"))
+
+# repetitions and reversals excluded
+tmp <- exp3gen2
+tmp[["freq"]] <- 1
+tmp[["SOC.correct"]] <- factor(tmp[["SOC.correct"]], levels = 1:0, labels = c("correct", "incorrect"))
+tmp[["revealed"]] <- factor(tmp[["revealed"]], levels = 0:1, labels = c("non-revealed", "revealed"))
+# only non-revealed, non-touching
+agg <- apa.aggregate(data = tmp[tmp[["revealed"]]=="non-revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+# write.table(agg, file = "model_data/exp3_wo_reversals_non_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_non.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_non:")
+
+# fit baseline model
+f.b <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals_non.mdt", c("C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f=C_two_inclusion_p"))
+
+
+```
+
+```{r results='asis', eval = FALSE}
+apa_table(out$table, caption = "trialweise (wie oben) ausgeschlossen, zusätzlich fliegen Vpn mit weniger als 30 verbleibendne Beobachtungen raus (das sind 25 Vpn)")
+```
+
+```{r fig.cap="vp-weiser ausschluss, histogramme des anteils der reaktionen, die teil eines triplets sind", eval = FALSE}
+# nur vp-weise ausgeschlossen
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0,]
+agg <- apa.aggregate(data = tmp, factors = c("id", "Material", "Condition","PD instruction"), dv = "poid", fun = mean)
+# agg[order(agg$poid),]
+par(mfrow=c(1,2))
+# hist(agg[agg$`PD instruction`=="Inclusion"&agg$Condition=="Two transitions revealed", "poid"], breaks = 20, col = "lightgrey", xlab = "Proportion that is part of instructed triplet", ylim = c(0, 15), main = "Inclusion")
+# hist(agg[agg$`PD instruction`=="Exclusion"&agg$Condition=="Two transitions revealed", "poid"], breaks = 20, col = "lightgrey", xlab = "Proportion that is part of instructed triplet", ylim = c(0, 15), main = "Exclusion")
+par(mfrow=c(1,1))
+
+loser <- sort(unique(agg[agg$poid>.6, "id"]))
+# length(loser)
+
+```
+
+```{r fig.cap="nicht mehr trialweise ausgeschlossen, stattdessen werden Vpn ausgeschlossen, die zu einem sehr großen Teil nur Lokationen aus den verratenen Übergängen generieren (p>.6), so werden 27 Vpn ausgeschlossen", eval = FALSE}
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0 & Generation[["id"]] %in% setdiff(unique(Generation$id), loser),]
+# plot
+apa_beeplot(data = tmp, id = "id",dv = "SOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim=c(0,1), intercept=.25, jit = .5, xlim = c(.7, 3.3))
+
+out <- apa.glm(data = tmp, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"), within = c("PD instruction"))
+
+
+# repetitions and reversals excluded
+tmp <- exp3gen2
+tmp[["freq"]] <- 1
+tmp[["SOC.correct"]] <- factor(tmp[["SOC.correct"]], levels = 1:0, labels = c("correct", "incorrect"))
+tmp[["revealed"]] <- factor(tmp[["revealed"]], levels = 0:1, labels = c("non-revealed", "revealed"))
+# only non-revealed, non-touching
+agg <- apa.aggregate(data = tmp[tmp[["revealed"]]=="non-revealed", ], factors = c("Material", "Condition", "PD instruction", "SOC.correct"), dv = "freq", fun = sum)
+# write.table(agg, file = "model_data/exp3_wo_reversals_non_frequencies.csv", sep = ",", row.names = FALSE)
+make.mdt(data = agg[, "freq"], mdt.filename = "model_data/exp3_wo_reversals_non.mdt", index = "Material x Condition x PD instruction x SOC.correct", prefix = "exp3_wo_reversals_non:")
+
+# fit baseline model
+f.b <- fit_mpt(eqnfile = "exp3.eqn", mdtfile = "model_data/exp3_wo_reversals_non.mdt", c("C_two_exclusion=C_two_exclusion_f=C_two_exclusion_p","C_two_inclusion=C_two_inclusion_f"))
+
+
+
+```
+
+```{r results='asis', eval = FALSE}
+apa_table(out$table, caption = "nicht mehr trialweise ausgeschlossen, stattdessen werden Vpn ausgeschlossen, die zu einem sehr großen Teil nur Lokationen aus den verratenen Übergängen generieren (p>.6), so werden 27 Vpn ausgeschlossen")
+```
+
+
+```{r fig.cap="Anteil der nicht-instruierten Lokationen, die Teil eines instruierten Übergangs sind", eval = FALSE}
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0,]
+
+apa_beeplot(
+  data = tmp
+  , id = "id"
+  , dv = "poid"
+  , factors = c("Material", "PD instruction", "Condition")
+  , ylim = c(0, 1)
+  # , intercept = .25
+  , jit = .5
+  , xlim = c(.7, 3.3)
+  , args_legend = list(plot = c(TRUE, FALSE))
+)
+
+```
+
+```{r eval = FALSE}
+## alter kram
+# ANOVA
+out <- apa.glm(data = tmp, id = "id", dv = "SOC.correct", between = c("Material", "Condition", "Order"), within = c("PD instruction"))
+# --> 'Condition x PD instruction' significant
+
+
+tmp <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["reversal"]]==0 & Generation[["excluded.id"]]==0 & Generation[["instruiert"]]==0 & Generation[["poit"]]==0,]
+
+# separate ANOVAs for each 'Condition'
+tmp.nt <- tmp[tmp[["Condition"]]=="No transition revealed",]
+out.nt <- apa.glm(data=tmp.nt,id="id",dv="SOC.correct",between=c("Material","Order"),within=c("PD instruction"))
+# main effect 'PD instruction', ges = .025
+tmp.tt <- tmp[tmp[["Condition"]]=="Two transitions revealed",]
+out.tt <- apa.glm(data=tmp.tt,id="id",dv="SOC.correct",between=c("Material","Order"),within=c("PD instruction"))
+# main effect 'PD instruction', ges = .035
+
+# plot
+apa.barplot(data = tmp, id = "id",dv = "SOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim=c(0,1), intercept=.25)
+# --> If nothing revealed, then I>E; if two transitions revealed, then I<E.
+apa_beeplot(data = tmp, id = "id", dv = "SOC.correct", factors = c("Material", "PD instruction", "Condition"), ylim=c(0,1), intercept=.25, jit = .5)
+```
+
