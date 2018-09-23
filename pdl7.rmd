@@ -367,7 +367,7 @@ Parameter estimates from model $\mathcal{M}_1$ were used to address the invarian
 
 
 ```{r 'pdl7_load_ic_fit', cache = FALSE}
-load("hierarchical_pd/exp1_stan_summary.RData")
+load("hierarchical_pd/pdl7_stan_summary.RData")
 
 DIC_1vs2 <- paste0("$\\Delta \\textrm{DIC}_{\\mathcal{M}_1 - \\mathcal{M}_2} = ", papaja::printnum(M1$num$DIC - M2$num$DIC, digits = 2, big.mark = "{,}"), "$")
 # DIC_1vs2a <- papaja::printnum(M2a$num$DIC - M1$num$DIC, digits = 2, big.mark = ",")
@@ -376,7 +376,7 @@ DIC_1vs2 <- paste0("$\\Delta \\textrm{DIC}_{\\mathcal{M}_1 - \\mathcal{M}_2} = "
 ```
 
 ```{r 'pdl7_load_posteriors', cache = FALSE}
-load(file = "hierarchical_pd/exp1/pd_Halt_cdfs.RData")
+load(file = "hierarchical_pd/pdl7/pd_Halt_cdfs.RData")
 
 a_non <- paste0("$p ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
 a_rev <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_rev(0)), "$")
@@ -400,7 +400,7 @@ This implies that the auxiliary assumptions we introduced to $\mathcal{M}_1$ wer
 Moreover, the standard PD model enforcing the invariance assumption was not able to account for the data.
 
 ```{r pdl7-parameter-estimates, fig.cap = "Parameter estimates from Experiment 2. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/exp1/pd_Halt_posteriors.RData")
+load("hierarchical_pd/pdl7/pd_Halt_posteriors.RData")
 
 par(mfrow = c(1, 2))
 apa_beeplot(
@@ -427,7 +427,7 @@ apa_beeplot(
 ```{r pdl7-posterior-differences, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 2, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 
 
-load(file = "hierarchical_pd/exp1/posteriors_for_plot.RData")
+load(file = "hierarchical_pd/pdl7/posteriors_for_plot.RData")
 library(papaja)
 
 par(mfrow = c(1, 3))
@@ -534,7 +534,7 @@ percentage_reported <- round(mean(tmp$SR.frei.3C!="nicht.genannt") * 100, digits
 tmp <- SelfReport[SelfReport$vR!=2, ]
 percentage_hits <- round(sum(tmp$Hit.free)/sum(tmp$Hit.free + tmp$FA.free) * 100, digits = 2)
 
-load("hierarchical_pd/exp1/stan_M1_excluded_all_freely_reported_cdfs.RData")
+load("hierarchical_pd/pdl7/stan_M1_excluded_all_freely_reported_cdfs.RData")
 bayes_p <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
 ```
 

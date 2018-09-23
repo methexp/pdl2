@@ -24,7 +24,7 @@ Generation$SOC.correct <- 100 * Generation$SOC.correct
 pdl10_generation <- Generation[Generation[["repetition"]]==0 & Generation[["vR.repetition"]]==0 & Generation[["Trial"]]>2 & Generation[["excluded.id"]]==0,]
 
 # ANOVA
-exp3gen.out <- apa.glm(data = exp3gen
+exp3gen.out <- apa.glm(data = pdl10_generation
                        , id = "id"
                        , dv = "SOC.correct"
                        , between = c("Material", "Condition", "Order")

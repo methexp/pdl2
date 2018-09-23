@@ -1,3 +1,4 @@
+theta <- extract(model, pars = "theta")$theta
 
 dimnames(theta) <- list(
   "iteration" = NULL

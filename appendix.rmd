@@ -117,7 +117,7 @@ concatenated <- rbind(
   , tmp4
 )
 
-rownames(concatenated) <- c(
+first_col <- c(
     "$\\textit{Full dataset}$"
   , rownames(tmp1)
   , "$\\textit{Nonrevealed transitions}$"
@@ -127,6 +127,9 @@ rownames(concatenated) <- c(
   , "$\\textit{Revealed-and-practiced transitions}$"
   , rownames(tmp4)
 )
+concatenated <- cbind(first_col, concatenated)
+colnames(concatenated)[1] <- ""
+rownames(concatenated) <- NULL
 
 # build table
 apa_table(
@@ -206,7 +209,9 @@ concatenated <- rbind(
   , revealed
 )
 
-rownames(concatenated) <- c(
+rownames(concatenated) <- NULL
+
+first_col <- c(
   "$\\textit{Full dataset}$"
   , "No transition revealed"
   , "One transition revealed"
@@ -217,11 +222,15 @@ rownames(concatenated) <- c(
   , "One transition revealed"
 )
 
+concatenated <- cbind(first_col, concatenated)
+  
+colnames(concatenated)[1] <- ""
+
 
 # build table
 apa_table(
   concatenated
-  , col_spanners = list("Random" = 2:3, "Probabilistic" = 4:5)
+  , col_spanners = list("Random" = c(2, 3), "Probabilistic" = 4:5)
   , added_stub_head = "Condition"
   , caption = "Mean percentage of regular transitions generated in Experiment 2, excluding repetions. Standard deviations are given in parentheses."
   , placement = "hp"
@@ -300,7 +309,7 @@ concatenated <- rbind(
   , revealed
 )
 
-rownames(concatenated) <- c(
+first_col <- c(
   "$\\textit{Full dataset}$"
   , "No transition revealed"
   , "Two transitions revealed"
@@ -311,6 +320,9 @@ rownames(concatenated) <- c(
   , "Two transitions revealed"
 )
 
+concatenated <- cbind(first_col, concatenated)
+colnames(concatenated)[1] <- ""
+rownames(concatenated) <- NULL
 
 # build table
 apa_table(
@@ -385,7 +397,7 @@ Parameter estimates from model $\mathcal{M}_1$ were used to address the invarian
 The first trial of a block as well as any response repetitions were excluded from all generation task analyses.
 
 ```{r 'pdl9-load-models', cache = FALSE}
-load("hierarchical_pd/exp2_stan_summary.RData")
+load("hierarchical_pd/pdl9_stan_summary.RData")
 
 # DIC_1vs2 <- papaja::printnum(M2$num$DIC - M1$num$DIC, digits = 2, big.mark = ",")
 # DIC_1vs2a <- papaja::printnum(M2a$num$DIC - M1$num$DIC, digits = 2, big.mark = ",")
@@ -393,7 +405,7 @@ load("hierarchical_pd/exp2_stan_summary.RData")
 ```
 
 ```{r 'pdl9-load-posteriors'}
-load(file = "hierarchical_pd/exp2/pd_Halt_cdfs.RData")
+load(file = "hierarchical_pd/pdl9/pd_Halt_cdfs.RData")
 a <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a(0)), "$") 
 c_practiced <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$c_practiced(0)), "$")
 c_nonpracticed <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$c_nonpracticed(0)), "$")
@@ -409,7 +421,7 @@ The model checks for model $\mathcal{M}_1$ were satisfactory,
 `r M1$fit`
 
 ```{r pdl9-parameter-estimates, fig.cap = "Parameter estimates from Experiment 1, model $\\mathcal{M}_1$. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/exp2/pd_Halt_posteriors.RData")
+load("hierarchical_pd/pdl9/pd_Halt_posteriors.RData")
 
 par(mfrow = c(1, 2))
 
@@ -436,7 +448,7 @@ apa_beeplot(
 
 ```{r pdl9-posterior-differences, fig.height = 5, fig.width = 8.8, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 1, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 
-load(file = "hierarchical_pd/exp2/posteriors_for_plot.RData")
+load(file = "hierarchical_pd/pdl9/posteriors_for_plot.RData")
 
 N <- sum(!is.na(delta_quantiles[1, ,1]))
 
@@ -607,7 +619,7 @@ an alternative model imposing an order constraint $C_I < C_E$ was also not ident
 # library(PDhelper)
 library(reshape2)
 library(rstan)
-load(file = "hierarchical_pd/exp1/fits/pd_alternative_model15a.RData")
+load(file = "hierarchical_pd/pdl7/fits/pd_alternative_model15a.RData")
 class(ic) <- "dic_waic"
 ```
 
@@ -622,8 +634,9 @@ This again implies that our auxiliary assumptions introduced to $\mathcal{M}_{1R
 ```{r pdl7-m1r-parameter-estimates, fig.height = 10, fig.cap = "Parameter estimates from Experiment 2, model $\\mathcal{M}_{1R}$. Error bars represent 95% confidence intervals."}
 load("hierarchical_pd/pd_alternative_model15a.RData")
 
-source("hierarchical_pd/R/helper.R")
 
+load("hierarchical_pd/pdl7/m1r_posteriors.RData")
+source("hierarchical_pd/R/helper.R")
 
 apa_beeplot(
   data = theta# [theta$`Transition type`=="revealed", ]

@@ -410,11 +410,11 @@ Deviating from the RT result pattern, this advantage did not reliably increase a
 ### Generation task
 
 ```{r 'exp3_load_ic_fit', cache = FALSE}
-load(file = "hierarchical_pd/exp3_stan_summary.RData")
+load(file = "hierarchical_pd/pdl10_stan_summary.RData")
 ```
 
 ```{r 'exp3_load_posteriors', cache = FALSE}
-load(file = "hierarchical_pd/exp3/pd_Halt_cdfs.RData")
+load(file = "hierarchical_pd/pdl10/pd_Halt_cdfs.RData")
 
 a_non <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_non(0)), "$")
 a_rev <- paste0("$p = ", papaja::printp(cdfs$difference_of_means$a_rev(0)), "$")
@@ -448,7 +448,7 @@ were less problematic than the invariance assumption.
 Moreover, the standard PD model enforcing the invariance assumption was not able to account for the data.
 
 ```{r pdl10-parameter-estimates, fig.width = 8.8, fig.height = 5, fig.cap = "Parameter estimates from Experiment 3. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/exp3/pd_Halt_posteriors.RData")
+load("hierarchical_pd/pdl10/pd_Halt_posteriors.RData")
 par(mfrow = c(1, 2))
 apa_beeplot(
   data = means_df[means_df$Parameter=="a",]
@@ -472,7 +472,7 @@ apa_beeplot(
 ```
 
 ```{r pdl10-posterior-differences, fig.height = 5, fig.width = 8.8, fig.cap = "Posterior differences $A_I - A_E$ and $C_I - C_E$ in Experiment 3, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
-load(file = "hierarchical_pd/exp3/posteriors_for_plot.RData")
+load(file = "hierarchical_pd/pdl10/posteriors_for_plot.RData")
 N <- 171
 N2 <- 82
 par(mfrow = c(1, 3))
