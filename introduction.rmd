@@ -205,7 +205,7 @@ $$E=(1-C)*A$$
 These equations reflect the notions that (1) regular transitions generated under inclusion can arise from either the controlled process (with probability $C$) or, given that it fails (with probability $1-C$), from the automatic process $A$; and (2) regular transitions generated under exclusion are solely due to the automatic process in the absence of the influence of the controlled process, $(1-C)*A$.
 Solving these equations for $C$ and $A$ (or using parameter estimation techniques for multinomial models) yields estimates of the contributions of the controlled and automatic process. 
 
-The validity of the PD method and model has been the target of debate since its introduction by @jacoby_process_1991 [see, e.g., @buchner_toward_1995; @curran_violations_1995; @graf_process_1994].
+The validity of the PD method and model has been the target of debate since its introduction by @jacoby_process_1991 [see, e.g., @buchner_unbiased_1995; @curran_violations_1995; @graf_process_1994].
 This is because the PD approach is not a theory-free measurement tool but rests on a set of strong and possibly problematic assumptions.
 <!-- the first and second assumptions could be moved to a footnote or the gd, if space requires -->
 First and obviously, it assumes the existence of two qualitatively different---controlled and automatic---processes, and it aims to measure the magnitude of their respective contributions.
@@ -218,7 +218,7 @@ Second, it is assumed that both processes operate independently; that is, on eac
 In particular, the response proposed by the automatic process is assumed to be uninfluenced by whether the controlled process proposes the same or a different candidate response.
 Relatedly, the model assumes that independence holds across persons and items; when data are aggregated over (potentially heterogeneous) participants and items, a violation can lead to biases in parameter estimates.
 There has been considerable debate about the independence assumption in applications of the PD to episodic memory paradigms
-[@jacoby_toward_1997; @curran_violations_1995; @hintzman_more_1997; @curran_consequences_1997].
+[@jacoby_psychometric_1997; @curran_violations_1995; @hintzman_more_1997; @curran_consequences_1997].
 Evidence suggests that aggregation independence may often be violated; hierarchical extension of the PD model have been proposed to address this problem [@rouder_hierarchical_2008].
 
 Third, and most important for the present study, it is assumed that both the controlled and automatic processes are *invariant* across the inclusion and exclusion instructions.

@@ -81,7 +81,7 @@ Nevertheless, because evidence for (implicit) sequence learning was not beyond d
 ### Explicit knowledge learned via instruction may be qualitatively different from acquired explicit knowledge
 
 The present study manipulated explicit knowledge via instruction.
-Although it is an established method [e.g., @liefooghe_instruction-based_2012] that has yielded important insights in other domains,
+Although it is an established method [e.g., @liefooghe_instructionbased_2012] that has yielded important insights in other domains,
 one might argue that explicit knowledge acquired via instruction is somehow qualitatively different from explicit knowledge acquired during SRTT training, and that therefore the present results do not speak to the question of interest regarding the invariance of the expression of acquired knowledge.
 We believe our manipulation to be valid for the following reasons.
 First, the instructed explicit knowledge communicated the same proposition about the sequence that participants would have acquired during SRTT training (i.e., that a specific location was regularly followed by another location).
@@ -97,7 +97,7 @@ Finally, even if that was the case, note that this would not salvage the PD meth
 
 ### Boundary conditions of the process-dissociation approach may be violated
 
-Jacoby and colleagues [@jacoby_separating_1993; @toth_toward_1994; @jacoby_defense_1997] emphasized the importance of
+Jacoby and colleagues [@jacoby_separating_1993; @toth_redefinition_1994; @jacoby_defense_1997] emphasized the importance of
 avoiding floor effects when applying the process-dissociation approach.
 <!-- In our Experiments 1 and 2 that used first-order conditional material, we found below-chance exclusion performance for a subset of revealed transitions. -->
 In the present studies, floor effects may be present if participants succeed in avoiding to generating any regular transitions under exclusion instructions.
@@ -120,7 +120,7 @@ If individual participants' data are analyzed separately,
 floor effects might be accompanied by inflated levels of zero counts in the exclusion condition (i.e., perfect exclusion) for some participants.
 The original PD equations would then lead to an estimate of $A=0$ for this participant;
 therefore, averaging over individual $A$ parameters would lead to an underestimation of the *automatic* parameter.
-As a means to circumvent this estimation problem, @toth_toward_1994 proposed complete pooling (i.e., aggregate analysis) of data.
+As a means to circumvent this estimation problem, @toth_redefinition_1994 proposed complete pooling (i.e., aggregate analysis) of data.
 In our studies, we followed and extended this recommendation by utilizing a Bayesian hierarchical multinomial model for estimating parameters;
 while allowing for individual differences between parameter estimates,
 a participant's parameter estimate is not only affected by the data that are directly linked to this estimate, but also by the higher-level distribution for this parameter; the influence of outlier values (such as zero counts provided by some individuals) on the parameter estimates is thus minimized.

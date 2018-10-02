@@ -239,7 +239,7 @@ Finally, participants were thanked and debriefed.
 
 All analyses were performed using the R software^[
 We used `r cite_r(file = "r-references.bib", withhold = FALSE, pkgs = c("papaja", "afex"))`.
-] and Stan [@carpenter_stan:_2016].
+] and Stan [@carpenter_stan_2016].
 For analyses of reaction times during the acquisition task,
 we excluded the first trial of each block as well as trials with errors, trials succeeding an error, reactions faster than 50 ms and those slower than 1,000 ms.
 For analyses of error rates during the acquisition task, we excluded the first trial of each block.
