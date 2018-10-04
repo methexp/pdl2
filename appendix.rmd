@@ -30,6 +30,7 @@ This appendix provides the raw generation performance for all experiments in tab
 
 
 ```{r appendix-pdl9-generation, fig.cap = "Generation performance in Experiment 1, excluding repetitions. Error bars represent 95% confidence intervals. Horizontal line represents chance baseline.", fig.show='hide', results='asis'}
+library("rstan")
 # load data
 load("data/pdl9.RData")
 
@@ -107,28 +108,24 @@ tmp4 <- tapply(
 )[4:5, ]
 
 concatenated <- rbind(
-  rep("", ncol(tmp1))
-  , tmp1
-  , rep("", ncol(tmp2))
+  tmp1
   , tmp2
-  , rep("", ncol(tmp3))
   , tmp3
-  , rep("", ncol(tmp4))
   , tmp4
 )
 
 first_col <- c(
-    "$\\textit{Full dataset}$"
-  , rownames(tmp1)
-  , "$\\textit{Nonrevealed transitions}$"
+  #   "$\\textit{Full dataset}$"
+  rownames(tmp1)
+  # , "$\\textit{Nonrevealed transitions}$"
   , rownames(tmp2)
-  , "$\\textit{Revealed, but nonpracticed transitions}$"
+  # , "$\\textit{Revealed, but nonpracticed transitions}$"
   , rownames(tmp3)
-  , "$\\textit{Revealed-and-practiced transitions}$"
+  # , "$\\textit{Revealed-and-practiced transitions}$"
   , rownames(tmp4)
 )
 concatenated <- cbind(first_col, concatenated)
-colnames(concatenated)[1] <- ""
+colnames(concatenated)[1] <- "Condition"
 rownames(concatenated) <- NULL
 
 # build table
@@ -137,6 +134,13 @@ apa_table(
   , caption = "Mean percentage of regular transitions generated in Experiment 1, excluding repetions. Standard deviations are given in parentheses."
   , placement = "h"
   , escape = FALSE
+  , stub_indents = list(
+    "$\\textit{Full dataset}$" = 1:5
+    , "$\\textit{Nonrevealed transitions}$" = 6:10
+    , "$\\textit{Revealed, but nonpracticed transitions}$" = 11:13
+    , "$\\textit{Revealed-and-practiced transitions}$" = 14:15
+  )
+  # , font_size = "tiny"
 )
 ```
 
@@ -201,41 +205,47 @@ tmp3 <- tapply(
 revealed <- c(tmp3[,, "Random"], tmp3[,,"Probabilistic"])
 
 concatenated <- rbind(
-  rep("", ncol(full))
-  , full
-  , rep("", ncol(full))
+  # rep("", ncol(full))
+  full
+  #, rep("", ncol(full))
   , nonrevealed
-  , rep("", ncol(full))
+  #, rep("", ncol(full))
   , revealed
 )
 
 rownames(concatenated) <- NULL
 
+
 first_col <- c(
-  "$\\textit{Full dataset}$"
+  # "$\\textit{Full dataset}$"
+  "No transition revealed"
+  , "One transition revealed"
+  # , "$\\textit{Nonrevealed transitions}$"
   , "No transition revealed"
   , "One transition revealed"
-  , "$\\textit{Nonrevealed transitions}$"
-  , "No transition revealed"
-  , "One transition revealed"
-  , "$\\textit{Revealed transitions}$"
+  # , "$\\textit{Revealed transitions}$"
   , "One transition revealed"
 )
 
 concatenated <- cbind(first_col, concatenated)
   
-colnames(concatenated)[1] <- ""
+colnames(concatenated)[1] <- "Condition"
 
 
 # build table
 apa_table(
   concatenated
   , col_spanners = list("Random" = c(2, 3), "Probabilistic" = 4:5)
-  , added_stub_head = "Condition"
+  , stub_indents = list(
+    "$\\textit{Full dataset}$" = 1:2
+    , "$\\textit{Nonrevealed transitions}$" = 3:4
+    , "$\\textit{Revealed transitions}$" = 5
+  )
   , caption = "Mean percentage of regular transitions generated in Experiment 2, excluding repetions. Standard deviations are given in parentheses."
   , placement = "hp"
   , escape = FALSE
-  , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
+  # , font_size = "tiny"
+  # , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
 )
 ```
 
@@ -301,38 +311,44 @@ revealed <- c(tmp[,, "Random"], tmp[,, "Mixed SOC"], tmp[,, "Pure SOC"])
 
 
 concatenated <- rbind(
-  rep("", ncol(full))
-  , full
-  , rep("", ncol(full))
+  # rep("", ncol(full))
+  full
+  #, rep("", ncol(full))
   , nonrevealed
-  , rep("", ncol(full))
+  #, rep("", ncol(full))
   , revealed
 )
 
 first_col <- c(
-  "$\\textit{Full dataset}$"
+  # "$\\textit{Full dataset}$"
+  "No transition revealed"
+  , "Two transitions revealed"
+  # , "$\\textit{Nonrevealed transitions}$"
   , "No transition revealed"
   , "Two transitions revealed"
-  , "$\\textit{Nonrevealed transitions}$"
-  , "No transition revealed"
-  , "Two transitions revealed"
-  , "$\\textit{Revealed transitions}$"
+  #, "$\\textit{Revealed transitions}$"
   , "Two transitions revealed"
 )
 
 concatenated <- cbind(first_col, concatenated)
-colnames(concatenated)[1] <- ""
+colnames(concatenated)[1] <- "Condition"
 rownames(concatenated) <- NULL
 
 # build table
 apa_table(
   concatenated
   , col_spanners = list("Random" = 2:3, "Mixed SOC" = 4:5, "Pure SOC" = 6:7)
-  , added_stub_head = "Condition"
+  # , added_stub_head = "Condition"
+  , stub_indents = list(
+    "$\\textit{Full dataset}$" = 1:2
+    , "$\\textit{Nonrevealed transitions}$" = 3:4
+    , "$\\textit{Revealed transitions}$" = 5
+  )
   , caption = "Mean percentage of regular transitions generated in Experiment 3, excluding repetions and reversals. Standard deviations are given in parentheses."
   , placement = "hp"
   , escape = FALSE
-  , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
+  , font_size = "tiny"
+  # , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
 )
 ```
 
@@ -655,12 +671,12 @@ apa_beeplot(
   , ncol = 2)
 )
 
-# mu <- extract(model, pars = "mu")$mu
+# mu <- rstan::extract(model, pars = "mu")$mu
 # # Violations of invariances on C
-# theta <- extract(model, pars = "theta")$theta
+# theta <- rstan::extract(model, pars = "theta")$theta
 # 
 # load("pd_alternative_model15a_prior.RData")
-# theta_ <- extract(model, pars = "theta")$theta
+# theta_ <- rstan::extract(model, pars = "theta")$theta
 # 
 # delta <- theta[, , seq(1, 7, 2)] - theta[, , seq(2, 8, 2)]
 # delta_ <- theta_[, , seq(1, 7, 2)] - theta_[, , seq(2, 8, 2)]
@@ -704,7 +720,7 @@ apa_beeplot(
 ```{r pdl7-m1r-posterior-differences, fig.height = 10, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 2, model $\\mathcal{M}_{1R}$, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 par(mfrow = c(2, 2))
 
-pars <- extract(model, pars = "theta")$theta
+pars <- rstan::extract(model, pars = "theta")$theta
 
 delta <- pars[, , seq(1, 7, 2)] - pars[, , seq(2, 8, 2)]
 
@@ -839,12 +855,12 @@ apa_beeplot(
     , ncol = 2)
 )
 
-# mu <- extract(model, pars = "mu")$mu
+# mu <- rstan::extract(model, pars = "mu")$mu
 # # Violations of invariances on C
-# theta <- extract(model, pars = "theta")$theta
+# theta <- rstan::extract(model, pars = "theta")$theta
 # 
 # load("pd_alternative_model15a_prior.RData")
-# theta_ <- extract(model, pars = "theta")$theta
+# theta_ <- rstan::extract(model, pars = "theta")$theta
 # 
 # delta <- theta[, , seq(1, 7, 2)] - theta[, , seq(2, 8, 2)]
 # delta_ <- theta_[, , seq(1, 7, 2)] - theta_[, , seq(2, 8, 2)]
@@ -888,7 +904,7 @@ apa_beeplot(
 ```{r pdl10-m1r-posterior-differences, fig.height = 10, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 3, model $\\mathcal{M}_{1R}$, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 par(mfrow = c(2, 2))
 
-pars <- extract(model, pars = "theta")$theta
+pars <- rstan::extract(model, pars = "theta")$theta
 
 delta <- pars[, , seq(1, 7, 2)] - pars[, , seq(2, 8, 2)]
 
