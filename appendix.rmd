@@ -249,7 +249,7 @@ apa_table(
 )
 ```
 
-
+\begin{landscape}
 
 ```{r 'appendix-pdl10-generation', results='asis'}
 # load data
@@ -347,10 +347,13 @@ apa_table(
   , caption = "Mean percentage of regular transitions generated in Experiment 3, excluding repetions and reversals. Standard deviations are given in parentheses."
   , placement = "hp"
   , escape = FALSE
-  , font_size = "tiny"
+  # , font_size = "tiny"
   # , landscape = TRUE # do not use landscape tables in an appendix (pandoc bug)
 )
 ```
+
+\end{landscape}
+\clearpage
 
 # Additional ordinal-PD analyses
 
