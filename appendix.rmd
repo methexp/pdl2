@@ -22,7 +22,7 @@ if (before && options$fig.show!='none') par(mar = c(5.4, 4, 2, 0)+.1, las = 1, f
 \setlength{\leftskip}{0in}
 \setlength{\parskip}{2pt}
 
-This appendix provides the raw generation performance for all experiments in tables A1, A2, and A3.
+This appendix provides the raw generation performance for all experiments in Chapter III in tables A1, A2, and A3.
 
 
 <!-- figure \@ref(fig:pdl10-generation) shows generation performance in Experiment 3. -->
@@ -357,7 +357,7 @@ apa_table(
 
 # Additional ordinal-PD analyses
 
-This appendix provides results of additional ordinal-PD analyses for Experiments 2 and 3.
+This appendix provides results of additional ordinal-PD analyses for Experiments 2 and 3 in Chapter III.
 
 ## Experiment 2
 
@@ -376,7 +376,7 @@ This appendix provides results of additional ordinal-PD analyses for Experiments
 \setlength{\leftskip}{0in}
 \setlength{\parskip}{0pt}
 
-This appendix provides results of additional model analyses not included in the main text.
+This appendix provides results of additional model analyses not included in the main text of Chapter III.
 
 ## Experiment 1, model $\mathcal{M}_1$
 
