@@ -124,14 +124,14 @@ source("R/PDhelper.R")
 ```
 
 
-\clearpage
+<!-- \clearpage -->
 
-# References
+<!-- # References -->
 ```{r 'references', warning=FALSE, cache=FALSE}
-r_refs(file = "r-references.bib")
-render_appendix("appendix.rmd")
+# r_refs(file = "r-references.bib")
+# render_appendix("appendix.rmd")
 ```
 
-\setlength{\parindent}{-0.5in}
-\setlength{\leftskip}{0.5in}
-\setlength{\parskip}{8pt}
+<!-- \setlength{\parindent}{-0.5in} -->
+<!-- \setlength{\leftskip}{0.5in} -->
+<!-- \setlength{\parskip}{8pt} -->
