@@ -26,7 +26,7 @@ The present study assesses two of the crucial assumptions on which this method i
 
 In order to conclude that the learning effect in the SRTT (i.e., an RT advantage for regular transitions) is based on implicit knowledge, dissociations from subsequent assessments of explicit knowledge are typically sought.
 They depend on the assumptions that the explicit task is as *sensitive* to explicit sequence knowledge as the SRTT (the absence of an explicit effect may otherwise be due to lower reliability);
-and that it is also an *exhaustive and exclusive* measure of explicit knowledge, such that performance on the explicit task reflects all explicit but *no* implicit knowledge [@shanks_characteristics_1994;@reingold_interrelatedness_1990].
+and that it is also an *exhaustive and exclusive* measure of explicit knowledge, such that performance on the explicit task reflects all explicit but *no* implicit knowledge [@shanks_characteristics_1994;@reingold_inter-relatedness_1990].
 Multiple explicit-knowledge assessment tasks have been proposed, including verbal reports (i.e., recall of the sequence), recognition, prediction, and generation tests.
 Yet, while dissociations from RT advantages in the SRTT have been demonstrated in some studies, these tests have also been criticized for not meeting the above criteria<!-- of *sensitivity* and *exclusiveness*-->, or the reported dissociations did not replicate [@shanks_dissociation_2002].
 <!-- It has been claimed that sequence knowledge may be expressed either by an RT advantage in the SRT or a subsequent task that is considered to rely only on conscious knowledge; -->
@@ -218,7 +218,7 @@ Second, it is assumed that both processes operate independently; that is, on eac
 In particular, the response proposed by the automatic process is assumed to be uninfluenced by whether the controlled process proposes the same or a different candidate response.
 Relatedly, the model assumes that independence holds across persons and items; when data are aggregated over (potentially heterogeneous) participants and items, a violation can lead to biases in parameter estimates.
 There has been considerable debate about the independence assumption in applications of the PD to episodic memory paradigms
-[@jacoby_psychometric_1997; @curran_violations_1995; @hintzman_more_1997; @curran_consequences_1997].
+[@jacoby_toward_1997; @curran_violations_1995; @hintzman_more_1997; @curran_consequences_1997].
 Evidence suggests that aggregation independence may often be violated; hierarchical extension of the PD model have been proposed to address this problem [@rouder_hierarchical_2008].
 
 Third, and most important for the present study, it is assumed that both the controlled and automatic processes are *invariant* across the inclusion and exclusion instructions.
