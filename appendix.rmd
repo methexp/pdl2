@@ -1,10 +1,8 @@
+
 <!-- This appendix provides a complete specification of the models and priors used. -->
 <!-- Code (R/Stan) is available at [https://github.com/methexp/pdl2](https://github.com/methexp/pdl2). -->
 
-
-
-
-```{r}
+```{r eval = FALSE}
 # Set chunk defaults
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8.8, fig.height = 5, dev = "pdf", cache = FALSE, par = TRUE)
 
@@ -14,20 +12,15 @@ if (before && options$fig.show!='none') par(mar = c(5.4, 4, 2, 0)+.1, las = 1, f
 })
 ```
 
-<!-- \onecolumn -->
+\onecolumn
 
 # Generation performance
 
-\setlength{\parindent}{0.5in}
-\setlength{\leftskip}{0in}
-\setlength{\parskip}{2pt}
-
-This appendix provides the raw generation performance for all experiments in Chapter III in tables A1, A2, and A3.
 
 
-<!-- figure \@ref(fig:pdl10-generation) shows generation performance in Experiment 3. -->
-
-
+This appendix provides the raw generation performance for all experiments in Chapter III in tables \@ref(tab:appendix-pdl9-generation),
+\@ref(tab:appendix-pdl7-generation), and 
+\@ref(tab:appendix-pdl10-generation).
 
 ```{r appendix-pdl9-generation, fig.cap = "Generation performance in Experiment 1, excluding repetitions. Error bars represent 95% confidence intervals. Horizontal line represents chance baseline.", fig.show='hide', results='asis'}
 library("rstan")
@@ -651,7 +644,7 @@ a value comparable to our extended model $\mathcal{M}_{1}$ presented in the main
 This again implies that our auxiliary assumptions introduced to $\mathcal{M}_{1R}$ were much less problematic than the invariance assumption.
 
 ```{r pdl7-m1r-parameter-estimates, fig.height = 10, fig.cap = "Parameter estimates from Experiment 2, model $\\mathcal{M}_{1R}$. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/pd_alternative_model15a.RData")
+# load("hierarchical_pd/pd_alternative_model15a.RData")
 
 
 load("hierarchical_pd/pdl7/m1r_posteriors.RData")
@@ -723,8 +716,9 @@ apa_beeplot(
 ```{r pdl7-m1r-posterior-differences, fig.height = 10, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 2, model $\\mathcal{M}_{1R}$, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 par(mfrow = c(2, 2))
 
-pars <- rstan::extract(model, pars = "theta")$theta
-
+#pars <- rstan::extract(model, pars = "theta")$theta
+load("hierarchical_pd/pdl7/m1r_posteriors.RData")
+pars <- theta
 delta <- pars[, , seq(1, 7, 2)] - pars[, , seq(2, 8, 2)]
 
 delta_quantiles <- apply(X = delta, MARGIN = 2:3, FUN = quantile, probs = c(.025, .25, .5, .75, .975))
@@ -827,8 +821,8 @@ a value somewhat smaller than the DIC of our extended model $\mathcal{M}_{1}$ pr
 This again implies that our auxiliary assumptions introduced to $\mathcal{M}_{1R}$ were much less problematic than the invariance assumption.
 
 ```{r pdl10-m1r-parameter-estimates, fig.height = 10, fig.cap = "Parameter estimates from Experiment 3, model $\\mathcal{M}_{1R}$. Error bars represent 95% confidence intervals."}
-load("hierarchical_pd/model_objects/pdl10/M15a_randomly_selected.RData")
-
+# load("hierarchical_pd/model_objects/pdl10/M15a_randomly_selected.RData")
+load("hierarchical_pd/pdl10/m1r_posteriors.RData")
 source("hierarchical_pd/R/pdl10_helper.R")
 
 # # par(font.main = 1, cex.main = 1, mar = c(2, 4, 2, 2))
@@ -906,8 +900,8 @@ apa_beeplot(
 
 ```{r pdl10-m1r-posterior-differences, fig.height = 10, fig.cap = "Posterior differences between $A_I - A_E$ and $C_I - C_E$ in Experiment 3, model $\\mathcal{M}_{1R}$, plotted for each participant (gray dots) with 95% credible intervals. Dashed lines represent the posterior means of the differences between mean parameter estimates. Dotted lines represent 95% credible intervals."}
 par(mfrow = c(2, 2))
-
-pars <- rstan::extract(model, pars = "theta")$theta
+load("hierarchical_pd/pdl10/m1r_posteriors.RData")
+pars <- theta
 
 delta <- pars[, , seq(1, 7, 2)] - pars[, , seq(2, 8, 2)]
 

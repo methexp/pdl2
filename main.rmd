@@ -34,22 +34,23 @@ keywords: "sequence learning, process-dissociation procedure, invariance assumpt
 
 wordcount: "14,936"
 
-class: man
+class: doc
 figsintext: no
 lineno: yes
 keep_tex: yes
+keep_md: yes
 bibliography:
   - additional_references.bib
   - zotero_references.bib
+  - "../methexp.bib"
   - r-references.bib
 nocite: |
   - @lewandowski_generating_2009
   - @knapp_representing_2004
 
-output:
-  papaja::apa6_pdf:
-    includes:
-      after_body: appendix.tex
+output    : papaja::apa6_pdf
+appendix  : "appendix.rmd"
+
 
 ---
 
@@ -129,9 +130,9 @@ source("R/PDhelper.R")
 <!-- # References -->
 ```{r 'references', warning=FALSE, cache=FALSE}
 r_refs(file = "r-references.bib")
-# render_appendix("appendix.rmd")
 ```
 
 <!-- \setlength{\parindent}{-0.5in} -->
 <!-- \setlength{\leftskip}{0.5in} -->
 <!-- \setlength{\parskip}{8pt} -->
+
